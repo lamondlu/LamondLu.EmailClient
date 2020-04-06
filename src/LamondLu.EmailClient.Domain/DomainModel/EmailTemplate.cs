@@ -13,7 +13,5 @@ namespace LamondLu.EmailClient.Domain.DomainModel
         public string Subject { get; set; }
 
         public string Content { get; set; }
-
-
     }
 }

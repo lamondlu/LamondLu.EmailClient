@@ -31,7 +31,7 @@ namespace LamondLu.EmailClient.Domain.DomainModel
             }
             else if (Field == MatchField.Sender)
             {
-                sourceValue = email.Sender;
+                sourceValue = email.Sender.Address;
                 result = Compare(sourceValue);
             }
             else if (Field == MatchField.Attachment)

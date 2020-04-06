@@ -4,8 +4,10 @@ using System.Text;
 
 namespace LamondLu.EmailClient.Domain.DomainModel
 {
-    public class ReplyRule : Rule
+    public class EmailAddress
     {
-        public EmailTemplate EmailTemplate { get; set; }
+        public string Address { get; set; }
+
+        public string DisplayName { get; set; }
     }
 }

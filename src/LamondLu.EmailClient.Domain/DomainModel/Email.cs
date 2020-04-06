@@ -17,7 +17,7 @@ namespace LamondLu.EmailClient.Domain.DomainModel
 
         public DateTime ReceivedDate { get; set; }
 
-        public string Sender { get; set; }
+        public EmailAddress Sender { get; set; }
 
         public string Subject { get; set; }
 
@@ -25,7 +25,7 @@ namespace LamondLu.EmailClient.Domain.DomainModel
 
         public string Notes { get; set; }
 
-        public string Receipt { get; set; }
+        public EmailAddress Receipt { get; set; }
 
         public List<EmailAttachment> Attachments { get; set; }
 
