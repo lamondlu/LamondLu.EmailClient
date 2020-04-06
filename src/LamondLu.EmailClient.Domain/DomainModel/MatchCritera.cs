@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LamondLu.EmailClient.Domain.DomainModel
+namespace LamondLu.EmailClient.Domain
 {
     public class MatchCritera
     {
