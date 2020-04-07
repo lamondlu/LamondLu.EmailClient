@@ -23,3 +23,5 @@ If the rule matched, the system will reply the sender with assigned email templa
 
 ### Classify rule
 If the rule matched, the systesm will classify the email as assigned category. 
+
+
