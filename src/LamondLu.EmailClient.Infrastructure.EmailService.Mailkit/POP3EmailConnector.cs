@@ -8,13 +8,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
     public class POP3EmailConnector : IEmailConnector
     {
-        public List<Rule> Rules
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public RulePipeline Pipeline => throw new NotImplementedException();
 
         public event EmailReceived EmailReceived;
 

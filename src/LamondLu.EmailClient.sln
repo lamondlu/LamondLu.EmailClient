@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamondLu.EmailClient.Infrastructure.EmailService.Mailkit", "LamondLu.EmailClient.Infrastructure.EmailService.Mailkit\LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.csproj", "{DD570AC8-E599-464B-B350-4B80F4F96A63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lamond.EmailClient.ConsoleApp", "Lamond.EmailClient.ConsoleApp\Lamond.EmailClient.ConsoleApp.csproj", "{71AE166B-8B4E-4B33-B095-13DFE6A34E73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,18 @@ Global
 		{DD570AC8-E599-464B-B350-4B80F4F96A63}.Release|x64.Build.0 = Release|Any CPU
 		{DD570AC8-E599-464B-B350-4B80F4F96A63}.Release|x86.ActiveCfg = Release|Any CPU
 		{DD570AC8-E599-464B-B350-4B80F4F96A63}.Release|x86.Build.0 = Release|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Debug|x64.Build.0 = Debug|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Debug|x86.Build.0 = Debug|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Release|x64.ActiveCfg = Release|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Release|x64.Build.0 = Release|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Release|x86.ActiveCfg = Release|Any CPU
+		{71AE166B-8B4E-4B33-B095-13DFE6A34E73}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,7 +8,7 @@ namespace LamondLu.EmailClient.Domain.Interface
 
     public interface IEmailConnector
     {
-        List<Rule> Rules { get; }
+        RulePipeline Pipeline { get; }
 
         event EmailReceived EmailReceived;
 

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LamondLu.EmailClient.Domain\LamondLu.EmailClient.Domain.csproj" />
+    <ProjectReference Include="..\LamondLu.EmailClient.Infrastructure.EmailService.Mailkit\LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.csproj" />
+  </ItemGroup>
+
+</Project>
