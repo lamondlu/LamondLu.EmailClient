@@ -7,5 +7,6 @@ namespace LamondLu.EmailClient.Domain.Concrete.EmailConnectors
 {
     public class POP3EmailConnector : IEmailConnector
     {
+
     }
 }

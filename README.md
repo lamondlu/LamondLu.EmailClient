@@ -8,6 +8,8 @@ The email connector is like a email client, it will connect with the emailbox wi
 
 Each email connector have a rule pipeline with multiple rules. The rule pipeline are configurable.
 
+![](./img/20200407081451.png)
+
 ### Support Rules
 - Forward
 - Reply
