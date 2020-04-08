@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LamondLu.EmailClient.Domain\LamondLu.EmailClient.Domain.csproj" />
+    <ProjectReference Include="..\LamondLu.EmailClient.Infrastructure.EmailService.Mailkit\LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

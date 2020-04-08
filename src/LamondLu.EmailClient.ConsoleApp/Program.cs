@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
@@ -22,7 +25,8 @@ namespace LamondLu.EmailClient.ConsoleApp
                 configApp.AddCommandLine(args);
             }).ConfigureServices((hostContext, services) =>
             {
-
+                services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();
+                services.AddHostedService<EmailConnectorHostService>();
 
             }).UseConsoleLifetime().Build();
 
