@@ -18,7 +18,7 @@ namespace LamondLu.EmailClient.ConsoleApp
             IHost host = new HostBuilder().ConfigureAppConfiguration((hostContext, configApp) =>
             {
                 configApp.SetBasePath(Directory.GetCurrentDirectory());
-                configApp.AddJsonFile(_appsettings, optional: true);
+                configApp.AddJsonFile(_appsettings, optional: true, reloadOnChange: true);
                 configApp.AddJsonFile(
                     $"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json",
                     optional: true);
