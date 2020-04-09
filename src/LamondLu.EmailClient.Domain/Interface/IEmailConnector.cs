@@ -15,3 +15,4 @@ namespace LamondLu.EmailClient.Domain.Interface
         void Connect();
     }
 }
+ 
