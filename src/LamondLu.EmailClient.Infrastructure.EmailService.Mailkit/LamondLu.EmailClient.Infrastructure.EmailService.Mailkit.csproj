@@ -8,4 +8,8 @@
     <ProjectReference Include="..\LamondLu.EmailClient.Domain\LamondLu.EmailClient.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Mailkit" Version="2.6.0" />
+  </ItemGroup>
+
 </Project>
