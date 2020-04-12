@@ -1,16 +1,12 @@
-﻿using LamondLu.EmailClient.Domain;
-using LamondLu.EmailClient.Domain.Interface;
-using MailKit.Net.Pop3;
-using System;
 using System.Collections.Generic;
-using System.Text;
-
+using LamondLu.EmailClient.Domain;
+using LamondLu.EmailClient.Domain.Interface;
 
 namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
-    public class POP3EmailConnector : IEmailConnector
+    public class IMAPEmailConnector : IEmailConnector
     {
-        public POP3EmailConnector(List<Rule> rules)
+        public IMAPEmailConnector(List<Rule> rules)
         {
             Pipeline = new RulePipeline(rules);
         }
@@ -21,10 +17,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
         public void Connect()
         {
-            using (var client = new Pop3Client())
-            {
-
-            }
+            throw new System.NotImplementedException();
         }
     }
 }
