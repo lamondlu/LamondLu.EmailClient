@@ -25,6 +25,15 @@ namespace LamondLu.EmailClient.ConsoleApp
                 configApp.AddCommandLine(args);
             }).ConfigureServices((hostContext, services) =>
             {
+                services.AddOptions();
+                services.Configure<Settings>(hostContext.Configuration.GetSection("EmailSettings"));
+
+                var settings = new Settings();
+                hostContext.Configuration.Bind(settings);
+
+
+                EnvironmentConst.EmailSettings = settings;
+
                 services.AddSingleton<ILogger, ConsoleLogger>();
                 services.AddSingleton<IEmailConnectorFactory, EmailConnectorFactory>();
                 services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();

@@ -2,7 +2,7 @@ namespace LamondLu.EmailClient.Domain.Enum
 {
     public enum EmailConnectorType
     {
-        Pop3,
-        IMAP
+        POP3 = 0,
+        IMAP = 1
     }
 }

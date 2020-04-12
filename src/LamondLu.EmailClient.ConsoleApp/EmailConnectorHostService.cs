@@ -11,10 +11,12 @@ namespace LamondLu.EmailClient.ConsoleApp
     public class EmailConnectorHostService : IHostedService
     {
         private ILogger _logger = null;
+        private Settings _settings = null;
 
         public EmailConnectorHostService()
         {
             _logger = (ILogger)EnvironmentConst.Services.GetService(typeof(ILogger));
+            _settings = EnvironmentConst.EmailSettings;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -23,8 +25,18 @@ namespace LamondLu.EmailClient.ConsoleApp
             {
                 _logger.Write("Email Service started.");
 
-
+                Version();
             });
+        }
+
+        private void Version()
+        {
+            _logger.Write($"Email Connect Type: {_settings.Type}");
+            _logger.Write($"Address: {_settings.IP}");
+            _logger.Write($"Port: {_settings.Port}");
+            _logger.Write($"SSL: {(_settings.EnableSSL ? "Yes":"No")}");
+            _logger.Write($"UserName: {_settings.UserName}");
+            _logger.Write($"Password: {_settings.Password}");
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

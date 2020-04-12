@@ -6,7 +6,7 @@ namespace LamondLu.EmailClient.Domain.Extension
     {
         public static bool IsPop3(this EmailConnectorType type)
         {
-            return type == EmailConnectorType.Pop3;
+            return type == EmailConnectorType.POP3;
         }
 
         public static bool IsIMAP(this EmailConnectorType type)
