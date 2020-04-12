@@ -8,26 +8,28 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
     public class RuleProcessorFactory : IRuleProcessorFactory
     {
-        private static Dictionary<RuleType, IRuleProcessor> _processMappings = new Dictionary<RuleType, IRuleProcessor> {
-            { RuleType.Classify, new ClassifyRuleProcessor() },
-            { RuleType.Reply, new ReplyRuleProcessor() },
-            { RuleType.Forward, new ForwardRuleProcessor() }
-        };
-
         public RuleProcessorFactory()
         {
 
         }
 
-        public IRuleProcessor GetRuleProcessor(Rule rule)
+        public IRuleProcessor GetRuleProcessor(Rule rule, IUnitOfWork unitOfWork)
         {
-            if (_processMappings.ContainsKey(rule.RuleType))
+            if (rule is ClassifyRule)
             {
-                return _processMappings[rule.RuleType];
+                return new ClassifyRuleProcessor(unitOfWork);
+            }
+            else if (rule is ReplyRule)
+            {
+                return new ReplyRuleProcessor(unitOfWork);
+            }
+            else if (rule is ForwardRule)
+            {
+                return new ForwardRuleProcessor(unitOfWork);
             }
             else
             {
-                throw new Exception("The processor for this type is missing.");
+                return new NoMatchedRuleProcessor();
             }
         }
     }

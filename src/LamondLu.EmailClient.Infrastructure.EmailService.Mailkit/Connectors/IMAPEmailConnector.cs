@@ -6,9 +6,9 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
     public class IMAPEmailConnector : IEmailConnector
     {
-        public IMAPEmailConnector(List<Rule> rules)
+        public IMAPEmailConnector(List<Rule> rules, IRuleProcessorFactory ruleProcessorFactory,IUnitOfWork unitOfWork)
         {
-            Pipeline = new RulePipeline(rules);
+            Pipeline = new RulePipeline(rules, ruleProcessorFactory, unitOfWork);
         }
 
         public RulePipeline Pipeline { get; }
