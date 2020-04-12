@@ -15,6 +15,8 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent.Migrations
                 .WithColumn("Password").AsString().NotNullable()
                 .WithColumn("Status").AsInt16().NotNullable()
                 .WithColumn("IP").AsString()
+                .WithColumn("Port").AsInt32().NotNullable()
+                .WithColumn("EnableSSL").AsBoolean().NotNullable().WithDefaultValue(false)
                 .WithColumn("Description").AsString()
                 .WithColumn("CreatedTime").AsDateTime().NotNullable()
                 .WithColumn("CreatedBy").AsString().NotNullable()
