@@ -25,8 +25,12 @@ namespace LamondLu.EmailClient.ConsoleApp
                 configApp.AddCommandLine(args);
             }).ConfigureServices((hostContext, services) =>
             {
+                services.AddSingleton<ILogger, ConsoleLogger>();
+                services.AddSingleton<IEmailConnectorFactory, EmailConnectorFactory>();
                 services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();
                 services.AddHostedService<EmailConnectorHostService>();
+
+                EnvironmentConst.Services = services.BuildServiceProvider();
 
             }).UseConsoleLifetime().Build();
 
