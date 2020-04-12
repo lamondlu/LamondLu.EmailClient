@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Test",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62B60B31-3CC9-413D-8691-248C4EACE2B9}"
 	ProjectSection(SolutionItems) = preProject
+		..\migrate.bat = ..\migrate.bat
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
@@ -16,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Infras
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.ConsoleApp", "LamondLu.EmailClient.ConsoleApp\LamondLu.EmailClient.ConsoleApp.csproj", "{ED93863C-21FF-440C-9691-39C341084D20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamondLu.EmailClient.Infrastructure.DataPersistent", "LamondLu.EmailClient.Infrastructure.DataPersistent\LamondLu.EmailClient.Infrastructure.DataPersistent.csproj", "{C6A1F095-39C9-44E1-B139-A0AE3933A155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Infrastructure.DataPersistent", "LamondLu.EmailClient.Infrastructure.DataPersistent\LamondLu.EmailClient.Infrastructure.DataPersistent.csproj", "{C6A1F095-39C9-44E1-B139-A0AE3933A155}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
