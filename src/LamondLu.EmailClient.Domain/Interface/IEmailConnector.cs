@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LamondLu.EmailClient.Domain.Interface
+﻿namespace LamondLu.EmailClient.Domain.Interface
 {
     public delegate void EmailReceived();
 
@@ -15,4 +11,3 @@ namespace LamondLu.EmailClient.Domain.Interface
         void Connect();
     }
 }
- 

@@ -5,7 +5,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
     public class ForwardRuleProcessor : IRuleProcessor
     {
-        private IUnitOfWork _unitOfWork = null;
+        private readonly IUnitOfWork _unitOfWork = null;
 
         public ForwardRuleProcessor(IUnitOfWork unitOfWork)
         {

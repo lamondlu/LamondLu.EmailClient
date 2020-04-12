@@ -7,7 +7,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
     {
         public void Run(Email email)
         {
-            
+
         }
     }
 }

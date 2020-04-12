@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LamondLu.EmailClient.Domain.Interface
+﻿namespace LamondLu.EmailClient.Domain.Interface
 {
     public interface IUnitOfWork
     {

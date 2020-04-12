@@ -5,9 +5,10 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
     public class ClassifyRuleProcessor : IRuleProcessor
     {
-        private IUnitOfWork _unitOfWork = null;
+        private readonly IUnitOfWork _unitOfWork = null;
 
-        public ClassifyRuleProcessor(IUnitOfWork unitOfWork){
+        public ClassifyRuleProcessor(IUnitOfWork unitOfWork)
+        {
             _unitOfWork = unitOfWork;
         }
 

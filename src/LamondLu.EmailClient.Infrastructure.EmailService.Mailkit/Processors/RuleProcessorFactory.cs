@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using LamondLu.EmailClient.Domain;
-using LamondLu.EmailClient.Domain.Enum;
 using LamondLu.EmailClient.Domain.Interface;
 
 namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit

@@ -3,13 +3,12 @@ using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.ConsoleApp
 {
-    class Program
+    internal class Program
     {
         private const string _appsettings = "appsettings.json";
 
@@ -25,7 +24,7 @@ namespace LamondLu.EmailClient.ConsoleApp
                 configApp.AddCommandLine(args);
             }).ConfigureServices((hostContext, services) =>
             {
-                var settings = new Settings();
+                Settings settings = new Settings();
                 hostContext.Configuration.Bind("EmailSettings", settings);
 
 

@@ -1,5 +1,5 @@
-using System;
 using LamondLu.EmailClient.Domain.Interface;
+using System;
 
 namespace LamondLu.EmailClient.ConsoleApp
 {

@@ -1,8 +1,5 @@
 ﻿using LamondLu.EmailClient.Domain.Interface;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,8 +7,8 @@ namespace LamondLu.EmailClient.ConsoleApp
 {
     public class EmailConnectorHostService : IHostedService
     {
-        private ILogger _logger = null;
-        private Settings _settings = null;
+        private readonly ILogger _logger = null;
+        private readonly Settings _settings = null;
 
         public EmailConnectorHostService()
         {
@@ -34,7 +31,7 @@ namespace LamondLu.EmailClient.ConsoleApp
             _logger.Write($"Email Connect Type: {_settings.Type}");
             _logger.Write($"Address: {_settings.IP}");
             _logger.Write($"Port: {_settings.Port}");
-            _logger.Write($"SSL: {(_settings.EnableSSL ? "Yes":"No")}");
+            _logger.Write($"SSL: {(_settings.EnableSSL ? "Yes" : "No")}");
             _logger.Write($"UserName: {_settings.UserName}");
             _logger.Write($"Password: {_settings.Password}");
         }

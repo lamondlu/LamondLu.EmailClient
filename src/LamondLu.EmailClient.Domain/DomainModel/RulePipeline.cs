@@ -1,16 +1,14 @@
-﻿using System;
+﻿using LamondLu.EmailClient.Domain.Interface;
 using System.Collections.Generic;
-using System.Text;
-using LamondLu.EmailClient.Domain.Interface;
 
 namespace LamondLu.EmailClient.Domain
 {
     public class RulePipeline
     {
-        private List<Rule> _rules = null;
-        private IRuleProcessorFactory _factory = null;
+        private readonly List<Rule> _rules = null;
+        private readonly IRuleProcessorFactory _factory = null;
 
-        private IUnitOfWork _unitOfWork = null;
+        private readonly IUnitOfWork _unitOfWork = null;
 
         public RulePipeline(List<Rule> rules, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork)
         {
@@ -21,13 +19,13 @@ namespace LamondLu.EmailClient.Domain
 
         public void Run(Email email)
         {
-            foreach (var rule in _rules)
+            foreach (Rule rule in _rules)
             {
                 if (rule.Match(email))
                 {
                     //process the handler
 
-                    var ruleProcessor = _factory.GetRuleProcessor(rule, _unitOfWork);
+                    IRuleProcessor ruleProcessor = _factory.GetRuleProcessor(rule, _unitOfWork);
                     ruleProcessor.Run(email);
 
                     if (rule.TerminateIfMatch)
