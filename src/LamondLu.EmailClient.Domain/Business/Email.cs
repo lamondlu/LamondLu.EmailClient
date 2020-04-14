@@ -14,6 +14,8 @@ namespace LamondLu.EmailClient.Domain
 
         public Guid EmailId { get; private set; }
 
+        public EmailFolder EmailFolder { get; private set; }
+
         public DateTime ReceivedDate { get; set; }
 
         public EmailAddress Sender { get; set; }
