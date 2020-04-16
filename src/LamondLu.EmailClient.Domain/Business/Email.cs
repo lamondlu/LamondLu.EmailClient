@@ -1,20 +1,19 @@
-﻿using System;
+﻿using LamondLu.EmailClient.Domain.Business;
+using System;
 using System.Collections.Generic;
 
 namespace LamondLu.EmailClient.Domain
 {
     public class Email
     {
-        public Email()
+        public Email(string messageId, uint mailkitId, uint mailkitValidityId)
         {
-            EmailId = Guid.NewGuid();
+            EmailId = new EmailId(messageId, mailkitId, mailkitValidityId);
             Tags = new List<Tag>();
             Attachments = new List<EmailAttachment>();
         }
 
-        public Guid EmailId { get; private set; }
-
-        public int MailkitId { get; private set; }
+        public EmailId EmailId { get; private set; }
 
         public EmailFolder EmailFolder { get; private set; }
 
