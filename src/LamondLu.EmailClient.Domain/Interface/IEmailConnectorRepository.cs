@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Domain.Interface
 {
     public interface IEmailConnectorRepository
     {
-        List<EmailConnectorConfigViewModel> GetEmailConnectors();
+        Task<List<EmailConnectorConfigViewModel>> GetEmailConnectors();
     }
 }

@@ -9,6 +9,7 @@ namespace LamondLu.EmailClient.ConsoleApp
     {
         private readonly ILogger _logger = null;
         private readonly Settings _settings = null;
+        private readonly IUnitOfWork _unitOfWork = null;
 
         public EmailConnectorHostService()
         {
@@ -16,14 +17,16 @@ namespace LamondLu.EmailClient.ConsoleApp
             _settings = EnvironmentConst.EmailSettings;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            return Task.Run(() =>
-            {
-                _logger.Write("Email Service started.");
+            _logger.Write("Email Service started.");
 
-                Version();
-            });
+            var connectors = await _unitOfWork.EmailConnectorRepository.GetEmailConnectors();
+
+            foreach (var connector in connectors)
+            {
+
+            }
         }
 
         private void Version()

@@ -30,7 +30,7 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             {
                 if (_emailConnectorRepository == null)
                 {
-
+                    return new EmailConnectorRepository(_dbContext);
                 }
 
                 return _emailConnectorRepository;
