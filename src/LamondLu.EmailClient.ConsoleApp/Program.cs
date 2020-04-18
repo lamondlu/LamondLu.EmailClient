@@ -1,4 +1,6 @@
 ﻿using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Infrastructure.DataPersistent;
+using LamondLu.EmailClient.Infrastructure.DataPersistent.Models;
 using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,15 +26,13 @@ namespace LamondLu.EmailClient.ConsoleApp
                 configApp.AddCommandLine(args);
             }).ConfigureServices((hostContext, services) =>
             {
-                Settings settings = new Settings();
-                hostContext.Configuration.Bind("EmailSettings", settings);
-
-
-                EnvironmentConst.EmailSettings = settings;
+                services.AddOptions();
+                services.Configure<DbSetting>(hostContext.Configuration.GetSection("Db"));
 
                 services.AddSingleton<ILogger, ConsoleLogger>();
                 services.AddSingleton<IEmailConnectorFactory, EmailConnectorFactory>();
                 services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();
+                services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
                 services.AddHostedService<EmailConnectorHostService>();
 
                 EnvironmentConst.Services = services.BuildServiceProvider();

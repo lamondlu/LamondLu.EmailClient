@@ -12,11 +12,14 @@ namespace LamondLu.EmailClient.ConsoleApp
         private readonly ILogger _logger = null;
         private readonly Settings _settings = null;
         private readonly IUnitOfWork _unitOfWork = null;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory = null;
 
         public EmailConnectorHostService()
         {
             _logger = (ILogger)EnvironmentConst.Services.GetService(typeof(ILogger));
             _settings = EnvironmentConst.EmailSettings;
+            _unitOfWorkFactory = (IUnitOfWorkFactory)EnvironmentConst.Services.GetService(typeof(IUnitOfWorkFactory));
+            _unitOfWork = _unitOfWorkFactory.Create();
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -33,12 +36,12 @@ namespace LamondLu.EmailClient.ConsoleApp
 
         private void Version(EmailConnectorConfigViewModel emailConnector)
         {
-            _logger.Write($"Email Connect Type: {emailConnector.Type}");
-            _logger.Write($"Address: {emailConnector.IP}");
-            _logger.Write($"Port: {emailConnector.Port}");
-            _logger.Write($"SSL: {(emailConnector.EnableSSL ? "Yes" : "No")}");
-            _logger.Write($"UserName: {emailConnector.UserName}");
-            _logger.Write($"Password: {emailConnector.Password}");
+            _logger.Write($"[{emailConnector.Name}] Email Connect Type: {emailConnector.Type}");
+            _logger.Write($"[{emailConnector.Name}] Address: {emailConnector.IP}");
+            _logger.Write($"[{emailConnector.Name}] Port: {emailConnector.Port}");
+            _logger.Write($"[{emailConnector.Name}] SSL: {(emailConnector.EnableSSL ? "Yes" : "No")}");
+            _logger.Write($"[{emailConnector.Name}] UserName: {emailConnector.UserName}");
+            _logger.Write($"[{emailConnector.Name}] Password: {emailConnector.Password}");
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
