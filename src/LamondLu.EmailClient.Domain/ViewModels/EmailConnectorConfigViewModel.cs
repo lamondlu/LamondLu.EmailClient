@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LamondLu.EmailClient.Domain.Enum;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,6 +8,8 @@ namespace LamondLu.EmailClient.Domain.ViewModels
     public class EmailConnectorConfigViewModel
     {
         public Guid EmailConnectorId { get; set; }
+
+        public EmailConnectorType Type { get; set; }
 
         public string Name { get; set; }
 

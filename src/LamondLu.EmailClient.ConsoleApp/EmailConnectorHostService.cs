@@ -1,4 +1,6 @@
-﻿using LamondLu.EmailClient.Domain.Interface;
+﻿using LamondLu.EmailClient.Domain;
+using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Domain.ViewModels;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,18 +27,18 @@ namespace LamondLu.EmailClient.ConsoleApp
 
             foreach (var connector in connectors)
             {
-
+                Version(connector);
             }
         }
 
-        private void Version()
+        private void Version(EmailConnectorConfigViewModel emailConnector)
         {
-            _logger.Write($"Email Connect Type: {_settings.Type}");
-            _logger.Write($"Address: {_settings.IP}");
-            _logger.Write($"Port: {_settings.Port}");
-            _logger.Write($"SSL: {(_settings.EnableSSL ? "Yes" : "No")}");
-            _logger.Write($"UserName: {_settings.UserName}");
-            _logger.Write($"Password: {_settings.Password}");
+            _logger.Write($"Email Connect Type: {emailConnector.Type}");
+            _logger.Write($"Address: {emailConnector.IP}");
+            _logger.Write($"Port: {emailConnector.Port}");
+            _logger.Write($"SSL: {(emailConnector.EnableSSL ? "Yes" : "No")}");
+            _logger.Write($"UserName: {emailConnector.UserName}");
+            _logger.Write($"Password: {emailConnector.Password}");
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
