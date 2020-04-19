@@ -2,6 +2,7 @@
 using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.ViewModels;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace LamondLu.EmailClient.ConsoleApp
         private readonly Settings _settings = null;
         private readonly IUnitOfWork _unitOfWork = null;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory = null;
+        private List<EmailConnectorTask> _tasks = new List<EmailConnectorTask>();
 
         public EmailConnectorHostService()
         {
@@ -30,7 +32,12 @@ namespace LamondLu.EmailClient.ConsoleApp
 
             foreach (var connector in connectors)
             {
+                var task = new EmailConnectorTask(connector.EmailConnectorId);
+
                 Version(connector);
+                _tasks.Add(task);
+
+                _logger.Write($"[{connector.Name}] Started");
             }
         }
 
