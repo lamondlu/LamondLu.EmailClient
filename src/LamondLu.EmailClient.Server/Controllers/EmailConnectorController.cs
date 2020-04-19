@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LamondLu.EmailClient.Server.Controllers
 {
     public class EmailConnectorController : Controller
     {
-        private IUnitOfWork _unitOfWork = null;
+        private EmailConnectorService _emailConnectorService = null;
 
-        public EmailConnectorController(IUnitOfWorkFactory unitOfWorkFactory)
+        public EmailConnectorController(EmailConnectorService emailConnectorService)
         {
-            _unitOfWork = unitOfWorkFactory.Create();
+            _emailConnectorService = emailConnectorService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var connectors = await _unitOfWork.EmailConnectorRepository.GetEmailConnectors();
+            var connectors = await _emailConnectorService.GetEmailConnectors();
 
             return View(connectors);
         }

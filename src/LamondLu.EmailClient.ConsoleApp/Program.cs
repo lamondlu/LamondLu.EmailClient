@@ -32,7 +32,7 @@ namespace LamondLu.EmailClient.ConsoleApp
                 services.AddSingleton<ILogger, ConsoleLogger>();
                 services.AddSingleton<IEmailConnectorFactory, EmailConnectorFactory>();
                 services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();
-                services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
+                services.AddScoped<IUnitOfWork, UnitOfWork>();
                 services.AddHostedService<EmailConnectorHostService>();
 
                 EnvironmentConst.Services = services.BuildServiceProvider();

@@ -20,8 +20,7 @@ namespace LamondLu.EmailClient.ConsoleApp
         {
             _logger = (ILogger)EnvironmentConst.Services.GetService(typeof(ILogger));
             _settings = EnvironmentConst.EmailSettings;
-            _unitOfWorkFactory = (IUnitOfWorkFactory)EnvironmentConst.Services.GetService(typeof(IUnitOfWorkFactory));
-            _unitOfWork = _unitOfWorkFactory.Create();
+            _unitOfWork = (IUnitOfWork)EnvironmentConst.Services.GetService(typeof(IUnitOfWork));
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

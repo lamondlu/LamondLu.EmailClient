@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Domain.Services;
 using LamondLu.EmailClient.Infrastructure.DataPersistent;
 using LamondLu.EmailClient.Infrastructure.DataPersistent.Models;
 using Microsoft.AspNetCore.Builder;
@@ -29,7 +30,8 @@ namespace LamondLu.EmailClient.Server
         {
             services.AddOptions();
             services.Configure<DbSetting>(Configuration.GetSection("Db"));
-            services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<EmailConnectorService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
