@@ -1,0 +1,42 @@
+﻿@model List<LamondLu.EmailClient.Domain.ViewModels.EmailConnectorConfigViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Email Connectors</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Type</th>
+            <th>Port</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null || Model.Count == 0)
+        {
+            <tr>
+                <td colspan="5">No Record</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.IP</td>
+                    <td>@item.Type</td>
+                    <td>@item.Port</td>
+                    <td></td>
+                </tr>
+            }
+        }
+
+
+    </tbody>
+</table>
+
