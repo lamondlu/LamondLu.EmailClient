@@ -1,14 +1,29 @@
-﻿using System;
+﻿using LamondLu.EmailClient.Domain.DTOs;
+using LamondLu.EmailClient.Domain.Interface;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Domain.Managers
 {
     public class EmailConnectorManager : ManagerBase
     {
-        public void Add()
-        {
+        private IUnitOfWork _unitOfWork = null;
 
+        public EmailConnectorManager(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task Add(AddEmailConnectorModel model)
+        {
+            var emailConnector = new EmailConnector();
+
+
+
+            await _unitOfWork.EmailConnectorRepository.AddEmailConnector(emailConnector);
+            await _unitOfWork.SaveAsync();
         }
 
         public void Update(Guid emailConnectorId)

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using LamondLu.EmailClient.Domain;
 
 namespace LamondLu.EmailClient.Infrastructure.DataPersistent
 {
@@ -23,6 +24,35 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             var result = await _context.QueryAsync<EmailConnectorConfigViewModel>(sql);
 
             return result.ToList();
+        }
+
+        public async Task AddEmailConnector(EmailConnector emailConnector)
+        {
+            var sql = @"INSERT INTO EmailConnector(EmailConnectorId, 
+                    Name, 
+                    EmailAddress, 
+                    UserName, 
+                    Password, 
+                    Status, 
+                    IP, 
+                    Port, 
+                    EnableSSL, 
+                    Description, Type) 
+                    VALUES(@EmailConnectorId, @Name, @EmailAddress, @UserName, @Password, @Status, @IP, @Port, @EnableSSL, @Description, @Type)";
+
+            await _context.Execute(sql, new
+            {
+                emailConnector.EmailConnectorId,
+                emailConnector.Name,
+                emailConnector.EmailAddress,
+                emailConnector.Password,
+                emailConnector.Status,
+                IP = emailConnector.Server.Server,
+                emailConnector.Server.Port,
+                emailConnector.Server.EnableSSL,
+                emailConnector.Description,
+                emailConnector.Type
+            });
         }
     }
 }

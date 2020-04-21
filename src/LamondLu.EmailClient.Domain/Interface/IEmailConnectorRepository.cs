@@ -9,5 +9,7 @@ namespace LamondLu.EmailClient.Domain.Interface
     public interface IEmailConnectorRepository
     {
         Task<List<EmailConnectorConfigViewModel>> GetEmailConnectors();
+
+        Task AddEmailConnector(EmailConnector emailConnector);
     }
 }

@@ -21,9 +21,12 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             _connection = connection;
         }
 
-        public void Execute(string sql, object param = null, CommandType commandType = CommandType.Text)
+        public async Task Execute(string sql, object param = null, CommandType commandType = CommandType.Text)
         {
-            _commands.Add(new DapperCommand(sql, param, commandType));
+            await Task.Run(() =>
+            {
+                _commands.Add(new DapperCommand(sql, param, commandType));
+            });
         }
 
         public async Task SubmitAsync()
