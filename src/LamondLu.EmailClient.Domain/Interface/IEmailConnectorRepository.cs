@@ -11,5 +11,7 @@ namespace LamondLu.EmailClient.Domain.Interface
         Task<List<EmailConnectorConfigViewModel>> GetEmailConnectors();
 
         Task AddEmailConnector(EmailConnector emailConnector);
+
+        Task<bool> CheckDuplicated(string emailAddress, string name, Guid emailConnectorId);
     }
 }

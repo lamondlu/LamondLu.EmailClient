@@ -6,10 +6,17 @@ namespace LamondLu.EmailClient.Domain
 {
     public class EmailServerConfig
     {
-        public string Server { get; set; }
+        public EmailServerConfig(string server, int port, bool enableSSL)
+        {
+            Server = server;
+            Port = port;
+            EnableSSL = enableSSL;
+        }
 
-        public int Port { get; set; }
+        public string Server { get; private set; }
 
-        public bool EnableSSL { get; set; }
+        public int Port { get; private set; }
+
+        public bool EnableSSL { get; private set; }
     }
 }

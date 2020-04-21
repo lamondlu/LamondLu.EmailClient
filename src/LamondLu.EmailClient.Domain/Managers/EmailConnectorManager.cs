@@ -18,9 +18,11 @@ namespace LamondLu.EmailClient.Domain.Managers
 
         public async Task Add(AddEmailConnectorModel model)
         {
-            var emailConnector = new EmailConnector();
+            var emailConnector = new EmailConnector(model.Name, model.EmailAddress, model.UserName, model.Password, new EmailServerConfig(model.Server, model.Port, model.EnableSSL), model.Type, model.Description);
 
+            var duplicateChecking = await _unitOfWork.EmailConnectorRepository.CheckDuplicated(emailConnector.EmailAddress, emailConnector.Name, emailConnector.EmailConnectorId);
 
+            //TODO: we need to validate whether the email setting are correct
 
             await _unitOfWork.EmailConnectorRepository.AddEmailConnector(emailConnector);
             await _unitOfWork.SaveAsync();

@@ -7,6 +7,18 @@ namespace LamondLu.EmailClient.Domain
 {
     public class EmailConnector
     {
+        public EmailConnector(string name, string emailAddress, string userName, string password, EmailServerConfig config, EmailConnectorType type, string description)
+        {
+            Name = name;
+            EmailAddress = emailAddress;
+            UserName = userName;
+            Password = password;
+            Server = config;
+            Type = type;
+            Description = description;
+            Status = EmailConnectorStatus.Stopped;
+        }
+
         public Guid EmailConnectorId { get; private set; }
 
         public string Name { get; set; }
@@ -17,7 +29,7 @@ namespace LamondLu.EmailClient.Domain
 
         public string Password { get; set; }
 
-        public EmailConnectorStatus Status { get; set; }
+        public EmailConnectorStatus Status { get; private set; }
 
         public EmailServerConfig Server { get; set; }
 
@@ -25,6 +37,14 @@ namespace LamondLu.EmailClient.Domain
 
         public string Description { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public void Start()
+        {
+            this.Status = EmailConnectorStatus.Running;
+        }
+
+        public void Stop()
+        {
+            this.Status = EmailConnectorStatus.Stopped;
+        }
     }
 }
