@@ -22,10 +22,13 @@ namespace LamondLu.EmailClient.Domain.Managers
 
             var duplicateChecking = await _unitOfWork.EmailConnectorRepository.CheckDuplicated(emailConnector.EmailAddress, emailConnector.Name, emailConnector.EmailConnectorId);
 
-            //TODO: we need to validate whether the email setting are correct
+            if (!duplicateChecking)
+            {
+                //TODO: we need to validate whether the email setting are correct
 
-            await _unitOfWork.EmailConnectorRepository.AddEmailConnector(emailConnector);
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.EmailConnectorRepository.AddEmailConnector(emailConnector);
+                await _unitOfWork.SaveAsync();
+            }
         }
 
         public void Update(Guid emailConnectorId)
