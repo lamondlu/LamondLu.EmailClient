@@ -9,6 +9,8 @@ namespace LamondLu.EmailClient.Domain
     {
         public MatchField Field { get; set; }
 
+        public MatchOperator? Operator { get; set; }
+
         public MatchCondition Condition { get; set; }
 
         public string Value { get; set; }

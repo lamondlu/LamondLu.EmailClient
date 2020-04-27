@@ -9,13 +9,13 @@ namespace LamondLu.EmailClient.Domain
 
         public RuleType RuleType { get; private set; }
 
-        public MatchCritera Critera { get; set; }
+        public MatchCriteraCollection Criteras { get; set; }
 
         public bool TerminateIfMatch { get; set; }
 
         public virtual bool Match(Email email)
         {
-            return Critera.IsMatch(email);
+            return Criteras.IsMatch(email);
         }
     }
 }

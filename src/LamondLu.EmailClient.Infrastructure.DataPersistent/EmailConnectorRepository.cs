@@ -54,5 +54,10 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
                 emailConnector.Type
             });
         }
+
+        public Task<bool> CheckDuplicated(string emailAddress, string name, Guid emailConnectorId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
