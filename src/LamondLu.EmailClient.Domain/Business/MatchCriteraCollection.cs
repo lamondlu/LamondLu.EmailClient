@@ -10,7 +10,7 @@ namespace LamondLu.EmailClient.Domain
     {
         public MatchCriteraCollection(List<MatchCritera> criteras)
         {
-            Criteras = criteras;
+            BuildMatchGroup(criteras);
         }
 
         public List<MatchCritera> Criteras { get; set; }
@@ -21,8 +21,11 @@ namespace LamondLu.EmailClient.Domain
         {
             List<MatchCritera> currentGroup = null;
 
+            var count = matchExpressions.Count;
+            var current = 0;
             foreach (var item in matchExpressions)
             {
+                current++;
                 if (!item.Operator.HasValue || item.Operator.Value == MatchOperator.AND)
                 {
                     if (currentGroup == null)
@@ -37,6 +40,11 @@ namespace LamondLu.EmailClient.Domain
                     _matchGroups.Add(currentGroup);
                     currentGroup = new List<MatchCritera>();
                     currentGroup.Add(item);
+                }
+
+                if (current == count)
+                {
+                    _matchGroups.Add(currentGroup);
                 }
             }
         }
