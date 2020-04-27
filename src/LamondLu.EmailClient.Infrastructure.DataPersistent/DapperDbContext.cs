@@ -79,6 +79,21 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             return default(T);
         }
 
+        public async Task<T> ExecuteScalar<T>(string sql, object param = null, CommandType commandType = CommandType.Text)
+        {
+            try
+            {
+                return await _connection.ExecuteScalarAsync<T>(sql, param, commandTimeout: _commandTimeout, commandType: commandType);
+            }
+            catch (Exception ex)
+            {
+
+                ThrowErrorMessage(ex);
+            }
+
+            return default(T);
+        }
+
         private void ThrowErrorMessage(Exception ex)
         {
             if (ex.InnerException == null)

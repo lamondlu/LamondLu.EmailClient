@@ -55,9 +55,11 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             });
         }
 
-        public Task<bool> CheckDuplicated(string emailAddress, string name, Guid emailConnectorId)
+        public async Task<bool> CheckDuplicated(string emailAddress, string name, Guid emailConnectorId)
         {
-            throw new NotImplementedException();
+            var sql = "SELECT COUNT(*) FROM EmailConnector WHERE IsDeleted=0 AND EmailConnectorId<>@emailConnectorId";
+            var count = await _context.ExecuteScalar<int>(sql, new { emailConnectorId });
+            return count > 0;
         }
     }
 }
