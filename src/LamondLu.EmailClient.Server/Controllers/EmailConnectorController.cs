@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LamondLu.EmailClient.Domain.DTOs;
+using LamondLu.EmailClient.Domain.Enum;
 using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,8 @@ namespace LamondLu.EmailClient.Server.Controllers
         [Route("Add")]
         public async Task<IActionResult> Add()
         {
+            ViewBag.Types = Enum.GetValues(typeof(EmailConnectorType)).Cast<EmailConnectorType>();
+
             return View();
         }
 
