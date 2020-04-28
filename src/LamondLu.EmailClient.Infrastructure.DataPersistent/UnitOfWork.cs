@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Domain.Models;
 using LamondLu.EmailClient.Infrastructure.DataPersistent.Models;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
@@ -37,9 +38,9 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             }
         }
 
-        public async Task SaveAsync()
+        public async Task<DbOperationResult> SaveAsync()
         {
-            await _dbContext.SubmitAsync();
+            return await _dbContext.SubmitAsync();
         }
     }
 }

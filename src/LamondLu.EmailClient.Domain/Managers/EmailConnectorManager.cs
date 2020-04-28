@@ -1,5 +1,7 @@
 ﻿using LamondLu.EmailClient.Domain.DTOs;
 using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Domain.Models;
+using LamondLu.EmailClient.Domain.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,18 +18,38 @@ namespace LamondLu.EmailClient.Domain.Managers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Add(AddEmailConnectorModel model)
+        public async Task<OperationResult> Add(AddEmailConnectorModel model)
         {
-            var emailConnector = new EmailConnector(model.Name, model.EmailAddress, model.UserName, model.Password, new EmailServerConfig(model.Server, model.Port, model.EnableSSL), model.Type, model.Description);
-
-            var duplicateChecking = await _unitOfWork.EmailConnectorRepository.CheckDuplicated(emailConnector.EmailAddress, emailConnector.Name, emailConnector.EmailConnectorId);
-
-            if (!duplicateChecking)
+            try
             {
-                //TODO: we need to validate whether the email setting are correct
+                var emailConnector = new EmailConnector(model.Name, model.EmailAddress, model.UserName, model.Password, new EmailServerConfig(model.Server, model.Port, model.EnableSSL), model.Type, model.Description);
 
-                await _unitOfWork.EmailConnectorRepository.AddEmailConnector(emailConnector);
-                await _unitOfWork.SaveAsync();
+                var duplicateChecking = await _unitOfWork.EmailConnectorRepository.CheckDuplicated(emailConnector.EmailAddress, emailConnector.Name, emailConnector.EmailConnectorId);
+
+                if (!duplicateChecking)
+                {
+                    //TODO: we need to validate whether the email setting are correct
+
+                    await _unitOfWork.EmailConnectorRepository.AddEmailConnector(emailConnector);
+                    var result = await _unitOfWork.SaveAsync();
+
+                    if (result.Success)
+                    {
+                        return OperationResult.SuccessResult;
+                    }
+                    else
+                    {
+                        return new UnexpectedErrorResult(result.Error.Message);
+                    }
+                }
+                else
+                {
+                    return new DuplicateEmailConnectorResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new UnexpectedErrorResult(ex.Message);
             }
         }
 

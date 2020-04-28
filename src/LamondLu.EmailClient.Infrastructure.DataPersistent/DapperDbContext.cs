@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using LamondLu.EmailClient.Domain.Models;
 using LamondLu.EmailClient.Infrastructure.DataPersistent.Models;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Infrastructure.DataPersistent
 {
-    public class DapperDbContext
+    public class DapperDbContext : IDisposable
     {
         private MySqlConnection _connection = null;
         private List<DapperCommand> _commands = new List<DapperCommand>();
@@ -29,7 +30,7 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             });
         }
 
-        public async Task SubmitAsync()
+        public async Task<DbOperationResult> SubmitAsync()
         {
             if (_connection.State != ConnectionState.Open)
             {
@@ -46,10 +47,12 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
                 }
 
                 tran.Commit();
+                return new SuccessDbOperationResult();
             }
-            catch
+            catch (Exception ex)
             {
                 tran.Rollback();
+                return new ErrorDbOperationResult(ex);
             }
         }
 
@@ -107,6 +110,12 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             }
 
             throw new Exception(ex.InnerException.Message);
+        }
+
+        public void Dispose()
+        {
+            _connection.Close();
+            _connection = null;
         }
     }
 }

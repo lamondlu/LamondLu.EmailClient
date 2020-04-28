@@ -23,5 +23,7 @@ namespace LamondLu.EmailClient.Domain.Models
         public OperationResultCode Code { get; private set; }
 
         public string Message { get; private set; }
+
+        public static SuccessResult SuccessResult = new SuccessResult();
     }
 }

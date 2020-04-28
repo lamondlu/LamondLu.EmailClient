@@ -44,9 +44,16 @@ namespace LamondLu.EmailClient.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _emailConnectorManager.Add(model);
+                var result = await _emailConnectorManager.Add(model);
 
-                return RedirectToAction("Index");
+                if (result.Success)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(result.Code.ToString(), result.Message);
+                }
             }
 
             return View(model);

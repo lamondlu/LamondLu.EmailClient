@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using LamondLu.EmailClient.Domain.Models;
+using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Domain.Interface
 {
@@ -6,6 +7,6 @@ namespace LamondLu.EmailClient.Domain.Interface
     {
         IEmailConnectorRepository EmailConnectorRepository { get; }
 
-        Task SaveAsync();
+        Task<DbOperationResult> SaveAsync();
     }
 }
