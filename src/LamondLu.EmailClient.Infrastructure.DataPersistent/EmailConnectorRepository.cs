@@ -51,14 +51,15 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
                 emailConnector.Server.Port,
                 emailConnector.Server.EnableSSL,
                 emailConnector.Description,
+                emailConnector.UserName,
                 emailConnector.Type
             });
         }
 
         public async Task<bool> CheckDuplicated(string emailAddress, string name, Guid emailConnectorId)
         {
-            var sql = "SELECT COUNT(*) FROM EmailConnector WHERE IsDeleted=0 AND EmailConnectorId<>@emailConnectorId";
-            var count = await _context.ExecuteScalar<int>(sql, new { emailConnectorId });
+            var sql = "SELECT COUNT(*) FROM EmailConnector WHERE IsDeleted=0 AND Name=@name AND EmailConnectorId<>@emailConnectorId";
+            var count = await _context.ExecuteScalar<int>(sql, new { name, emailConnectorId });
             return count > 0;
         }
     }

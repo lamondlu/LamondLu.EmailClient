@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LamondLu.EmailClient.Domain.DTOs;
 using LamondLu.EmailClient.Domain.Enum;
 using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Domain.Managers;
 using LamondLu.EmailClient.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +14,12 @@ namespace LamondLu.EmailClient.Server.Controllers
     public class EmailConnectorController : Controller
     {
         private EmailConnectorService _emailConnectorService = null;
+        private EmailConnectorManager _emailConnectorManager = null;
 
-        public EmailConnectorController(EmailConnectorService emailConnectorService)
+        public EmailConnectorController(EmailConnectorService emailConnectorService, EmailConnectorManager emailConnectorManager)
         {
             _emailConnectorService = emailConnectorService;
+            _emailConnectorManager = emailConnectorManager;
         }
 
         [Route("List")]
@@ -41,7 +44,9 @@ namespace LamondLu.EmailClient.Server.Controllers
         {
             if (ModelState.IsValid)
             {
+                await _emailConnectorManager.Add(model);
 
+                return RedirectToAction("Index");
             }
 
             return View(model);

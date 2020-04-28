@@ -10,9 +10,9 @@
 <hr />
 
 
-<form asp-action="Add">
+<form asp-action="Add" asp-controller="EmailConnector" method="post">
     <div class="row">
-
+        @Html.ValidationSummary()
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">

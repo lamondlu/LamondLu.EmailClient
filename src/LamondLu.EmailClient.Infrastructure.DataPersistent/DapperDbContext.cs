@@ -31,6 +31,11 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
 
         public async Task SubmitAsync()
         {
+            if (_connection.State != ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             var tran = await _connection.BeginTransactionAsync();
 
             try
