@@ -66,6 +66,16 @@ namespace LamondLu.EmailClient.Server.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Route("Update")]
+        public async Task<IActionResult> Update()
+        {
+            if (ModelState.IsValid)
+            {
 
+            }
+
+            return View();
+        }
     }
 }
