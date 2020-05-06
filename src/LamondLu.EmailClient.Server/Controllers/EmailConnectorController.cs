@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LamondLu.EmailClient.Domain.DTOs;
+﻿using LamondLu.EmailClient.Domain.DTOs;
 using LamondLu.EmailClient.Domain.Enum;
-using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.Managers;
 using LamondLu.EmailClient.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Server.Controllers
 {
@@ -63,7 +61,9 @@ namespace LamondLu.EmailClient.Server.Controllers
         [Route("Details")]
         public async Task<IActionResult> Details(Guid emailConnectorId)
         {
-            return View();
+            var model = await _emailConnectorService.GetEmailConnector(emailConnectorId);
+
+            return View(model);
         }
 
         [HttpPost]
@@ -76,6 +76,18 @@ namespace LamondLu.EmailClient.Server.Controllers
             }
 
             return View();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Stop()
+        {
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Start()
+        {
+            return Ok();
         }
     }
 }

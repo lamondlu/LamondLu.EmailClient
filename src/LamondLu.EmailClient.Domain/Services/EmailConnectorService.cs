@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Domain.Services
 {
-    public class EmailConnectorService : ServicerBase
+    public class EmailConnectorService : ServiceBase
     {
         public EmailConnectorService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -17,6 +17,11 @@ namespace LamondLu.EmailClient.Domain.Services
         public async Task<List<EmailConnectorConfigViewModel>> GetEmailConnectors()
         {
             return await _unitOfWork.EmailConnectorRepository.GetEmailConnectors();
+        }
+
+        public async Task<EmailConnectorDetailViewModel> GetEmailConnector(Guid emailConnectorId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace LamondLu.EmailClient.Domain.Services
 {
-    public abstract class ServicerBase
+    public abstract class ServiceBase
     {
         protected IUnitOfWork _unitOfWork = null;
 
-        public ServicerBase(IUnitOfWork unitOfWork)
+        public ServiceBase(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
