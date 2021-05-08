@@ -15,6 +15,8 @@ namespace LamondLu.EmailClient.ConsoleApp
         private readonly IUnitOfWork _unitOfWork = null;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory = null;
         private List<EmailConnectorTask> _tasks = new List<EmailConnectorTask>();
+        private List<Thread> _threads = new List<Thread>();
+
 
         public EmailConnectorHostService()
         {
@@ -31,10 +33,15 @@ namespace LamondLu.EmailClient.ConsoleApp
 
             foreach (var connector in connectors)
             {
-                var task = new EmailConnectorTask(connector.EmailConnectorId);
+                var task = new EmailConnectorTask(connector.EmailConnectorId, connector.Name);
 
                 Version(connector);
                 _tasks.Add(task);
+
+                Thread thread = new Thread(task.Start);
+                thread.Start();
+
+                _threads.Add(thread);
 
                 _logger.Write($"[{connector.Name}] Started");
             }
