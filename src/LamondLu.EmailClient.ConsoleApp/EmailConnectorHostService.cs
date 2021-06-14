@@ -33,7 +33,7 @@ namespace LamondLu.EmailClient.ConsoleApp
 
             foreach (var connector in connectors)
             {
-                var task = new EmailConnectorTask(connector.EmailConnectorId, connector.Name);
+                var task = new EmailConnectorTask(connector);
 
                 Version(connector);
                 _tasks.Add(task);

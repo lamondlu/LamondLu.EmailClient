@@ -1,4 +1,5 @@
 ﻿using LamondLu.EmailClient.Domain;
+using LamondLu.EmailClient.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,22 +8,20 @@ namespace LamondLu.EmailClient.ConsoleApp
 {
     public class EmailConnectorTask
     {
-        private Guid _emailConnectorId;
-        private string _emailConnectorName = string.Empty;
+        private EmailConnectorConfigViewModel _emailConnector = null;
 
-        public EmailConnectorTask(Guid emailConnectorId, string emailConnectorName)
+        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector)
         {
-            _emailConnectorId = emailConnectorId;
-            _emailConnectorName = emailConnectorName;
+            _emailConnector = emailConnector;
         }
 
         public void Start()
         {
-            Console.WriteLine($"Email Connector (id:{_emailConnectorId},name: {_emailConnectorName}) Start");
+            Console.WriteLine($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Start");
 
             try
             {
-
+                //var emailConnector = new EmailConnector(_emailConnector.Name, _emailConnector)
             }
             catch
             {
