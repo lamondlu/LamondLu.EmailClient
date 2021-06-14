@@ -5,7 +5,7 @@
 
 <h1>Email Connectors</h1>
 
-<section>
+<section style="padding-bottom: 20px">
     <button type="button" class="btn btn-dark" onclick="window.location='@Url.Action("Add","EmailConnector")'">+ Add</button>
 </section>
 <table class="table table-bordered">
@@ -22,7 +22,7 @@
         @if (Model == null || Model.Count == 0)
         {
             <tr>
-                <td colspan="5">No Record</td>
+                <td colspan="6">No Record</td>
             </tr>
         }
         else
@@ -30,11 +30,24 @@
             foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.IP</td>
-                    <td>@item.Type</td>
-                    <td>@item.Port</td>
-                    <td></td>
+                    <td><span class="align-middle">@item.Name</span></td>
+                    <td><span class="align-middle">@item.IP</span></td>
+                    <td><span class="align-middle">@item.Type</span></td>
+                    <td><span class="align-middle">@item.Status</span></td>
+                    <td><span class="align-middle">@item.Port</span></td>
+                    <td>
+                        <button class="btn btn-info">Edit</button>
+
+                        @if (item.IsRunning)
+                        {
+                            <button class="btn btn-danger">Stop</button>
+                        }
+
+                        @if (item.IsStopped)
+                        {
+                            <button class="btn btn-success">Start</button>
+                        }
+                    </td>
                 </tr>
             }
         }
