@@ -36,9 +36,9 @@ namespace LamondLu.EmailClient.ConsoleApp
                     StartPOP3(emailConnector);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
         }
 
@@ -47,7 +47,7 @@ namespace LamondLu.EmailClient.ConsoleApp
             ImapClient emailClient = new ImapClient();
 
             Console.WriteLine($"Try to connect Email IMAP Server,connector name is {emailConnector.Name}");
-            emailClient.Connect(emailConnector.Server.Server, emailConnector.Server.Port);
+            emailClient.Connect(emailConnector.Server.Server, emailConnector.Server.Port, true);
             emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
             emailClient.Authenticate(emailConnector.UserName, emailConnector.Password);
 
@@ -57,21 +57,35 @@ namespace LamondLu.EmailClient.ConsoleApp
             }
 
             List<MailKit.UniqueId> ids = null;
-            if (emailClient.Inbox != null)
-            {
-                var range = new UniqueIdRange(new UniqueId((uint)0), UniqueId.MaxValue);
-                ids = emailClient.Inbox.Search(MailKit.Search.SearchQuery.Uids(range)).Where(x => x.Id > (uint)0).OrderBy(x => x.Id).Take(100).ToList();
-            }
 
-            if (ids.Count == 0)
+            var folders = emailClient.GetFolders(emailClient.PersonalNamespaces[0]);
+
+            foreach (var folder in folders)
             {
-                foreach (var emailId in ids)
+                Console.WriteLine($"Current Folder: {folder.Name}");
+
+                if (!folder.IsOpen)
                 {
-                    var email = emailClient.Inbox.GetMessage(emailId);
+                    folder.Open(FolderAccess.ReadOnly);
+                }
 
-                    Console.WriteLine($"[{email.Date}] {email.Subject}");
+                if (folder != null)
+                {
+                    var range = new UniqueIdRange(new UniqueId((uint)1), UniqueId.MaxValue);
+                    ids = folder.Search(MailKit.Search.SearchQuery.Uids(range)).ToList();
+                }
+
+                if (ids.Count != 0)
+                {
+                    foreach (var emailId in ids)
+                    {
+                        var email = folder.GetMessage(emailId);
+
+                        Console.WriteLine($"[{email.Date}] {email.Subject}");
+                    }
                 }
             }
+
         }
 
         private void StartPOP3(EmailConnector emailConnector)
