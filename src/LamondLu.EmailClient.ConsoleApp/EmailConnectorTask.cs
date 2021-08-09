@@ -1,7 +1,10 @@
 ﻿using LamondLu.EmailClient.Domain;
 using LamondLu.EmailClient.Domain.ViewModels;
+using MailKit;
+using MailKit.Net.Imap;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LamondLu.EmailClient.ConsoleApp
@@ -19,14 +22,61 @@ namespace LamondLu.EmailClient.ConsoleApp
         {
             Console.WriteLine($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Start");
 
+            EmailConnector emailConnector = new EmailConnector(_emailConnector.Name, _emailConnector.EmailAddress, _emailConnector.UserName, _emailConnector.Password, new EmailServerConfig(_emailConnector.IP, _emailConnector.Port, _emailConnector.EnableSSL)
+            , _emailConnector.Type, string.Empty);
+
             try
             {
-                //var emailConnector = new EmailConnector(_emailConnector.Name, _emailConnector)
+                if (_emailConnector.Type == Domain.Enum.EmailConnectorType.IMAP)
+                {
+                    StartIMAP(emailConnector);
+                }
+                else
+                {
+                    StartPOP3(emailConnector);
+                }
             }
             catch
             {
 
             }
+        }
+
+        private void StartIMAP(EmailConnector emailConnector)
+        {
+            ImapClient emailClient = new ImapClient();
+
+            Console.WriteLine($"Try to connect Email IMAP Server,connector name is {emailConnector.Name}");
+            emailClient.Connect(emailConnector.Server.Server, emailConnector.Server.Port);
+            emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
+            emailClient.Authenticate(emailConnector.UserName, emailConnector.Password);
+
+            if (emailClient.Inbox != null)
+            {
+                emailClient.Inbox.Open(MailKit.FolderAccess.ReadOnly);
+            }
+
+            List<MailKit.UniqueId> ids = null;
+            if (emailClient.Inbox != null)
+            {
+                var range = new UniqueIdRange(new UniqueId((uint)0), UniqueId.MaxValue);
+                ids = emailClient.Inbox.Search(MailKit.Search.SearchQuery.Uids(range)).Where(x => x.Id > (uint)0).OrderBy(x => x.Id).Take(100).ToList();
+            }
+
+            if (ids.Count == 0)
+            {
+                foreach (var emailId in ids)
+                {
+                    var email = emailClient.Inbox.GetMessage(emailId);
+
+                    Console.WriteLine($"[{email.Date}] {email.Subject}");
+                }
+            }
+        }
+
+        private void StartPOP3(EmailConnector emailConnector)
+        {
+
         }
     }
 }

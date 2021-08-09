@@ -44,7 +44,7 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             {
                 emailConnector.EmailConnectorId,
                 emailConnector.Name,
-                emailConnector.EmailAddress,
+                emailConnector,
                 emailConnector.Password,
                 emailConnector.Status,
                 IP = emailConnector.Server.Server,
@@ -61,6 +61,11 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             var sql = "SELECT COUNT(*) FROM EmailConnector WHERE IsDeleted=0 AND Name=@name AND EmailConnectorId<>@emailConnectorId";
             var count = await _context.ExecuteScalar<int>(sql, new { name, emailConnectorId });
             return count > 0;
+        }
+
+        public Task<EmailConnector> GetEmailConnector(Guid emailConnectorId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

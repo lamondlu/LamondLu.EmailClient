@@ -9,3 +9,6 @@ namespace LamondLu.EmailClient.Domain.DTOs
         public string Name { get; set; }
     }
 }
+
+
+

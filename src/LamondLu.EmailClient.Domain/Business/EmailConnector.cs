@@ -11,13 +11,13 @@ namespace LamondLu.EmailClient.Domain
         {
             EmailConnectorId = Guid.NewGuid();
             Name = name;
-            EmailAddress = emailAddress;
             UserName = userName;
             Password = password;
             Server = config;
             Type = type;
             Description = description;
             Status = EmailConnectorStatus.Stopped;
+            EmailAddress = emailAddress;
         }
 
         public Guid EmailConnectorId { get; private set; }
