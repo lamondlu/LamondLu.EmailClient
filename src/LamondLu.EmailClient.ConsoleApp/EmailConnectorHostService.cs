@@ -12,36 +12,38 @@ namespace LamondLu.EmailClient.ConsoleApp
     {
         private readonly ILogger _logger = null;
         private readonly Settings _settings = null;
-        private readonly IUnitOfWork _unitOfWork = null;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory = null;
+        private readonly IEmailConnectorWorkerFactory _emailConnectorWorkerFactory = null;
+        private readonly IRuleProcessorFactory _ruleProcessorFactory = null;
         private List<EmailConnectorTask> _tasks = new List<EmailConnectorTask>();
-        private List<Thread> _threads = new List<Thread>();
-
 
         public EmailConnectorHostService()
         {
             _logger = (ILogger)EnvironmentConst.Services.GetService(typeof(ILogger));
             _settings = EnvironmentConst.EmailSettings;
-            _unitOfWork = (IUnitOfWork)EnvironmentConst.Services.GetService(typeof(IUnitOfWork));
+            _unitOfWorkFactory = (IUnitOfWorkFactory)EnvironmentConst.Services.GetService(typeof(IUnitOfWorkFactory));
+            _emailConnectorWorkerFactory = (IEmailConnectorWorkerFactory)EnvironmentConst.Services.GetService(typeof(IEmailConnectorWorkerFactory));
+            _ruleProcessorFactory = (IRuleProcessorFactory)EnvironmentConst.Services.GetService(typeof(IRuleProcessorFactory));
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.Write("Email Service started.");
 
-            var connectors = await _unitOfWork.EmailConnectorRepository.GetEmailConnectors();
+            var unitOfWork = _unitOfWorkFactory.Create();
+            var connectors = await unitOfWork.EmailConnectorRepository.GetEmailConnectors();
 
             foreach (var connector in connectors)
             {
-                var task = new EmailConnectorTask(connector);
+                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory);
 
                 Version(connector);
                 _tasks.Add(task);
 
-                Thread thread = new Thread(task.Start);
-                thread.Start();
-
-                _threads.Add(thread);
+                Task.Run(() =>
+                {
+                    task.Start();
+                });
 
                 _logger.Write($"[{connector.Name}] Started");
             }

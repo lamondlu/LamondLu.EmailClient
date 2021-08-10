@@ -30,9 +30,9 @@ namespace LamondLu.EmailClient.ConsoleApp
                 services.Configure<DbSetting>(hostContext.Configuration.GetSection("Db"));
 
                 services.AddSingleton<ILogger, ConsoleLogger>();
-                services.AddSingleton<IEmailConnectorFactory, EmailConnectorFactory>();
+                services.AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>();
+                services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
                 services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();
-                services.AddScoped<IUnitOfWork, UnitOfWork>();
                 services.AddHostedService<EmailConnectorHostService>();
 
                 EnvironmentConst.Services = services.BuildServiceProvider();

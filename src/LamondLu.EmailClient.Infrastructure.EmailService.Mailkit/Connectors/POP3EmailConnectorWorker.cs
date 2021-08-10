@@ -1,15 +1,14 @@
-using LamondLu.EmailClient.Domain;
+﻿using LamondLu.EmailClient.Domain;
 using LamondLu.EmailClient.Domain.Interface;
-using MailKit.Net.Imap;
+using MailKit.Net.Pop3;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
-    public class IMAPEmailConnector : IEmailConnector
+    public class POP3EmailConnectorWorker : IEmailConnectorWorker
     {
-        private ImapClient _imapClient = null;
-
-        public IMAPEmailConnector(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork)
+        public POP3EmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork)
         {
             Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
         }
@@ -18,12 +17,12 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
         public event EmailReceived EmailReceived;
 
-        public void Connect()
+        public async Task<bool> Connect()
         {
-            _imapClient = new ImapClient();
+            throw new System.NotImplementedException();
         }
 
-        public void Listen()
+        public async Task Listen()
         {
             throw new System.NotImplementedException();
         }

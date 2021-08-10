@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Consol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Infrastructure.DataPersistent", "LamondLu.EmailClient.Infrastructure.DataPersistent\LamondLu.EmailClient.Infrastructure.DataPersistent.csproj", "{C6A1F095-39C9-44E1-B139-A0AE3933A155}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamondLu.EmailClient.Server", "LamondLu.EmailClient.Server\LamondLu.EmailClient.Server.csproj", "{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Server", "LamondLu.EmailClient.Server\LamondLu.EmailClient.Server.csproj", "{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

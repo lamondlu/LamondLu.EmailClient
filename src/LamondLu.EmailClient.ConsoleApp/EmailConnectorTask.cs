@@ -6,19 +6,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LamondLu.EmailClient.Domain.Interface;
+using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.ConsoleApp
 {
     public class EmailConnectorTask
     {
         private EmailConnectorConfigViewModel _emailConnector = null;
+        private IEmailConnectorWorkerFactory _factory = null;
+        private IRuleProcessorFactory _ruleProcessorFactory = null;
+        private IUnitOfWorkFactory _unitOfWorkFactory = null;
 
-        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector)
+        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _emailConnector = emailConnector;
+            _factory = factory;
+            _ruleProcessorFactory = ruleProcessorFactory;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public void Start()
+        public async Task Start()
         {
             Console.WriteLine($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Start");
 
@@ -27,84 +35,20 @@ namespace LamondLu.EmailClient.ConsoleApp
 
             try
             {
-                if (_emailConnector.Type == Domain.Enum.EmailConnectorType.IMAP)
+                var worker = _factory.Build(emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create());
+
+                var isConnected = await worker.Connect();
+
+                if (isConnected)
                 {
-                    StartIMAP(emailConnector);
-                }
-                else
-                {
-                    StartPOP3(emailConnector);
+                    Console.WriteLine("Email Connector connected.");
+                    await worker.Listen();
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
-        }
-
-        private void StartIMAP(EmailConnector emailConnector)
-        {
-            ImapClient emailClient = new ImapClient();
-
-            Console.WriteLine($"Try to connect Email IMAP Server,connector name is {emailConnector.Name}");
-            emailClient.Connect(emailConnector.Server.Server, emailConnector.Server.Port, true);
-            emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
-            emailClient.Authenticate(emailConnector.UserName, emailConnector.Password);
-
-            if (emailConnector.Server.Server.Contains("163"))
-            {
-                HotFixFor163(emailClient);
-            }
-
-            if (emailClient.Inbox != null)
-            {
-                emailClient.Inbox.Open(MailKit.FolderAccess.ReadOnly);
-            }
-
-            List<MailKit.UniqueId> ids = null;
-
-            var folders = emailClient.GetFolders(emailClient.PersonalNamespaces[0]);
-
-            foreach (var folder in folders)
-            {
-                Console.WriteLine($"Current Folder: {folder.Name}");
-
-                if (!folder.IsOpen)
-                {
-                    folder.Open(FolderAccess.ReadOnly);
-                }
-
-                if (folder != null)
-                {
-                    var range = new UniqueIdRange(new UniqueId((uint)1), UniqueId.MaxValue);
-                    ids = folder.Search(MailKit.Search.SearchQuery.Uids(range)).Take(10).ToList();
-                }
-
-                if (ids.Count != 0)
-                {
-                    foreach (var emailId in ids)
-                    {
-                        var email = folder.GetMessage(emailId);
-
-                        Console.WriteLine($"[{email.Date}] {email.Subject}");
-                    }
-                }
-            }
-
-        }
-
-        private void StartPOP3(EmailConnector emailConnector)
-        {
-
-        }
-
-        private void HotFixFor163(ImapClient client)
-        {
-            client.Identify(new ImapImplementation
-            {
-                Version = "2.0",
-                Name = "xxxx"
-            });
         }
     }
 }
