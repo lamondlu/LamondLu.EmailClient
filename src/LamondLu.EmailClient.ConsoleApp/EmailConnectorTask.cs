@@ -51,6 +51,11 @@ namespace LamondLu.EmailClient.ConsoleApp
             emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
             emailClient.Authenticate(emailConnector.UserName, emailConnector.Password);
 
+            if (emailConnector.Server.Server.Contains("163"))
+            {
+                HotFixFor163(emailClient);
+            }
+
             if (emailClient.Inbox != null)
             {
                 emailClient.Inbox.Open(MailKit.FolderAccess.ReadOnly);
@@ -72,7 +77,7 @@ namespace LamondLu.EmailClient.ConsoleApp
                 if (folder != null)
                 {
                     var range = new UniqueIdRange(new UniqueId((uint)1), UniqueId.MaxValue);
-                    ids = folder.Search(MailKit.Search.SearchQuery.Uids(range)).ToList();
+                    ids = folder.Search(MailKit.Search.SearchQuery.Uids(range)).Take(10).ToList();
                 }
 
                 if (ids.Count != 0)
@@ -91,6 +96,15 @@ namespace LamondLu.EmailClient.ConsoleApp
         private void StartPOP3(EmailConnector emailConnector)
         {
 
+        }
+
+        private void HotFixFor163(ImapClient client)
+        {
+            client.Identify(new ImapImplementation
+            {
+                Version = "2.0",
+                Name = "xxxx"
+            });
         }
     }
 }
