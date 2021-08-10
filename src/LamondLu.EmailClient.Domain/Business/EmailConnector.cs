@@ -30,6 +30,8 @@ namespace LamondLu.EmailClient.Domain
 
         public string Password { get; set; }
 
+        public List<Rule> Rules { get; set; }
+
         public EmailConnectorStatus Status { get; private set; }
 
         public EmailServerConfig Server { get; set; }

@@ -5,8 +5,7 @@ namespace LamondLu.EmailClient.Domain.Interface
 {
     public interface IEmailConnectorFactory
     {
-        IEmailConnector Build(EmailConnectorType emailConnectorType,
-            List<Rule> rules,
+        IEmailConnector Build(EmailConnector emailConnector,
             IRuleProcessorFactory ruleProcessorFactory,
             IUnitOfWork unitOfWork);
     }
