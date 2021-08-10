@@ -7,5 +7,10 @@ namespace LamondLu.EmailClient.ConsoleApp
         public static IServiceProvider Services = null;
 
         public static Settings EmailSettings = null;
+
+        public static T GetService<T>()
+        {
+            return (T)Services.GetService(typeof(T));
+        }
     }
 }

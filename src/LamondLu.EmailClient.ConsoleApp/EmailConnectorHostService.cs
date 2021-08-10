@@ -11,7 +11,6 @@ namespace LamondLu.EmailClient.ConsoleApp
     public class EmailConnectorHostService : IHostedService
     {
         private readonly ILogger _logger = null;
-        private readonly Settings _settings = null;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory = null;
         private readonly IEmailConnectorWorkerFactory _emailConnectorWorkerFactory = null;
         private readonly IRuleProcessorFactory _ruleProcessorFactory = null;
@@ -19,11 +18,10 @@ namespace LamondLu.EmailClient.ConsoleApp
 
         public EmailConnectorHostService()
         {
-            _logger = (ILogger)EnvironmentConst.Services.GetService(typeof(ILogger));
-            _settings = EnvironmentConst.EmailSettings;
-            _unitOfWorkFactory = (IUnitOfWorkFactory)EnvironmentConst.Services.GetService(typeof(IUnitOfWorkFactory));
-            _emailConnectorWorkerFactory = (IEmailConnectorWorkerFactory)EnvironmentConst.Services.GetService(typeof(IEmailConnectorWorkerFactory));
-            _ruleProcessorFactory = (IRuleProcessorFactory)EnvironmentConst.Services.GetService(typeof(IRuleProcessorFactory));
+            _logger = EnvironmentConst.GetService<ILogger>();
+            _unitOfWorkFactory = EnvironmentConst.GetService<IUnitOfWorkFactory>();
+            _emailConnectorWorkerFactory = EnvironmentConst.GetService<IEmailConnectorWorkerFactory>();
+            _ruleProcessorFactory = EnvironmentConst.GetService<IRuleProcessorFactory>();
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
