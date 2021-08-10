@@ -9,5 +9,7 @@
         event EmailReceived EmailReceived;
 
         void Connect();
+
+        void Listen();
     }
 }

@@ -12,15 +12,15 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
         {
             if (emailConnector.Type.IsPop3())
             {
-                return new POP3EmailConnector(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
+                return new POP3EmailConnector(emailConnector, ruleProcessorFactory, unitOfWork);
             }
             else if (emailConnector.Type.IsIMAP())
             {
-                return new IMAPEmailConnector(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
+                return new IMAPEmailConnector(emailConnector, ruleProcessorFactory, unitOfWork);
             }
             else
             {
-                return new IMAPEmailConnector(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
+                return new IMAPEmailConnector(emailConnector, ruleProcessorFactory, unitOfWork);
             }
         }
     }
