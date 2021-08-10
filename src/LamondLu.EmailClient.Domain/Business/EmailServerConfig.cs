@@ -18,5 +18,13 @@ namespace LamondLu.EmailClient.Domain
         public int Port { get; private set; }
 
         public bool EnableSSL { get; private set; }
+
+        public bool IsNetEase
+        {
+            get
+            {
+                return Server.Contains("163");
+            }
+        }
     }
 }

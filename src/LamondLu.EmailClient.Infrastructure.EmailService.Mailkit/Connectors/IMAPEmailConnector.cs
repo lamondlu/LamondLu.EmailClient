@@ -7,11 +7,13 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
     public class IMAPEmailConnector : IEmailConnector
     {
-        private ImapClient _imapClient = null;
+        private ImapClient _emailClient = null;
+        private EmailConnector _emailConnector = null;
 
         public IMAPEmailConnector(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork)
         {
             Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
+            _emailConnector = emailConnector;
         }
 
         public RulePipeline Pipeline { get; }
@@ -20,12 +22,31 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
         public void Connect()
         {
-            _imapClient = new ImapClient();
+            _emailClient = new ImapClient();
+
+            _emailClient.Connect(_emailConnector.Server.Server, _emailConnector.Server.Port, true);
+            _emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
+            _emailClient.Authenticate(_emailConnector.UserName, _emailConnector.Password);
+
+            if (_emailConnector.Server.IsNetEase)
+            {
+                //for netease box, there need some extra work
+                SpeicalBox();
+            }
+        }
+
+        private void SpeicalBox()
+        {
+            _emailClient.Identify(new ImapImplementation
+            {
+                OS = "2.0",
+                Name = "xxxxx"
+            });
         }
 
         public void Listen()
         {
-            throw new System.NotImplementedException();
+
         }
     }
 }
