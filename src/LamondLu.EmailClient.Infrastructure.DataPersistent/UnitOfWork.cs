@@ -10,6 +10,7 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
     public class UnitOfWork : IUnitOfWork
     {
         private IEmailConnectorRepository _emailConnectorRepository = null;
+        private IEmailFolderRepository _emailFolderRepository = null;
         private MySqlConnection _connection = null;
         private DbSetting _dbSetting = null;
         private DapperDbContext _dbContext = null;
@@ -31,6 +32,19 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
                 }
 
                 return _emailConnectorRepository;
+            }
+        }
+
+        public IEmailFolderRepository EmailFolderRepository
+        {
+            get
+            {
+                if (_emailFolderRepository == null)
+                {
+                    return new EmailFolderRepository(_dbContext);
+                }
+
+                return _emailFolderRepository;
             }
         }
 

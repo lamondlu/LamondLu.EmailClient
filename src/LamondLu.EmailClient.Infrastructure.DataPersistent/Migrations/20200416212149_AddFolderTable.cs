@@ -11,7 +11,6 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent.Migrations
                .WithColumn("FolderId").AsGuid().PrimaryKey()
                .WithColumn("FolderName").AsString().NotNullable()
                .WithColumn("FolderFullPath").AsString().NotNullable()
-               .WithColumn("ParentId").AsGuid().ForeignKey("FK_Folder_ParentId_Folder_FolderId", "EmailFolder", "FolderId")
                .WithColumn("IsDeleted").AsBoolean().NotNullable().WithDefaultValue(false);
         }
 

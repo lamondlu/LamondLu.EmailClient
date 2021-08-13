@@ -1,10 +1,12 @@
 using LamondLu.EmailClient.Domain;
 using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Domain.ViewModels;
 using MailKit;
 using MailKit.Net.Imap;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
@@ -13,11 +15,13 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
     {
         private ImapClient _emailClient = null;
         private EmailConnector _emailConnector = null;
+        private IUnitOfWork _unitOfWork = null;
 
         public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork)
         {
             Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
+            _unitOfWork = unitOfWork;
         }
 
         public RulePipeline Pipeline { get; }
@@ -86,7 +90,21 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                         Console.WriteLine($"[{email.Date}] {email.Subject}");
                     }
                 }
+
+                Thread.Sleep(60000);
             }
+        }
+
+        private async Task<EmailFolderConfigurationModel> GetOrCreateFolder(Guid emailconnectorId, string folderPath)
+        {
+            var folder = await _unitOfWork.EmailFolderRepository.GetEmailFolder(emailconnectorId, folderPath);
+
+            if (folder == null)
+            {
+                
+            }
+
+            throw new NotImplementedException();
         }
     }
 }
