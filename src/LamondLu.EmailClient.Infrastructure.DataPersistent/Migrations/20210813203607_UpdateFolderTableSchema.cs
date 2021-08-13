@@ -14,9 +14,9 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent.Migrations
 
             Create.ForeignKey("FK_EmailFolder_EmailConnectorId_EmailConnector_Id")
                 .FromTable("EmailFolder")
-                .ForeignColumn("EmailConnectId")
+                .ForeignColumn("EmailConnectorId")
                 .ToTable("EmailConnector")
-                .PrimaryColumn("Id");
+                .PrimaryColumn("EmailConnectorId");
         }
 
         public override void Down()
