@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LamondLu.EmailClient.Domain.Models
+﻿namespace LamondLu.EmailClient.Domain.Models
 {
     public class SuccessDbOperationResult : DbOperationResult
     {

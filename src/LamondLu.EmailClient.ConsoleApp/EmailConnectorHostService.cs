@@ -1,5 +1,4 @@
-﻿using LamondLu.EmailClient.Domain;
-using LamondLu.EmailClient.Domain.Interface;
+﻿using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.ViewModels;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;

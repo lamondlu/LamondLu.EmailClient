@@ -1,12 +1,7 @@
 ﻿using LamondLu.EmailClient.Domain;
-using LamondLu.EmailClient.Domain.ViewModels;
-using MailKit;
-using MailKit.Net.Imap;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Domain.ViewModels;
+using System;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.ConsoleApp

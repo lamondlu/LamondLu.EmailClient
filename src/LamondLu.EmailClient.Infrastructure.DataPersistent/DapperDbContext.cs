@@ -1,12 +1,10 @@
 ﻿using Dapper;
 using LamondLu.EmailClient.Domain.Models;
 using LamondLu.EmailClient.Infrastructure.DataPersistent.Models;
-using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Infrastructure.DataPersistent

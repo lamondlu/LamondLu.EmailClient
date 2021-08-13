@@ -1,8 +1,5 @@
 ﻿using LamondLu.EmailClient.Domain.Enum;
 using LamondLu.EmailClient.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LamondLu.EmailClient.Domain.Results
 {

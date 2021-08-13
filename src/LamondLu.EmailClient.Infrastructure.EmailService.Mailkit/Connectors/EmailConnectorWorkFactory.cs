@@ -1,8 +1,6 @@
 using LamondLu.EmailClient.Domain;
-using LamondLu.EmailClient.Domain.Enum;
 using LamondLu.EmailClient.Domain.Extension;
 using LamondLu.EmailClient.Domain.Interface;
-using System.Collections.Generic;
 
 namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {

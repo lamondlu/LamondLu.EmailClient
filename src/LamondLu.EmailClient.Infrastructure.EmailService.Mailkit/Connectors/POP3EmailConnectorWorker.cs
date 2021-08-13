@@ -1,7 +1,5 @@
 ﻿using LamondLu.EmailClient.Domain;
 using LamondLu.EmailClient.Domain.Interface;
-using MailKit.Net.Pop3;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit

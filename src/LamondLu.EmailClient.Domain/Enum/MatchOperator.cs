@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LamondLu.EmailClient.Domain.Enum
+﻿namespace LamondLu.EmailClient.Domain.Enum
 {
     public enum MatchOperator
     {

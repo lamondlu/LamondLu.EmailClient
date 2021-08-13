@@ -1,9 +1,6 @@
 ﻿using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Infrastructure.DataPersistent.Models;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LamondLu.EmailClient.Infrastructure.DataPersistent
 {

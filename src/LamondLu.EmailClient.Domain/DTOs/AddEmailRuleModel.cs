@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LamondLu.EmailClient.Domain.DTOs
+﻿namespace LamondLu.EmailClient.Domain.DTOs
 {
     public class AddEmailRuleModel
     {

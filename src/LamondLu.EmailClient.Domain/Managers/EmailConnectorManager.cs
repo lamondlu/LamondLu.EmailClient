@@ -3,8 +3,6 @@ using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.Models;
 using LamondLu.EmailClient.Domain.Results;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailClient.Domain.Managers

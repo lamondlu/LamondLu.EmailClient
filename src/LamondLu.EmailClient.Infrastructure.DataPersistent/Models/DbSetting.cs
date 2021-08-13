@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LamondLu.EmailClient.Infrastructure.DataPersistent.Models
+﻿namespace LamondLu.EmailClient.Infrastructure.DataPersistent.Models
 {
     public class DbSetting
     {

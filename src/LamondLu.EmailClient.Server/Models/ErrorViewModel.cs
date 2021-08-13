@@ -1,5 +1,3 @@
-using System;
-
 namespace LamondLu.EmailClient.Server.Models
 {
     public class ErrorViewModel

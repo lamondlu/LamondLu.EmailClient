@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LamondLu.EmailClient.Domain.Interface;
+﻿using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.Managers;
 using LamondLu.EmailClient.Domain.Services;
 using LamondLu.EmailClient.Infrastructure.DataPersistent;
 using LamondLu.EmailClient.Infrastructure.DataPersistent.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

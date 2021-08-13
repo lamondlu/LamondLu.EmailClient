@@ -1,6 +1,3 @@
-using LamondLu.EmailClient.Domain.Enum;
-using System.Collections.Generic;
-
 namespace LamondLu.EmailClient.Domain.Interface
 {
     public interface IEmailConnectorWorkerFactory
