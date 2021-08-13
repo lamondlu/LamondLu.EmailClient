@@ -19,6 +19,19 @@ namespace LamondLu.EmailClient.Domain
             EmailAddress = emailAddress;
         }
 
+        public EmailConnector(Guid emailConnectorId, string name, string emailAddress, string userName, string password, EmailServerConfig config, EmailConnectorType type, string description)
+        {
+            EmailConnectorId = emailConnectorId;
+            Name = name;
+            UserName = userName;
+            Password = password;
+            Server = config;
+            Type = type;
+            Description = description;
+            Status = EmailConnectorStatus.Stopped;
+            EmailAddress = emailAddress;
+        }
+
         public Guid EmailConnectorId { get; private set; }
 
         public string Name { get; set; }

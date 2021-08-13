@@ -65,29 +65,42 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
         {
             Console.WriteLine("Start to pull email.");
 
-            if (_emailClient.Inbox != null)
+            if (!_emailClient.Inbox.IsOpen)
             {
-                _emailClient.Inbox.Open(MailKit.FolderAccess.ReadOnly);
+                _emailClient.Inbox.Open(FolderAccess.ReadOnly);
             }
+
+            var folders = GetFolders(_emailClient.Inbox);
+            folders.Add(_emailClient.Inbox);
 
             while (true)
             {
-
-
-                List<MailKit.UniqueId> ids = null;
-                if (_emailClient.Inbox != null)
+                foreach (var folder in folders)
                 {
-                    var range = new UniqueIdRange(new UniqueId((uint)1), UniqueId.MaxValue);
-                    ids = _emailClient.Inbox.Search(MailKit.Search.SearchQuery.Uids(range)).Where(x => x.Id > (uint)1).OrderBy(x => x.Id).Take(100).ToList();
-                }
-
-                if (ids.Count != 0)
-                {
-                    foreach (var emailId in ids)
+                    if (!folder.IsOpen)
                     {
-                        var email = _emailClient.Inbox.GetMessage(emailId);
+                        folder.Open(MailKit.FolderAccess.ReadOnly);
+                    }
 
-                        Console.WriteLine($"[{email.Date}] {email.Subject}");
+                    var folderEntity = await GetOrCreateFolder(_emailConnector.EmailConnectorId, folder.FullName, folder.Name);
+
+                    Console.WriteLine($"Current Folder: {folderEntity.FolderPath}");
+
+                    List<MailKit.UniqueId> ids = null;
+                    if (_emailClient.Inbox != null)
+                    {
+                        var range = new UniqueIdRange(new UniqueId((uint)1), UniqueId.MaxValue);
+                        ids = folder.Search(MailKit.Search.SearchQuery.Uids(range)).Where(x => x.Id > (uint)1).OrderBy(x => x.Id).Take(10).ToList();
+                    }
+
+                    if (ids.Count != 0)
+                    {
+                        foreach (var emailId in ids)
+                        {
+                            var email = folder.GetMessage(emailId);
+
+                            Console.WriteLine($"[{email.Date}] {email.Subject}");
+                        }
                     }
                 }
 
@@ -95,16 +108,33 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             }
         }
 
-        private async Task<EmailFolderConfigurationModel> GetOrCreateFolder(Guid emailconnectorId, string folderPath)
+        private List<IMailFolder> GetFolders(IMailFolder rootFolder)
+        {
+            var folders = new List<IMailFolder>();
+
+            var subFolders = rootFolder.GetSubfolders();
+
+            if (subFolders.Count > 0)
+            {
+                foreach (var folder in subFolders)
+                {
+                    folders.AddRange(GetFolders(folder));
+                }
+            }
+
+            return folders;
+        }
+
+        private async Task<EmailFolderConfigurationModel> GetOrCreateFolder(Guid emailconnectorId, string folderName, string folderPath)
         {
             var folder = await _unitOfWork.EmailFolderRepository.GetEmailFolder(emailconnectorId, folderPath);
 
             if (folder == null)
             {
-                
+                folder = await _unitOfWork.EmailFolderRepository.CreateEmailFolder(emailconnectorId, folderPath, folderName);
             }
 
-            throw new NotImplementedException();
+            return folder;
         }
     }
 }

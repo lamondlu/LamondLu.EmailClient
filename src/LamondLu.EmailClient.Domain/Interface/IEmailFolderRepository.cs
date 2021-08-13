@@ -9,7 +9,7 @@ namespace LamondLu.EmailClient.Domain.Interface
     {
         Task<EmailFolderConfigurationModel> GetEmailFolder(Guid emailConnectorId, string folderPath);
 
-        Task<EmailFolderConfigurationModel> CreateEmailFolder(Guid emailConnectorId, string folderPath);
+        Task<EmailFolderConfigurationModel> CreateEmailFolder(Guid emailConnectorId, string folderPath, string folderName);
 
 
         Task<List<EmailFolderConfigurationModel>> GetFolders(Guid emailConnectorId);
