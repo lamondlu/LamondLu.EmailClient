@@ -66,20 +66,25 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                 _emailClient.Inbox.Open(MailKit.FolderAccess.ReadOnly);
             }
 
-            List<MailKit.UniqueId> ids = null;
-            if (_emailClient.Inbox != null)
+            while (true)
             {
-                var range = new UniqueIdRange(new UniqueId((uint)1), UniqueId.MaxValue);
-                ids = _emailClient.Inbox.Search(MailKit.Search.SearchQuery.Uids(range)).Where(x => x.Id > (uint)1).OrderBy(x => x.Id).Take(100).ToList();
-            }
 
-            if (ids.Count != 0)
-            {
-                foreach (var emailId in ids)
+
+                List<MailKit.UniqueId> ids = null;
+                if (_emailClient.Inbox != null)
                 {
-                    var email = _emailClient.Inbox.GetMessage(emailId);
+                    var range = new UniqueIdRange(new UniqueId((uint)1), UniqueId.MaxValue);
+                    ids = _emailClient.Inbox.Search(MailKit.Search.SearchQuery.Uids(range)).Where(x => x.Id > (uint)1).OrderBy(x => x.Id).Take(100).ToList();
+                }
 
-                    Console.WriteLine($"[{email.Date}] {email.Subject}");
+                if (ids.Count != 0)
+                {
+                    foreach (var emailId in ids)
+                    {
+                        var email = _emailClient.Inbox.GetMessage(emailId);
+
+                        Console.WriteLine($"[{email.Date}] {email.Subject}");
+                    }
                 }
             }
         }

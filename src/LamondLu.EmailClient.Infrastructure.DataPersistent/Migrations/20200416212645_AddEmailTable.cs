@@ -8,10 +8,10 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent.Migrations
         public override void Up()
         {
             Create.Table("Email")
-                .WithColumn("EmailId").AsGuid().PrimaryKey()
+                .WithColumn("Id").AsGuid().PrimaryKey()
                 .WithColumn("MessageId").AsString().NotNullable()
-                .WithColumn("MailkitId").AsInt32().Nullable()
-                .WithColumn("MailkitValidityId").AsInt32().Nullable()
+                .WithColumn("EmailId").AsInt32().Nullable()
+                .WithColumn("ValidityId").AsInt32().Nullable()
                 .WithColumn("ReceivedDate").AsDateTime().Nullable()
                 .WithColumn("SentDate").AsDateTime().Nullable()
                 .WithColumn("ImportedDate").AsDateTime().NotNullable()
