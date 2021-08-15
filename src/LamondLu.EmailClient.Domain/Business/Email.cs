@@ -27,7 +27,13 @@ namespace LamondLu.EmailClient.Domain
 
         public string Notes { get; set; }
 
-        public EmailAddress Receipt { get; set; }
+        public List<EmailAddress> Receipts { get; set; }
+
+        public List<EmailAddress> CCs{get;set;}
+
+        public List<EmailAddress> BCCs{get;set;}
+
+        public List<EmailAddress> ReplyTos{get;set;}
 
         public List<EmailAttachment> Attachments { get; set; }
 
