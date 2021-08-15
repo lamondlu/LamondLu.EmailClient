@@ -3,6 +3,7 @@ using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.ViewModels;
 using MailKit;
 using MailKit.Net.Imap;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,8 +90,8 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                     List<MailKit.UniqueId> ids = null;
                     if (_emailClient.Inbox != null)
                     {
-                        var range = new UniqueIdRange(new UniqueId((uint)1), UniqueId.MaxValue);
-                        ids = folder.Search(MailKit.Search.SearchQuery.Uids(range)).Where(x => x.Id > (uint)1).OrderBy(x => x.Id).Take(10).ToList();
+                        var range = new UniqueIdRange(new UniqueId(folderEntity.LastEmailId, folderEntity.LastValidityId), UniqueId.MaxValue);
+                        ids = folder.Search(MailKit.Search.SearchQuery.Uids(range)).OrderBy(x => x.Id).Take(100).ToList();
                     }
 
                     if (ids.Count != 0)
@@ -98,8 +99,9 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                         foreach (var emailId in ids)
                         {
                             var email = folder.GetMessage(emailId);
-
                             Console.WriteLine($"[{email.Date}] {email.Subject}");
+
+                            SaveMessage(email);
                         }
                     }
                 }
@@ -135,6 +137,24 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             }
 
             return folder;
+        }
+
+        private void SaveMessage(MimeMessage mail)
+        {
+            //save message
+
+            if (mail.Attachments.Count() > 0)
+            {
+                foreach (var attachment in mail.Attachments)
+                {
+                    SaveAttachment(attachment);
+                }
+            }
+        }
+
+        private void SaveAttachment(MimeEntity attachment)
+        {
+
         }
     }
 }
