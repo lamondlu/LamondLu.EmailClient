@@ -11,6 +11,9 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
     {
         private IEmailConnectorRepository _emailConnectorRepository = null;
         private IEmailFolderRepository _emailFolderRepository = null;
+
+        private IEmailRepository _emailRepository = null;
+
         private MySqlConnection _connection = null;
         private DbSetting _dbSetting = null;
         private DapperDbContext _dbContext = null;
@@ -20,6 +23,16 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             _dbSetting = optionsAccessor.Value;
             _connection = new MySqlConnection(_dbSetting.ConnectionString);
             _dbContext = new DapperDbContext(_connection, _dbSetting.Timeout);
+        }
+
+        public IEmailRepository EmailRepository{
+            get{
+                if(_emailRepository  == null){
+                    return new EmailRepository(_dbContext);
+                }
+
+                return _emailRepository;
+            }
         }
 
         public IEmailConnectorRepository EmailConnectorRepository
