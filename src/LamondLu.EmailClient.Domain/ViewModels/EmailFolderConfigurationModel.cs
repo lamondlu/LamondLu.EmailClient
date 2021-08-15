@@ -12,8 +12,8 @@ namespace LamondLu.EmailClient.Domain.ViewModels
 
         public string FolderPath { get; set; }
 
-        public int LastEmailId { get; set; }
+        public uint LastEmailId { get; set; }
 
-        public int LastValidityId { get; set; }
+        public uint LastValidityId { get; set; }
     }
 }
