@@ -16,13 +16,9 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent.Migrations
                 .WithColumn("SentDate").AsDateTime().Nullable()
                 .WithColumn("ImportedDate").AsDateTime().NotNullable()
                 .WithColumn("Subject").AsString().Nullable()
-                .WithColumn("Body").AsCustom("longtext").Nullable()
-                .WithColumn("TextBody").AsCustom("longtext").Nullable()
                 .WithColumn("Notes").AsCustom("longtext").Nullable()
                 .WithColumn("SenderAddress").AsString().NotNullable()
                 .WithColumn("SenderDisplayName").AsString().Nullable()
-                .WithColumn("ReceiptAddress").AsString().NotNullable()
-                .WithColumn("ReceiptDisplayName").AsString().Nullable()
                 .WithColumn("FolderId").AsGuid().ForeignKey("FK_Email_FolderId_EmailFolder_FolderId", "EmailFolder", "FolderId");
         }
 

@@ -15,7 +15,13 @@ namespace LamondLu.EmailClient.Domain
 
         public EmailId EmailId { get; private set; }
 
-        public EmailFolder EmailFolder { get; private set; }
+        public EmailFolder EmailFolder { get; set; }
+
+        public uint EmailRealId { get; set; }
+
+        public uint EmailValidityId { get; set; }
+
+        public string MessageId { get; set; }
 
         public DateTime ReceivedDate { get; set; }
 
@@ -25,15 +31,17 @@ namespace LamondLu.EmailClient.Domain
 
         public string Body { get; set; }
 
+        public string TextBody { get; set; }
+
         public string Notes { get; set; }
 
         public List<EmailAddress> Receipts { get; set; }
 
-        public List<EmailAddress> CCs{get;set;}
+        public List<EmailAddress> CCs { get; set; }
 
-        public List<EmailAddress> BCCs{get;set;}
+        public List<EmailAddress> BCCs { get; set; }
 
-        public List<EmailAddress> ReplyTos{get;set;}
+        public List<EmailAddress> ReplyTos { get; set; }
 
         public List<EmailAttachment> Attachments { get; set; }
 
