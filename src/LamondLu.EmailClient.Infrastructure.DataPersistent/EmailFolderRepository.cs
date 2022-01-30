@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace LamondLu.EmailClient.Infrastructure.DataPersistent
 {
@@ -18,9 +19,14 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
 
         public async Task<List<EmailFolderConfigurationModel>> GetFolders(Guid emailConnectorId)
         {
-            var sql = "SELECT EmailFolderId FROM EmailFolder WHERE IsDeleted=0";
+            var sql = "SELECT * FROM EmailFolder WHERE IsDeleted=0 and EmailConnectId=@emailConnectorId";
 
-            return null;
+            var result =  await _context.QueryAsync<EmailFolderConfigurationModel>(sql, new
+            {
+                emailConnectorId
+            });
+
+            return result.ToList();
         }
 
         public async Task<EmailFolderConfigurationModel> CreateEmailFolder(Guid emailConnectorId, string folderPath, string folderName)

@@ -1,6 +1,7 @@
 using LamondLu.EmailClient.Domain;
 using MailKit;
 using MimeKit;
+using System;
 using System.Linq;
 
 namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.Extensions
