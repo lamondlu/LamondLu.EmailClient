@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Consol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Infrastructure.DataPersistent", "LamondLu.EmailClient.Infrastructure.DataPersistent\LamondLu.EmailClient.Infrastructure.DataPersistent.csproj", "{C6A1F095-39C9-44E1-B139-A0AE3933A155}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamondLu.EmailClient.Server", "LamondLu.EmailClient.Server\LamondLu.EmailClient.Server.csproj", "{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,18 +89,6 @@ Global
 		{C6A1F095-39C9-44E1-B139-A0AE3933A155}.Release|x64.Build.0 = Release|Any CPU
 		{C6A1F095-39C9-44E1-B139-A0AE3933A155}.Release|x86.ActiveCfg = Release|Any CPU
 		{C6A1F095-39C9-44E1-B139-A0AE3933A155}.Release|x86.Build.0 = Release|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Debug|x64.Build.0 = Debug|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Debug|x86.Build.0 = Debug|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Release|x64.ActiveCfg = Release|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Release|x64.Build.0 = Release|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Release|x86.ActiveCfg = Release|Any CPU
-		{EE856CB6-6B79-4BD2-AC2B-55879C9C7489}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
