@@ -22,7 +22,7 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
         {
             _dbSetting = optionsAccessor.Value;
             _connection = new MySqlConnection(_dbSetting.ConnectionString);
-            _dbContext = new DapperDbContext(_connection, _dbSetting.Timeout);
+            _dbContext = new DapperDbContext(_connection, _dbSetting.TimeOut);
         }
 
         public IEmailRepository EmailRepository{

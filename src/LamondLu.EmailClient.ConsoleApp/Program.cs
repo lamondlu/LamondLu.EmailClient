@@ -19,16 +19,17 @@ namespace LamondLu.EmailClient.ConsoleApp
             IHost host = new HostBuilder().ConfigureAppConfiguration((hostContext, configApp) =>
             {
                 configApp.SetBasePath(Directory.GetCurrentDirectory());
-                configApp.AddJsonFile(_appsettings, optional: true, reloadOnChange: true);
-                configApp.AddJsonFile(
-                    $"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json",
-                    optional: true);
+                configApp.AddJsonFile(_appsettings, optional: false, reloadOnChange: true);
                 configApp.AddCommandLine(args);
             }).ConfigureServices((hostContext, services) =>
             {
-                services.AddOptions();
+
+
+                var item = hostContext.Configuration.GetSection("Db");
+
                 services.Configure<DbSetting>(hostContext.Configuration.GetSection("Db"));
 
+                services.AddOptions();
                 services.AddSingleton<ILogger, ConsoleLogger>();
                 services.AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>();
                 services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();

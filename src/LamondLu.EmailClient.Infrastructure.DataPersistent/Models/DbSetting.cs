@@ -4,6 +4,6 @@
     {
         public string ConnectionString { get; set; }
 
-        public int Timeout { get; set; }
+        public int TimeOut { get; set; }
     }
 }

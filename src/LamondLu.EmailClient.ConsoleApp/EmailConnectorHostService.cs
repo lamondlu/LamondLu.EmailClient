@@ -37,9 +37,9 @@ namespace LamondLu.EmailClient.ConsoleApp
                 Version(connector);
                 _tasks.Add(task);
 
-                Task.Run(() =>
+                await Task.Run(async () =>
                 {
-                    task.Start();
+                    await task.Start();
                 });
 
                 _logger.Write($"[{connector.Name}] Started");

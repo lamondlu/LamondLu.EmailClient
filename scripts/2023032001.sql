@@ -1,0 +1,1 @@
+ALTER TABLE EmailConnector ADD COLUMN IsDeleted BIT(1) NOT NULL
