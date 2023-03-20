@@ -91,8 +91,11 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                     List<MailKit.UniqueId> ids = null;
                     if (_emailClient.Inbox != null)
                     {
-                        var range = new UniqueIdRange(new UniqueId(folderEntity.LastEmailId, folderEntity.LastValidityId), new UniqueId(folderEntity.LastEmailId + (uint)_emailClient.Inbox.Count, folderEntity.LastValidityId));
-                        
+                        var start = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId);
+                        var end = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId + (uint)_emailClient.Inbox.Count);
+
+                        var range = new UniqueIdRange(start,end);
+                        ids = _emailClient.Inbox.Search(MailKit.Search.SearchQuery.Uids(range)).ToList();
                     }
 
                     if (ids.Count != 0)
@@ -102,7 +105,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                             var email = folder.GetMessage(emailId);
                             Console.WriteLine($"[{email.Date}] {email.Subject}");
 
-                            SaveMessage(email);
+                            //SaveMessage(email);
                         }
                     }
                 }
