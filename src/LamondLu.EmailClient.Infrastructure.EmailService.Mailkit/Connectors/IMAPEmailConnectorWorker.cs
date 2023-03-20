@@ -87,11 +87,12 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
                     Console.WriteLine($"Current Folder: {folderEntity.FolderPath}");
 
+
                     List<MailKit.UniqueId> ids = null;
                     if (_emailClient.Inbox != null)
                     {
-                        var range = new UniqueIdRange(new UniqueId(folderEntity.LastEmailId, folderEntity.LastValidityId), UniqueId.MaxValue);
-                        ids = folder.Search(MailKit.Search.SearchQuery.Uids(range)).OrderBy(x => x.Id).Take(100).ToList();
+                        var range = new UniqueIdRange(new UniqueId(folderEntity.LastEmailId, folderEntity.LastValidityId), new UniqueId(folderEntity.LastEmailId + (uint)_emailClient.Inbox.Count, folderEntity.LastValidityId));
+                        
                     }
 
                     if (ids.Count != 0)
