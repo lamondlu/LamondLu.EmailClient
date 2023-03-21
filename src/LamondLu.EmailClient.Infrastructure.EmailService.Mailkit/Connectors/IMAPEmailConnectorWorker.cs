@@ -105,7 +105,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                             var email = folder.GetMessage(emailId);
                             Console.WriteLine($"[{email.Date}] {email.Subject}");
 
-                            //SaveMessage(email);
+                            SaveMessage(email);
                         }
                     }
                 }
@@ -158,7 +158,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
         private void SaveAttachment(MimeEntity attachment)
         {
-
+            
         }
     }
 }
