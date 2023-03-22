@@ -23,9 +23,9 @@ CREATE TABLE `Email` (
 -- ----------------------------
 DROP TABLE IF EXISTS `EmailBody`;
 CREATE TABLE `EmailBody` (
-  `EmailId` int(11) NOT NULL,
+  `EmailId` char(36) NOT NULL,
   `EmailBody` longtext COLLATE utf8mb4_unicode_ci,
   `EmailHtmlBody` longtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`EmailId`),
-  CONSTRAINT `FK_EmailBody_Email_EmailId` FOREIGN KEY (`EmailId`) REFERENCES `Email` (`Id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `FK_EmailBody_Email_EmailId` FOREIGN KEY (`EmailId`) REFERENCES `Email` (`EmailId`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

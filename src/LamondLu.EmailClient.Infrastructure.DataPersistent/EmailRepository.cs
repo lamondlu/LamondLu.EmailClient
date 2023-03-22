@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using LamondLu.EmailClient.Domain.DTOs;
 using LamondLu.EmailClient.Domain.Interface;
@@ -42,6 +43,13 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             });
 
             return !string.IsNullOrWhiteSpace(result);
+        }
+
+        public async Task SaveEmailBody(Guid emailId, string emailBody, string emailHTMLBody)
+        {
+            var sql = "INSERT INTO EmailBody(EmailId, EmailBody, EmailHTMLBody) VALUE(@emailId, @emailBody, @emailHTMLBody)";
+
+            await _context.Execute(sql, new { emailId, emailBody, emailHTMLBody});
         }
     }
 }

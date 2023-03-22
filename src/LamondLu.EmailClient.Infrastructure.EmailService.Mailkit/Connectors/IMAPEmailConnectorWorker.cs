@@ -157,6 +157,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             }
 
             var email = await SaveEmail(mail, emailConnectorId, folderId, emailId);
+            await SaveEmailBody(email.EmailId, mail.TextBody, mail.HtmlBody);
 
             if (mail.Attachments.Count() > 0)
             {
@@ -177,8 +178,6 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
         private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId)
         {
-
-
             var newEmail = new AddEmailModel();
             newEmail.EmailConnectorId = emailConnectorId;
             newEmail.EmailFolderId = folderId;
@@ -194,9 +193,9 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             return newEmail;
         }
 
-        private void SaveEmailBody()
+        private async Task SaveEmailBody(Guid emailId, string body, string htmlBody)
         {
-
+            await _unitOfWork.EmailRepository.SaveEmailBody(emailId, body, htmlBody);
         }
 
         private void SaveAttachment(MimeEntity attachment)
