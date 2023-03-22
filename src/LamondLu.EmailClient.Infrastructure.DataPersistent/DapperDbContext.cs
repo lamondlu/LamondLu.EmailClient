@@ -52,6 +52,10 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
                 tran.Rollback();
                 return new ErrorDbOperationResult(ex);
             }
+            finally
+            {
+                _commands.Clear();
+            }
         }
 
         public async Task<IEnumerable<T>> QueryAsync<T>(string sql, object param = null, CommandType commandType = CommandType.Text)

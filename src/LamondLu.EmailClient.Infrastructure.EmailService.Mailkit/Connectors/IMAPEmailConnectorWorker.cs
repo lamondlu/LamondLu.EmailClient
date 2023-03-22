@@ -1,4 +1,5 @@
 using LamondLu.EmailClient.Domain;
+using LamondLu.EmailClient.Domain.DTOs;
 using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.ViewModels;
 using MailKit;
@@ -94,7 +95,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                         var start = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId);
                         var end = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId + (uint)_emailClient.Inbox.Count);
 
-                        var range = new UniqueIdRange(start,end);
+                        var range = new UniqueIdRange(start, end);
                         ids = _emailClient.Inbox.Search(MailKit.Search.SearchQuery.Uids(range)).ToList();
                     }
 
@@ -105,7 +106,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                             var email = folder.GetMessage(emailId);
                             Console.WriteLine($"[{email.Date}] {email.Subject}");
 
-                            SaveMessage(email);
+                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.FolderId, emailId);
                         }
                     }
                 }
@@ -143,9 +144,11 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             return folder;
         }
 
-        private void SaveMessage(MimeMessage mail)
+        private async Task SaveMessage(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId)
         {
             //save message
+
+            var email = await SaveEmail(mail, emailConnectorId, folderId, emailId);
 
             if (mail.Attachments.Count() > 0)
             {
@@ -154,11 +157,35 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                     SaveAttachment(attachment);
                 }
             }
+
+            await _unitOfWork.SaveAsync();
+        }
+
+        private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId)
+        {
+            var newEmail = new AddEmailModel();
+            newEmail.EmailConnectorId = emailConnectorId;
+            newEmail.EmailFolderId = folderId;
+            newEmail.Subject = mail.Subject;
+            newEmail.Sender = mail.From?.Mailboxes?.FirstOrDefault()?.Address;
+            newEmail.ReceivedDate = mail.Date.Date;
+            newEmail.MessageId = mail.MessageId;
+            newEmail.Id = emailId.Id;
+            newEmail.Validity = emailId.Validity;
+
+            await _unitOfWork.EmailRepository.SaveNewEmail(newEmail);
+
+            return newEmail;
+        }
+
+        private void SaveEmailBody()
+        {
+
         }
 
         private void SaveAttachment(MimeEntity attachment)
         {
-            
+
         }
     }
 }
