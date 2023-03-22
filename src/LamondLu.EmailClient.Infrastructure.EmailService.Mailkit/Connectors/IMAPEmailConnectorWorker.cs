@@ -2,8 +2,10 @@ using LamondLu.EmailClient.Domain;
 using LamondLu.EmailClient.Domain.DTOs;
 using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.ViewModels;
+using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage;
 using MailKit;
 using MailKit.Net.Imap;
+using MailKit.Search;
 using MimeKit;
 using System;
 using System.Collections.Generic;
@@ -19,11 +21,14 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
         private EmailConnector _emailConnector = null;
         private IUnitOfWork _unitOfWork = null;
 
-        public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork)
+        private IInlineImageHandler _inlineImageHandler = null;
+
+        public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler)
         {
             Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
             _unitOfWork = unitOfWork;
+            _inlineImageHandler = inlineImageHandler;
         }
 
         public RulePipeline Pipeline { get; }
@@ -81,7 +86,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                 {
                     if (!folder.IsOpen)
                     {
-                        folder.Open(MailKit.FolderAccess.ReadOnly);
+                        folder.Open(FolderAccess.ReadOnly);
                     }
 
                     var folderEntity = await GetOrCreateFolder(_emailConnector.EmailConnectorId, folder.FullName, folder.Name);
@@ -89,14 +94,14 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                     Console.WriteLine($"Current Folder: {folderEntity.FolderPath}");
 
 
-                    List<MailKit.UniqueId> ids = null;
+                    List<UniqueId> ids = null;
                     if (_emailClient.Inbox != null)
                     {
                         var start = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId);
                         var end = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId + (uint)_emailClient.Inbox.Count);
 
                         var range = new UniqueIdRange(start, end);
-                        ids = _emailClient.Inbox.Search(MailKit.Search.SearchQuery.Uids(range)).ToList();
+                        ids = _emailClient.Inbox.Search(SearchQuery.Uids(range)).ToList();
                     }
 
                     if (ids.Count != 0)
@@ -157,7 +162,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             }
 
             var email = await SaveEmail(mail, emailConnectorId, folderId, emailId);
-            await SaveEmailBody(email.EmailId, mail.TextBody, mail.HtmlBody);
+            await SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail));
 
             if (mail.Attachments.Count() > 0)
             {
@@ -195,6 +200,8 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
         private async Task SaveEmailBody(Guid emailId, string body, string htmlBody)
         {
+            
+
             await _unitOfWork.EmailRepository.SaveEmailBody(emailId, body, htmlBody);
         }
 

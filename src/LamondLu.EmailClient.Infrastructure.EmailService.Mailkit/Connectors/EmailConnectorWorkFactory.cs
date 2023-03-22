@@ -1,12 +1,14 @@
 using LamondLu.EmailClient.Domain;
 using LamondLu.EmailClient.Domain.Extension;
 using LamondLu.EmailClient.Domain.Interface;
+using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage;
+using LamondLu.EmailClient.Infrastructure.EmailService.MailKit.Connectors;
 
 namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
     public class EmailConnectorWorkFactory : IEmailConnectorWorkerFactory
     {
-        public IEmailConnectorWorker Build(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork)
+        public IEmailConnectorWorker Build(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler)
         {
             if (emailConnector.Type.IsPop3())
             {
@@ -14,11 +16,11 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             }
             else if (emailConnector.Type.IsIMAP())
             {
-                return new IMAPEmailConnectorWorker(emailConnector, ruleProcessorFactory, unitOfWork);
+                return new IMAPEmailConnectorWorker(emailConnector, ruleProcessorFactory, unitOfWork, inlineImageHandler);
             }
             else
             {
-                return new IMAPEmailConnectorWorker(emailConnector, ruleProcessorFactory, unitOfWork);
+                return new IMAPEmailConnectorWorker(emailConnector, ruleProcessorFactory, unitOfWork,inlineImageHandler);
             }
         }
     }

@@ -2,6 +2,8 @@
 using LamondLu.EmailClient.Infrastructure.DataPersistent;
 using LamondLu.EmailClient.Infrastructure.DataPersistent.Models;
 using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit;
+using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage;
+using LamondLu.EmailClient.Infrastructure.EmailService.MailKit.Connectors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,6 +33,7 @@ namespace LamondLu.EmailClient.ConsoleApp
 
                 services.AddOptions();
                 services.AddSingleton<ILogger, ConsoleLogger>();
+                services.AddScoped<IInlineImageHandler, LocalInlineImageHandler>();
                 services.AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>();
                 services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
                 services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();

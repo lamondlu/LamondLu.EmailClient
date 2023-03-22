@@ -1,6 +1,8 @@
 ﻿using LamondLu.EmailClient.Domain;
 using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.ViewModels;
+using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage;
+using LamondLu.EmailClient.Infrastructure.EmailService.MailKit.Connectors;
 using System;
 using System.Threading.Tasks;
 
@@ -13,12 +15,15 @@ namespace LamondLu.EmailClient.ConsoleApp
         private IRuleProcessorFactory _ruleProcessorFactory = null;
         private IUnitOfWorkFactory _unitOfWorkFactory = null;
 
-        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory)
+        private IInlineImageHandler _inlineImageHandler = null;
+
+        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler)
         {
             _emailConnector = emailConnector;
             _factory = factory;
             _ruleProcessorFactory = ruleProcessorFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
+            _inlineImageHandler = inlineImageHandler;
         }
 
         public async Task Start()
@@ -30,7 +35,7 @@ namespace LamondLu.EmailClient.ConsoleApp
 
             try
             {
-                var worker = _factory.Build(emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create());
+                var worker = _factory.Build(emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler);
 
                 var isConnected = await worker.Connect();
 
