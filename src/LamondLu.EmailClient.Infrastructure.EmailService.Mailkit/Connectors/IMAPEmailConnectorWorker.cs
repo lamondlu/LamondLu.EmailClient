@@ -168,6 +168,11 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
             await _unitOfWork.SaveAsync();
+
+            if (EmailReceived != null)
+            {
+                EmailReceived(email);
+            }
         }
 
         private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId)

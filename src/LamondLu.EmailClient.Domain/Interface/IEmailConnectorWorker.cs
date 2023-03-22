@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
+using LamondLu.EmailClient.Domain.DTOs;
 
 namespace LamondLu.EmailClient.Domain.Interface
 {
-    public delegate void EmailReceived();
+    public delegate void EmailReceived(AddEmailModel email);
 
     public interface IEmailConnectorWorker
     {
