@@ -17,7 +17,8 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
         {
             var sql = "INSERT INTO Email(EmailId, EmailConnectorId, Subject, ReceivedDate, EmailFolderId, Id, Validity, CreatedTime, Sender, MessageId) VALUE(@emailId, @emailConnectorId, @subject,@receivedDate, @emailFolderId, @id, @validity, @createdTime, @sender, @messageId)";
 
-            await _context.Execute(sql, new {
+            await _context.Execute(sql, new
+            {
                 email.EmailId,
                 email.EmailConnectorId,
                 email.Subject,
@@ -29,6 +30,18 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
                 email.Sender,
                 email.MessageId
             });
+        }
+
+        public async Task<bool> MessageIdExisted(string messageId)
+        {
+            var sql = "SELECT messageId FROM Email WHERE messageId=@messageId limit 1";
+
+            var result = await _context.QueryFirstOrDefaultAsync<string>(sql, new
+            {
+                messageId
+            });
+
+            return !string.IsNullOrWhiteSpace(result);
         }
     }
 }

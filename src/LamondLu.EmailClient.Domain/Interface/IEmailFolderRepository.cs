@@ -11,7 +11,8 @@ namespace LamondLu.EmailClient.Domain.Interface
 
         Task<EmailFolderConfigurationModel> CreateEmailFolder(Guid emailConnectorId, string folderPath, string folderName);
 
-
         Task<List<EmailFolderConfigurationModel>> GetFolders(Guid emailConnectorId);
+
+        Task RecordFolderProcess(Guid folderId, uint lastEmailId, uint lastValidityId);
     }
 }

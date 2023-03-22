@@ -148,6 +148,14 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
         {
             //save message
 
+            var dup = await _unitOfWork.EmailRepository.MessageIdExisted(mail.MessageId);
+
+            if (dup)
+            {
+                Console.WriteLine($"The email id {mail.MessageId} is existed. System skip it.");
+                return;
+            }
+
             var email = await SaveEmail(mail, emailConnectorId, folderId, emailId);
 
             if (mail.Attachments.Count() > 0)
@@ -158,11 +166,14 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                 }
             }
 
+            await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
             await _unitOfWork.SaveAsync();
         }
 
         private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId)
         {
+
+
             var newEmail = new AddEmailModel();
             newEmail.EmailConnectorId = emailConnectorId;
             newEmail.EmailFolderId = folderId;

@@ -6,5 +6,7 @@ namespace LamondLu.EmailClient.Domain.Interface
     public interface IEmailRepository
     {
         Task SaveNewEmail(AddEmailModel email);
+
+        Task<bool> MessageIdExisted(string messageId);
     }
 }

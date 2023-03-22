@@ -21,7 +21,7 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
         {
             var sql = "SELECT * FROM EmailFolder WHERE IsDeleted=0 and EmailConnectId=@emailConnectorId";
 
-            var result =  await _context.QueryAsync<EmailFolderConfigurationModel>(sql, new
+            var result = await _context.QueryAsync<EmailFolderConfigurationModel>(sql, new
             {
                 emailConnectorId
             });
@@ -53,6 +53,18 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
             {
                 emailConnectorId,
                 folderPath
+            });
+        }
+
+        public async Task RecordFolderProcess(Guid folderId, uint lastEmailId, uint lastValidityId)
+        {
+            var sql = "UPDATE EmailFolder SET LastEmailId=@lastEmailId, LastValidityId=@lastValidityId WHERE FolderId=@folderId";
+
+            await _context.Execute(sql, new
+            {
+                folderId,
+                lastEmailId,
+                lastValidityId
             });
         }
     }
