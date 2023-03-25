@@ -2,6 +2,7 @@ using LamondLu.EmailClient.Domain;
 using LamondLu.EmailClient.Domain.DTOs;
 using LamondLu.EmailClient.Domain.Interface;
 using LamondLu.EmailClient.Domain.ViewModels;
+using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.Extensions;
 using LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage;
 using MailKit;
 using MailKit.Net.Imap;
@@ -9,6 +10,7 @@ using MailKit.Search;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,15 +22,17 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
         private ImapClient _emailClient = null;
         private EmailConnector _emailConnector = null;
         private IUnitOfWork _unitOfWork = null;
-
         private IInlineImageHandler _inlineImageHandler = null;
 
-        public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler)
+        private IFileStorage _fileStorage = null;
+
+        public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler, IFileStorage fileStorage)
         {
             Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
             _unitOfWork = unitOfWork;
             _inlineImageHandler = inlineImageHandler;
+            _fileStorage = fileStorage;
         }
 
         public RulePipeline Pipeline { get; }
@@ -164,13 +168,9 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             var email = await SaveEmail(mail, emailConnectorId, folderId, emailId);
             await SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail));
 
-            if (mail.Attachments.Count() > 0)
-            {
-                foreach (var attachment in mail.Attachments)
-                {
-                    SaveAttachment(attachment);
-                }
-            }
+
+            SaveAttachment(mail);
+
 
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
             await _unitOfWork.SaveAsync();
@@ -200,14 +200,162 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
         private async Task SaveEmailBody(Guid emailId, string body, string htmlBody)
         {
-            
+
 
             await _unitOfWork.EmailRepository.SaveEmailBody(emailId, body, htmlBody);
         }
 
-        private void SaveAttachment(MimeEntity attachment)
+        private void SaveAttachment(MimeMessage mail)
         {
+            var allAttachments = new Dictionary<MemoryStream, string>();
+            List<int> fileHashCodeList = new List<int>();
+            var messagePart_attachments = mail.Attachments.OfType<MessagePart>();
+            if (messagePart_attachments != null && messagePart_attachments.Any())
+            {
+                foreach (var item in messagePart_attachments)
+                {
+                    var files = item.Message?.Attachments?.ToList();
+                    if (files != null && files.Any())
+                    {
+                        foreach (var file in files)
+                        {
+                            if (fileHashCodeList.Contains(file.GetHashCode()))
+                            {
+                                continue;
+                            }
+                            else
+                            {
 
+                                var fileName = file.ContentDisposition?.FileName ?? file.ContentType.Name;
+                                fileName = fileName.GetSafeFileName();
+                                if (!string.IsNullOrEmpty(fileName))
+                                {
+                                    MemoryStream attachment_file_ms = new MemoryStream();
+                                    if (file is MimePart)
+                                    {
+                                        var file_mimiPart = file as MimePart;
+                                        file_mimiPart.Content.DecodeTo(attachment_file_ms);
+                                    }
+                                    else
+                                    {
+                                        file.WriteTo(attachment_file_ms);
+                                    }
+
+                                    allAttachments.Add(attachment_file_ms, fileName);
+                                    fileHashCodeList.Add(file.GetHashCode());
+                                }
+                            }
+                        }
+                    }
+
+                    if (fileHashCodeList.Contains(item.GetHashCode()))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        MemoryStream attachment_ms = new MemoryStream();
+                        item.WriteTo(attachment_ms);
+                        var attachment_filename = (item.Message.Subject ?? "attach_msg") + ".eml";
+                        allAttachments.Add(attachment_ms, attachment_filename.GetSafeFileName());
+                        fileHashCodeList.Add(item.GetHashCode());
+                    }
+                }
+            }
+            var normal_attachments = mail.Attachments.OfType<MimePart>().Where(p => !string.IsNullOrEmpty(p.FileName)).ToList();
+            if (normal_attachments != null && normal_attachments.Any())
+            {
+                foreach (var normal_item in normal_attachments)
+                {
+                    if (fileHashCodeList.Contains(normal_item.GetHashCode()))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        MemoryStream normal_ms = new MemoryStream();
+                        normal_item.Content.DecodeTo(normal_ms);
+                        allAttachments.Add(normal_ms, normal_item.FileName.GetSafeFileName());
+                        fileHashCodeList.Add(normal_item.GetHashCode());
+                    }
+
+                }
+            }
+            var attachments = mail.BodyParts.OfType<MimePart>().Where(p => !string.IsNullOrEmpty(p.FileName)).ToList();// email.Attachments;
+            if (attachments != null && attachments.Any())
+            {
+                foreach (var item in attachments)
+                {
+                    if (fileHashCodeList.Contains(item.GetHashCode()))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        MemoryStream normal_ms = new MemoryStream();
+                        item.Content.DecodeTo(normal_ms);
+                        allAttachments.Add(normal_ms, item.FileName.GetSafeFileName());
+                        fileHashCodeList.Add(item.GetHashCode());
+                    }
+
+                }
+            }
+
+            if (allAttachments.Count() > 0)
+            {
+                Dictionary<string, int> fileNameList = new Dictionary<string, int>();
+                //var specialNameCount = 0;
+                foreach (var item in allAttachments)
+                {
+
+                    if (item.Key.Length == 0)
+                    {
+                        continue;
+                    }
+
+                    var fileName = item.Value?.Replace("‎", "");
+                    if (fileNameList.ContainsKey(fileName.ToLower()))
+                    {
+                        var number = fileNameList[fileName.ToLower()] + 1;
+
+                        var fileType = fileName.Split(".").Last();
+                        if (fileName == fileType) //it means there is no extension name
+                        {
+                            fileName = $"{fileName}_{number}_";
+                        }
+                        else
+                        {
+                            fileName = fileName.Insert(fileName.LastIndexOf($".{fileType}"), $"_{number}_");
+                        }
+                        fileNameList[item.Value.ToLower()] = number;
+                    }
+                    else
+                    {
+                        fileNameList.Add(item.Value.ToLower(), 0);
+                    }
+                    var ms = item.Key;
+                    long length = ms.Length;
+                    if (length > 0)
+                    {
+                        ms.Position = 0;
+
+
+                        // _storage.Upload(ClientGlobalVar.AttachmentBucketName, $"{saved.EmailId}/{fileName}", ms);
+
+                        // saved.AddAttachment(new EmailAttachment
+                        // {
+                        //     FileName = fileName,
+                        //     FileSize = length,
+                        //     ScanStatus = EmailAttachmentScanStatus.Scanned,// _emailConnector.IsAIOCR && fileName.NeedScan() ? EmailAttachmentScanStatus.Scanning : EmailAttachmentScanStatus.Scanned,
+                        // });
+                    }
+
+                }
+
+                allAttachments.Clear();
+                fileHashCodeList.Clear();
+                fileNameList.Clear();
+            }
         }
     }
 }

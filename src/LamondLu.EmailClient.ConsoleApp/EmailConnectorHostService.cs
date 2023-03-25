@@ -18,6 +18,8 @@ namespace LamondLu.EmailClient.ConsoleApp
         private List<EmailConnectorTask> _tasks = new List<EmailConnectorTask>();
 
         private IInlineImageHandler _inlineImageHandler = null;
+
+        private IFileStorage _fileStorage = null;
         public EmailConnectorHostService()
         {
             _logger = EnvironmentConst.GetService<ILogger>();
@@ -25,6 +27,7 @@ namespace LamondLu.EmailClient.ConsoleApp
             _emailConnectorWorkerFactory = EnvironmentConst.GetService<IEmailConnectorWorkerFactory>();
             _ruleProcessorFactory = EnvironmentConst.GetService<IRuleProcessorFactory>();
             _inlineImageHandler = EnvironmentConst.GetService<IInlineImageHandler>();
+            _fileStorage = EnvironmentConst.GetService<IFileStorage>();
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -36,7 +39,7 @@ namespace LamondLu.EmailClient.ConsoleApp
 
             foreach (var connector in connectors)
             {
-                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler);
+                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _fileStorage);
 
                 Version(connector);
                 _tasks.Add(task);
