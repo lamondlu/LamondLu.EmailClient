@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `EmailAttachment`;
 CREATE TABLE `EmailAttachment` (
   `EmailAttachmentId` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `EmailId` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `FileName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `FileSize` int(11) NOT NULL,
+  `FileName` varchar(255) utf8mb4_unicode_ci NOT NULL,
+  `FileSize` varchar(20) NOT NULL,
   `SourceFileName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`EmailAttachmentId`),
   KEY `FK_EmailAttachment_Email_EmailId` (`EmailId`),

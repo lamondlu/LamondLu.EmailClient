@@ -37,6 +37,7 @@ namespace LamondLu.EmailClient.ConsoleApp
                 services.AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>();
                 services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
                 services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();
+                services.AddSingleton<IFileStorage, LocalFileStorage>();
                 services.AddHostedService<EmailConnectorHostService>();
 
                 EnvironmentConst.Services = services.BuildServiceProvider();

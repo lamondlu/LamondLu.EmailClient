@@ -167,11 +167,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
             var email = await SaveEmail(mail, emailConnectorId, folderId, emailId);
             await SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail));
-
-
-            SaveAttachment(mail);
-
-
+            await SaveAttachment(email.EmailId, mail);
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
             await _unitOfWork.SaveAsync();
 
@@ -200,12 +196,10 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 
         private async Task SaveEmailBody(Guid emailId, string body, string htmlBody)
         {
-
-
             await _unitOfWork.EmailRepository.SaveEmailBody(emailId, body, htmlBody);
         }
 
-        private void SaveAttachment(MimeMessage mail)
+        private async Task SaveAttachment(Guid emailId, MimeMessage mail)
         {
             var allAttachments = new Dictionary<MemoryStream, string>();
             List<int> fileHashCodeList = new List<int>();
@@ -314,6 +308,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                     }
 
                     var fileName = item.Value?.Replace("‎", "");
+                    var newFileName = string.Empty;
                     if (fileNameList.ContainsKey(fileName.ToLower()))
                     {
                         var number = fileNameList[fileName.ToLower()] + 1;
@@ -322,15 +317,27 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                         if (fileName == fileType) //it means there is no extension name
                         {
                             fileName = $"{fileName}_{number}_";
+                            newFileName = Guid.NewGuid().ToString();
                         }
                         else
                         {
                             fileName = fileName.Insert(fileName.LastIndexOf($".{fileType}"), $"_{number}_");
+                            newFileName = $"{Guid.NewGuid()}.{fileType}";
                         }
                         fileNameList[item.Value.ToLower()] = number;
                     }
                     else
                     {
+                        var fileType = fileName.Split(".").Last();
+                        if (fileName == fileType) //it means there is no extension name
+                        {
+                            newFileName = Guid.NewGuid().ToString();
+                        }
+                        else
+                        {
+                            newFileName = $"{Guid.NewGuid()}.{fileType}";
+                        }
+
                         fileNameList.Add(item.Value.ToLower(), 0);
                     }
                     var ms = item.Key;
@@ -339,17 +346,17 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                     {
                         ms.Position = 0;
 
+                        _fileStorage.Upload(emailId, newFileName, ms);
 
-                        // _storage.Upload(ClientGlobalVar.AttachmentBucketName, $"{saved.EmailId}/{fileName}", ms);
-
-                        // saved.AddAttachment(new EmailAttachment
-                        // {
-                        //     FileName = fileName,
-                        //     FileSize = length,
-                        //     ScanStatus = EmailAttachmentScanStatus.Scanned,// _emailConnector.IsAIOCR && fileName.NeedScan() ? EmailAttachmentScanStatus.Scanning : EmailAttachmentScanStatus.Scanned,
-                        // });
+                        await _unitOfWork.EmailAttachmentRepository.AddEmailAttachment(new AddEmailAttachmentModel
+                        {
+                            EmailAttachmentId = Guid.NewGuid(),
+                            SourceFileName = fileName,
+                            FileSize = GetFileSize(length),
+                            FileName = newFileName,
+                            EmailId = emailId
+                        });
                     }
-
                 }
 
                 allAttachments.Clear();
@@ -357,5 +364,34 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
                 fileNameList.Clear();
             }
         }
+
+        public string GetFileSize(long file_length)
+        {
+            try
+            {
+                if (file_length < 1024)
+                {
+                    return file_length + "b";
+                }
+                else if (file_length < 1024 * 1024)
+                {
+                    return ((double)file_length / 1024.0).ToString("0.00") + "kb";
+                }
+                else if (file_length < 1024 * 1024 * 1024)
+                {
+                    return ((double)file_length / (1024.0 * 1024.0)).ToString("0.00") + "M";
+                }
+                else
+                {
+                    return ((double)file_length / (1024.0 * 1024.0)).ToString("0") + "M";
+                }
+            }
+            catch
+            {
+                return "";
+            }
+        }
     }
+
+
 }

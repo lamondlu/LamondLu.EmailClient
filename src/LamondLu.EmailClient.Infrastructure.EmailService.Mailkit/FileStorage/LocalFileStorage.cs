@@ -10,6 +10,13 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage
     {
         public void Upload(Guid emailId, string fileName, MemoryStream stream)
         {
+            var emailFolder = new DirectoryInfo($"{Directory.GetCurrentDirectory()}/attachments/{emailId}");
+
+            if (!emailFolder.Exists)
+            {
+                emailFolder.Create();
+            }
+            
             using (var fs = new FileStream($"{Directory.GetCurrentDirectory()}/attachments/{emailId}/{fileName}", FileMode.Create))
             {
                 stream.WriteTo(fs);

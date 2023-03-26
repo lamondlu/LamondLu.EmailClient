@@ -9,7 +9,9 @@ namespace LamondLu.EmailClient.Domain.Interface
 
         IEmailFolderRepository EmailFolderRepository { get; }
 
-        IEmailRepository EmailRepository{get;}
+        IEmailRepository EmailRepository { get; }
+
+        IEmailAttachmentRepository EmailAttachmentRepository { get; }
 
         Task<DbOperationResult> SaveAsync();
     }

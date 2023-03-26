@@ -14,6 +14,8 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
 
         private IEmailRepository _emailRepository = null;
 
+        private IEmailAttachmentRepository _emailAttachmentRepository = null;
+
         private MySqlConnection _connection = null;
         private DbSetting _dbSetting = null;
         private DapperDbContext _dbContext = null;
@@ -58,6 +60,19 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
                 }
 
                 return _emailFolderRepository;
+            }
+        }
+
+        public IEmailAttachmentRepository EmailAttachmentRepository
+        {
+            get
+            {
+                if (_emailAttachmentRepository == null)
+                {
+                    return new EmailAttachmentRepository(_dbContext);
+                }
+
+                return _emailAttachmentRepository;
             }
         }
 

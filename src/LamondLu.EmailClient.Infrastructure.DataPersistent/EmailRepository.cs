@@ -51,5 +51,7 @@ namespace LamondLu.EmailClient.Infrastructure.DataPersistent
 
             await _context.Execute(sql, new { emailId, emailBody, emailHTMLBody});
         }
+
+        
     }
 }
