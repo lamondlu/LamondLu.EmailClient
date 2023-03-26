@@ -8,7 +8,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage
 {
     public class LocalFileStorage : IFileStorage
     {
-        public void Upload(Guid emailId, string fileName, MemoryStream stream)
+        public async Task Upload(Guid emailId, string fileName, MemoryStream stream)
         {
             var emailFolder = new DirectoryInfo($"{Directory.GetCurrentDirectory()}/attachments/{emailId}");
 
@@ -16,11 +16,11 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage
             {
                 emailFolder.Create();
             }
-            
+
             using (var fs = new FileStream($"{Directory.GetCurrentDirectory()}/attachments/{emailId}/{fileName}", FileMode.Create))
             {
                 stream.WriteTo(fs);
-                fs.Flush();
+                await fs.FlushAsync();
             }
         }
     }

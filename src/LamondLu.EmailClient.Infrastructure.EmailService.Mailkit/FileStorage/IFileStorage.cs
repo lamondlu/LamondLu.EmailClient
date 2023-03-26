@@ -8,6 +8,6 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage
 {
     public interface IFileStorage
     {
-        void Upload(Guid emailId, string fileName, MemoryStream stream);
+        Task Upload(Guid emailId, string fileName, MemoryStream stream);
     }
 }

@@ -8,7 +8,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
 {
     public class EmailConnectorWorkFactory : IEmailConnectorWorkerFactory
     {
-        public IEmailConnectorWorker Build(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler, IFileStorage fileStorage)
+        public IEmailConnectorWorker Build(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler)
         {
             if (emailConnector.Type.IsPop3())
             {
@@ -16,11 +16,11 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit
             }
             else if (emailConnector.Type.IsIMAP())
             {
-                return new IMAPEmailConnectorWorker(emailConnector, ruleProcessorFactory, unitOfWork, inlineImageHandler, fileStorage);
+                return new IMAPEmailConnectorWorker(emailConnector, ruleProcessorFactory, unitOfWork, inlineImageHandler, emailAttachmentHandler);
             }
             else
             {
-                return new IMAPEmailConnectorWorker(emailConnector, ruleProcessorFactory, unitOfWork, inlineImageHandler, fileStorage);
+                return new IMAPEmailConnectorWorker(emailConnector, ruleProcessorFactory, unitOfWork, inlineImageHandler, emailAttachmentHandler);
             }
         }
     }

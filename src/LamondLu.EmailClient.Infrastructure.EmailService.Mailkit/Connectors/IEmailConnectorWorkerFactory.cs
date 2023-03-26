@@ -8,6 +8,6 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.MailKit.Connectors
     {
         IEmailConnectorWorker Build(EmailConnector emailConnector,
             IRuleProcessorFactory ruleProcessorFactory,
-            IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler, IFileStorage fileStorage);
+            IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler,IEmailAttachmentHandler emailAttachmentHandler);
     }
 }

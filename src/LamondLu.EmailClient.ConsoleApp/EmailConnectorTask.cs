@@ -17,16 +17,16 @@ namespace LamondLu.EmailClient.ConsoleApp
 
         private IInlineImageHandler _inlineImageHandler = null;
 
-        private IFileStorage _fileStorage = null;
+        private IEmailAttachmentHandler _emailAttachmentHandler = null;
 
-        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IFileStorage fileStorage)
+        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler)
         {
             _emailConnector = emailConnector;
             _factory = factory;
             _ruleProcessorFactory = ruleProcessorFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             _inlineImageHandler = inlineImageHandler;
-            _fileStorage = fileStorage;
+            _emailAttachmentHandler = emailAttachmentHandler;
         }
 
         public async Task Start()
@@ -38,7 +38,7 @@ namespace LamondLu.EmailClient.ConsoleApp
 
             try
             {
-                var worker = _factory.Build(emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler, _fileStorage);
+                var worker = _factory.Build(emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler, _emailAttachmentHandler);
 
                 var isConnected = await worker.Connect();
 
