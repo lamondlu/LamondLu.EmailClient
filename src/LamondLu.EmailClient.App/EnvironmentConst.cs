@@ -1,6 +1,6 @@
 using System;
 
-namespace LamondLu.EmailClient.ConsoleApp
+namespace LamondLu.EmailClient.App
 {
     public static class EnvironmentConst
     {

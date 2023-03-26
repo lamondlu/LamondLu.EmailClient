@@ -166,7 +166,7 @@ namespace LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.FileStorage
                     {
                         ms.Position = 0;
 
-                        _fileStorage.Upload(emailId, newFileName, ms);
+                        await _fileStorage.Upload(emailId, newFileName, ms);
 
                         result.Add(new AddEmailAttachmentModel
                         {

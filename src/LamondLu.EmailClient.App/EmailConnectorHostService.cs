@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LamondLu.EmailClient.ConsoleApp
+namespace LamondLu.EmailClient.App
 {
     public class EmailConnectorHostService : IHostedService
     {
