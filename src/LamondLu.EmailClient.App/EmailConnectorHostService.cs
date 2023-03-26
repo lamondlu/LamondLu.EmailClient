@@ -20,14 +20,19 @@ namespace LamondLu.EmailClient.App
         private IInlineImageHandler _inlineImageHandler = null;
 
         private IEmailAttachmentHandler _emailAttachmentHandler = null;
-        public EmailConnectorHostService()
+        public EmailConnectorHostService(ILogger logger,
+        IUnitOfWorkFactory unitOfWorkFactory,
+          IEmailConnectorWorkerFactory emailConnectorWorkerFactory,
+          IRuleProcessorFactory ruleProcessorFactory,
+          IInlineImageHandler inlineImageHandler,
+          IEmailAttachmentHandler emailAttachmentHandler)
         {
-            _logger = EnvironmentConst.GetService<ILogger>();
-            _unitOfWorkFactory = EnvironmentConst.GetService<IUnitOfWorkFactory>();
-            _emailConnectorWorkerFactory = EnvironmentConst.GetService<IEmailConnectorWorkerFactory>();
-            _ruleProcessorFactory = EnvironmentConst.GetService<IRuleProcessorFactory>();
-            _inlineImageHandler = EnvironmentConst.GetService<IInlineImageHandler>();
-            _emailAttachmentHandler = EnvironmentConst.GetService<IEmailAttachmentHandler>();
+            _logger = logger;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _emailConnectorWorkerFactory = emailConnectorWorkerFactory;
+            _ruleProcessorFactory = ruleProcessorFactory;
+            _inlineImageHandler = inlineImageHandler;
+            _emailAttachmentHandler = emailAttachmentHandler;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

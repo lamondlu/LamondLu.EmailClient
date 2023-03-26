@@ -32,15 +32,15 @@ namespace LamondLu.EmailClient.App
                 services.Configure<DbSetting>(hostContext.Configuration.GetSection("Db"));
 
                 services.AddOptions();
-                services.AddSingleton<ILogger, ConsoleLogger>();
-                services.AddScoped<IInlineImageHandler, LocalInlineImageHandler>();
-                services.AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>();
-                services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
-                services.AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>();
-                services.AddSingleton<IFileStorage, LocalFileStorage>();
-                services.AddHostedService<EmailConnectorHostService>();
-
-                EnvironmentConst.Services = services.BuildServiceProvider();
+                
+                services.AddHostedService<EmailConnectorHostService>()
+                    .AddScoped<IInlineImageHandler, LocalInlineImageHandler>()
+                    .AddSingleton<ILogger, ConsoleLogger>()
+                    .AddScoped<IEmailAttachmentHandler, EmailAttachmentHandler>()
+                    .AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>()
+                    .AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
+                    .AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>()
+                    .AddSingleton<IFileStorage, LocalFileStorage>();
 
             }).UseConsoleLifetime().Build();
 
