@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LamondLu.EmailClient.Domain\LamondLu.EmailClient.Domain.csproj" />
+    <ProjectReference Include="..\LamondLu.EmailClient.Infrastructure.DataPersistent\LamondLu.EmailClient.Infrastructure.DataPersistent.csproj" />
+    <ProjectReference Include="..\LamondLu.EmailClient.Infrastructure.EmailService.Mailkit\LamondLu.EmailClient.Infrastructure.EmailService.Mailkit.csproj" />
+  </ItemGroup>
+</Project>
