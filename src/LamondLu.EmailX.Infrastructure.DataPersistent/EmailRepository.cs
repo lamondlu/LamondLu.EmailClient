@@ -20,7 +20,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
         public async Task SaveNewEmail(AddEmailModel email)
         {
             var sql =
-                "INSERT INTO Email(EmailId, EmailConnectorId, Subject, ReceivedDate, EmailFolderId, Id, Validity, CreatedTime, Sender, MessageId) VALUE(@emailId, @emailConnectorId, @subject,@receivedDate, @emailFolderId, @id, @validity, @createdTime, @sender, @messageId)";
+                "INSERT INTO Email(EmailId, EmailConnectorId, Subject, ReceivedDate, EmailFolderId, Id, Validity, CreatedTime, Sender, MessageId, IsRead) VALUE(@emailId, @emailConnectorId, @subject,@receivedDate, @emailFolderId, @id, @validity, @createdTime, @sender, @messageId, @isRead)";
 
             await _context.Execute(sql, new
             {
@@ -33,7 +33,8 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                 email.CreatedTime,
                 email.EmailFolderId,
                 email.Sender,
-                email.MessageId
+                email.MessageId,
+                email.IsRead
             });
         }
 
@@ -60,7 +61,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
         public async Task<PagedResult<EmailListViewModel>> GetEmails(Guid emailConnectorId, int pageSize, int pageNum)
         {
             var sql =
-                $"SELECT e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, e.Id, e.Validity, e.MessageId FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId WHERE e.EmailConnectorId=@emailConnectorId ORDER BY ReceivedDate DESC LIMIT @skipNum, @pageSize"; 
+                $"SELECT e.IsRead, e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, e.Id, e.Validity, e.MessageId FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId WHERE e.EmailConnectorId=@emailConnectorId ORDER BY ReceivedDate DESC LIMIT @skipNum, @pageSize"; 
             
 
             var result = await _context.QueryAsync<EmailListViewModel>(sql,

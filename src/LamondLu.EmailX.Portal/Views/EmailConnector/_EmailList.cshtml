@@ -1,13 +1,15 @@
 @model LamondLu.EmailX.Domain.Models.PagedResult<LamondLu.EmailX.Domain.ViewModels.EmailListViewModel>
 
-
+<p class="alert-info">
+Current Connector: QQ (309728709@qq.com)
+</p>
  
 <table class="table">
   <thead>
     <tr>
       <th class="col-1">#</th>
-      <th class="col-5">Subject</th>
       <th class="col-3">From</th>
+        <th class="col-5">Subject</th>
       <th class="col-2">Date</th>
       <th class="col-1">Action</th>
     </tr>
@@ -17,8 +19,19 @@
   {
     <tr>
       <th scope="row">@item.Id</th>
-      <td>@item.Subject</td>
-      <td>@item.Sender</td>
+       <td>@item.Sender</td>
+      <td>
+      @if(item.IsRead)
+      {
+        @item.Subject
+      }
+      else
+      {
+        <b>@item.Subject</b>
+      }
+    
+      </td>
+     
       <td>@item.ReceivedDate.ToString("yyyy-MM-dd")</td>
       <td>
       <i class="bi bi-arrow-right-square"></i>

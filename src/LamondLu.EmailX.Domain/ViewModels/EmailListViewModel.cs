@@ -22,5 +22,7 @@ namespace LamondLu.EmailX.Domain.ViewModels
         public long Validity { get; set; }
 
         public string MessageId { get; set; }
+
+        public bool IsRead { get; set; }
     }
 }

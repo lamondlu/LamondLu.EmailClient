@@ -112,12 +112,14 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
                     if (ids.Count != 0)
                     {
+                        var items = folder.Fetch(ids, MessageSummaryItems.Flags);
+
                         foreach (var emailId in ids)
                         {
                             var email = folder.GetMessage(emailId);
                             Console.WriteLine($"[{email.Date}] {email.Subject}");
 
-                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.FolderId, emailId);
+                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.FolderId, emailId, items.FirstOrDefault(p=>p.UniqueId == emailId).Flags.Value.HasFlag (MessageFlags.Seen));
                         }
                     }
                 }
@@ -155,7 +157,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             return folder;
         }
 
-        private async Task SaveMessage(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId)
+        private async Task SaveMessage(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId, bool isRead)
         {
             var dup = await _unitOfWork.EmailRepository.MessageIdExisted(mail.MessageId);
 
@@ -165,7 +167,8 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                 return;
             }
 
-            var email = await SaveEmail(mail, emailConnectorId, folderId, emailId);
+            var email = await SaveEmail(mail, emailConnectorId, folderId, emailId, isRead);
+            
             await _unitOfWork.EmailRepository.SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail));
             await SaveAttachment(email.EmailId, mail);
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
@@ -177,7 +180,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             }
         }
 
-        private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId)
+        private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId, bool isRead)
         {
             var newEmail = new AddEmailModel();
             newEmail.EmailConnectorId = emailConnectorId;
@@ -188,6 +191,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             newEmail.MessageId = mail.MessageId;
             newEmail.Id = emailId.Id;
             newEmail.Validity = emailId.Validity;
+            newEmail.IsRead = isRead;
 
             await _unitOfWork.EmailRepository.SaveNewEmail(newEmail);
 

@@ -46,5 +46,7 @@ namespace LamondLu.EmailX.Domain
         public List<EmailAttachment> Attachments { get; set; }
 
         public List<Tag> Tags { get; set; }
+
+        public bool IsRead {get;set;}
     }
 }
