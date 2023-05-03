@@ -57,7 +57,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
         public async Task<PagedResult<EmailListViewModel>> GetEmails(Guid emailConnectorId, int pageSize, int pageNum)
         {
-            var sql = "SELECT e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, e.Id, e.Validity, e.MessageId FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId WHERE e.EmailConnectorId=@emailConnectorId ORDER BY ReceivedDate LIMT @skipNum, @pageSize";
+            var sql = "SELECT e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, e.Id, e.Validity, e.MessageId FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId WHERE e.EmailConnectorId=@emailConnectorId ORDER BY ReceivedDate LIMIT @skipNum, @pageSize";
 
             var result = await _context.QueryAsync<EmailListViewModel>(sql, new { emailConnectorId, skipNum = (pageNum - 1) * pageSize, pageSize });
 
