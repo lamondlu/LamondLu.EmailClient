@@ -5,11 +5,11 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Subject</th>
-      <th scope="col">From</th>
-      <th scope="col">Received Date</th>
-      <th scope="col">Action</th>
+      <th class="col-1">#</th>
+      <th class="col-5">Subject</th>
+      <th class="col-3">From</th>
+      <th class="col-2">Date</th>
+      <th class="col-1">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -19,8 +19,12 @@
       <th scope="row">@item.Id</th>
       <td>@item.Subject</td>
       <td>@item.Sender</td>
-      <td>@item.ReceiveDate.ToString("yyyy-MM-dd")</td>
-      <td></td>
+      <td>@item.ReceivedDate.ToString("yyyy-MM-dd")</td>
+      <td>
+      <i class="bi bi-arrow-right-square"></i>
+        <i class="bi bi-reply"></i>
+        <i class="bi bi-reply-all"></i>
+      </td>
     </tr>
   }
   

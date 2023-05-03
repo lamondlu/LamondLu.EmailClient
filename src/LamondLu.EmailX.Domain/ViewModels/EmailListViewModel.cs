@@ -15,7 +15,7 @@ namespace LamondLu.EmailX.Domain.ViewModels
 
         public string To { get; set; }
 
-        public DateTime ReceiveDate { get; set; }
+        public DateTime ReceivedDate { get; set; }
 
         public long Id { get; set; }
 
