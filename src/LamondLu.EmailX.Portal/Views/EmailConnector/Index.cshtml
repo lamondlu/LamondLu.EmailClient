@@ -1,0 +1,21 @@
+@model List<LamondLu.EmailX.Domain.ViewModels.EmailConnectorConfigViewModel>;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-3">
+        <span>Email Connectors</span>
+        <ul class="list-group">
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item">@item.Name</li>
+            }
+        </ul>
+
+    </div>
+    <div class="col-9">
+      
+    </div>
+  </div>

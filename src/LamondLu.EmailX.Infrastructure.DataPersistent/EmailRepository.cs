@@ -1,7 +1,10 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using LamondLu.EmailX.Domain.DTOs;
 using LamondLu.EmailX.Domain.Interface;
+using LamondLu.EmailX.Domain.Models;
+using LamondLu.EmailX.Domain.ViewModels;
 
 namespace LamondLu.EmailX.Infrastructure.DataPersistent
 {
@@ -49,9 +52,20 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
         {
             var sql = "INSERT INTO EmailBody(EmailId, EmailBody, EmailHTMLBody) VALUE(@emailId, @emailBody, @emailHTMLBody)";
 
-            await _context.Execute(sql, new { emailId, emailBody, emailHTMLBody});
+            await _context.Execute(sql, new { emailId, emailBody, emailHTMLBody });
         }
 
-        
+        public async Task<PagedResult<EmailListViewModel>> GetEmails(Guid emailConnectorId, int pageSize, int pageNum)
+        {
+            var sql = "SELECT e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, e.Id, e.Validity, e.MessageId FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId WHERE e.EmailConnectorId=@emailConnectorId ORDER BY ReceivedDate LIMT @skipNum, @pageSize";
+
+            var result = await _context.QueryAsync<EmailListViewModel>(sql, new { emailConnectorId, skipNum = (pageNum - 1) * pageSize, pageSize });
+
+            var countSQL = "SELECT COUNT(*) FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId WHERE e.EmailConnectorId=@emailConnectorId";
+
+            var total = await _context.QueryFirstOrDefaultAsync<int>(countSQL, new { emailConnectorId });
+
+            return new PagedResult<EmailListViewModel>(result.ToList(), total, pageSize, pageNum);
+        }
     }
 }

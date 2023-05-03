@@ -1,7 +1,7 @@
 using LamondLu.EmailX.Domain.Interface;
 using System;
 
-namespace LamondLu.EmailX.App
+namespace LamondLu.EmailX.Client
 {
     public class ConsoleLogger : ILogger
     {

@@ -6,7 +6,7 @@ using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
 using System;
 using System.Threading.Tasks;
 
-namespace LamondLu.EmailX.App
+namespace LamondLu.EmailX.Client
 {
     public class EmailConnectorTask
     {

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace LamondLu.EmailX.App
+namespace LamondLu.EmailX.Client
 {
     internal class Program
     {

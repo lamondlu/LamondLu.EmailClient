@@ -1,6 +1,6 @@
 using LamondLu.EmailX.Domain.Enum;
 
-namespace LamondLu.EmailX.App
+namespace LamondLu.EmailX.Client
 {
     public class Settings
     {
