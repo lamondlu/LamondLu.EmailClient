@@ -11,7 +11,7 @@ services:
     depends_on: 
       - db
     build:
-      context: ./LamondLu.EmailClient.Server
+      context: ./LamondLu.EmailX.Server
       dockerfile: dockerfile
   db:
     image: mysql:latest
