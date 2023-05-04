@@ -101,10 +101,10 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
 
                     List<UniqueId> ids = null;
-                    if (_emailClient.Inbox != null)
+                    if (folder != null)
                     {
-                        var start = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId);
-                        var end = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId + (uint)_emailClient.Inbox.Count);
+                        var start = new UniqueId(folder.UidValidity, folderEntity.LastEmailId);
+                        var end = new UniqueId(folder.UidValidity, UniqueId.MaxValue.Id);
 
                         var range = new UniqueIdRange(start, end);
                         ids = _emailClient.Inbox.Search(SearchQuery.Uids(range)).ToList();

@@ -31,7 +31,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
         public async Task<EmailFolderConfigurationModel> CreateEmailFolder(Guid emailConnectorId, string folderPath, string folderName)
         {
-            var sql = "INSERT INTO EmailFolder(FolderId, EmailConnectorId, FolderFullPath,FolderName,IsDeleted,LastEmailId,LastValidityId) VALUES(UUID(),@emailConnectorId,@folderPath,@folderName,0,0,0)";
+            var sql = "INSERT INTO EmailFolder(FolderId, EmailConnectorId, FolderFullPath,FolderName,IsDeleted,LastEmailId,LastValidityId) VALUES(UUID(),@emailConnectorId,@folderPath,@folderName,0,1,0)";
 
             await _context.Execute(sql, new
             {

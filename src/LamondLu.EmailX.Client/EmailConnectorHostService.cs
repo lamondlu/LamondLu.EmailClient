@@ -4,6 +4,7 @@ using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,7 +43,7 @@ namespace LamondLu.EmailX.Client
             var unitOfWork = _unitOfWorkFactory.Create();
             var connectors = await unitOfWork.EmailConnectorRepository.GetEmailConnectors();
 
-            foreach (var connector in connectors)
+            foreach (var connector in connectors.Where(p => p.IsRunning))
             {
                 var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler);
 

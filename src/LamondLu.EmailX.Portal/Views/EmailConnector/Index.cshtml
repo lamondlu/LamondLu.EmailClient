@@ -7,12 +7,15 @@
 
 @{
     ViewData["Title"] = "Index";
-
+   
     var firstItem = Model.FirstOrDefault();
     PagedResult<EmailListViewModel> emails = null;
 
     if(firstItem != null){
-        emails = await unitOfWorkFactory.Create().EmailRepository.GetEmails(firstItem.EmailConnectorId, 10, 1);
+        emails = await unitOfWorkFactory.Create().EmailRepository.GetEmails(firstItem.EmailConnectorId, 20, 1);
+         ViewData["EmailConnectorName"] = firstItem.Name;
+         ViewData["EmailConnectorAddress"] = firstItem.EmailAddress;
+
     }
     
 }
@@ -31,7 +34,7 @@
     <div class="col-10">
         @if (emails != null)
         {
-            @Html.Partial("_EmailList", emails)
+            @Html.Partial("_EmailList", emails, this.ViewData)
         }
         
     </div>
