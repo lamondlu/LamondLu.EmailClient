@@ -33,7 +33,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
             _unitOfWork = unitOfWork;
-            _inlineImageHandler = inlineImageHandler; 
+            _inlineImageHandler = inlineImageHandler;
             _emailAttachmentHandler = emailAttachmentHandler;
         }
 
@@ -103,11 +103,11 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                     List<UniqueId> ids = null;
                     if (folder != null)
                     {
-                        var start = new UniqueId(folder.UidValidity, folderEntity.LastEmailId);
+                        var start = new UniqueId(folder.UidValidity, folderEntity.LastEmailId + 1);
                         var end = new UniqueId(folder.UidValidity, UniqueId.MaxValue.Id);
 
                         var range = new UniqueIdRange(start, end);
-                        ids = _emailClient.Inbox.Search(SearchQuery.Uids(range)).ToList();
+                        ids = _emailClient.Inbox.Search(SearchQuery.Uids(range)).Take(100).ToList();
                     }
 
                     if (ids.Count != 0)
@@ -119,7 +119,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                             var email = folder.GetMessage(emailId);
                             Console.WriteLine($"[{email.Date}] {email.Subject}");
 
-                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.FolderId, emailId, items.FirstOrDefault(p=>p.UniqueId == emailId).Flags.Value.HasFlag (MessageFlags.Seen));
+                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.FolderId, emailId, items.FirstOrDefault(p => p.UniqueId == emailId).Flags.Value.HasFlag(MessageFlags.Seen));
                         }
                     }
                 }
@@ -168,7 +168,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             }
 
             var email = await SaveEmail(mail, emailConnectorId, folderId, emailId, isRead);
-            
+
             await _unitOfWork.EmailRepository.SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail));
             await SaveAttachment(email.EmailId, mail);
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
