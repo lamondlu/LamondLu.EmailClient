@@ -7,13 +7,13 @@
 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Emails";
    PagedResult<EmailListViewModel> emails = null;
     if(ViewBag.EmailConnectorId != null){
         var emailConnectorId = ViewBag.EmailConnectorId;
         var emailConnector = Model.FirstOrDefault(x=>x.EmailConnectorId == emailConnectorId);
         if(emailConnector != null){
-            emails = await unitOfWorkFactory.Create().EmailRepository.GetEmails(emailConnector.EmailConnectorId, 20, 1);
+            emails = await unitOfWorkFactory.Create().EmailRepository.GetEmails(emailConnector.EmailConnectorId, 15, 1);
             ViewData["EmailConnectorName"] = emailConnector.Name;
             ViewData["EmailConnectorAddress"] = emailConnector.EmailAddress;
         }
@@ -24,7 +24,7 @@
 
     if(firstItem != null){
         ViewBag.CurrentId = firstItem.EmailConnectorId;
-        emails = await unitOfWorkFactory.Create().EmailRepository.GetEmails(firstItem.EmailConnectorId, 20, 1);
+        emails = await unitOfWorkFactory.Create().EmailRepository.GetEmails(firstItem.EmailConnectorId, 15, 1);
          ViewData["EmailConnectorName"] = firstItem.Name;
          ViewData["EmailConnectorAddress"] = firstItem.EmailAddress;
 
@@ -54,6 +54,6 @@
 
   <script type="text/javascript">
     function showDetails(id) {
-        window.location.href = "/EmailConnector/Index?emailConnectorId=" + id;
+        window.location.href = "/Email/Index?emailConnectorId=" + id;
     }
   </script>
