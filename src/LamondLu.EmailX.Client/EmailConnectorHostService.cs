@@ -50,10 +50,7 @@ namespace LamondLu.EmailX.Client
                 Version(connector);
                 _tasks.Add(task);
 
-                await Task.Run(async () =>
-                {
-                    await task.Start();
-                });
+                task.Start();
 
                 _logger.Write($"[{connector.Name}] Started");
             }

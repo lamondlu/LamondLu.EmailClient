@@ -19,6 +19,8 @@ namespace LamondLu.EmailX.Client
 
         private IEmailAttachmentHandler _emailAttachmentHandler = null;
 
+        private Task CurrentTask = null;
+
         public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler)
         {
             _emailConnector = emailConnector;
@@ -29,7 +31,12 @@ namespace LamondLu.EmailX.Client
             _emailAttachmentHandler = emailAttachmentHandler;
         }
 
-        public async Task Start()
+        public void Start()
+        {
+            CurrentTask = Task.Run(async () => await ConnectAsync());
+        }
+
+        public async Task ConnectAsync()
         {
             Console.WriteLine($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Start");
 

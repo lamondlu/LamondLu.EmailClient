@@ -20,10 +20,9 @@
     }
     else{
     var firstItem = Model.FirstOrDefault();
-    
 
     if(firstItem != null){
-        ViewBag.CurrentId = firstItem.EmailConnectorId;
+        ViewBag.EmailConnectorId = firstItem.EmailConnectorId;
         emails = await unitOfWorkFactory.Create().EmailRepository.GetEmails(firstItem.EmailConnectorId, 15, 1);
          ViewData["EmailConnectorName"] = firstItem.Name;
          ViewData["EmailConnectorAddress"] = firstItem.EmailAddress;
