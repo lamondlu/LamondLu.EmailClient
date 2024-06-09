@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/LamondLu.EmailX.Client/bin/Debug/net6.0/LamondLu.EmailX.Client.dll",
+            "program": "${workspaceFolder}/src/LamondLu.EmailX.Client/bin/Debug/net8.0/LamondLu.EmailX.Client.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/LamondLu.EmailX.Client/bin/Debug/net6.0",
+            "cwd": "${workspaceFolder}/src/LamondLu.EmailX.Client/bin/Debug/net8.0",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
