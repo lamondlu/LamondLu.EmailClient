@@ -25,10 +25,7 @@ namespace LamondLu.EmailX.Client
                 configApp.AddCommandLine(args);
             }).ConfigureServices((hostContext, services) =>
             {
-
-
                 var item = hostContext.Configuration.GetSection("Db");
-
                 services.Configure<DbSetting>(hostContext.Configuration.GetSection("Db"));
 
                 services.AddOptions();
