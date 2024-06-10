@@ -1,1 +1,0 @@
-ALTER TABLE Email ADD UNIQUE KEY `UN_MessageId` (`MessageId`) USING BTREE;
