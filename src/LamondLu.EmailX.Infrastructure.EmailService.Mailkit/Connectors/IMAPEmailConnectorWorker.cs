@@ -169,7 +169,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
             var email = await SaveEmail(mail, emailConnectorId, folderId, emailId, isRead);
 
-            await _unitOfWork.EmailRepository.SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail));
+            await _unitOfWork.EmailRepository.SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail, email.EmailId));
             await SaveAttachment(email.EmailId, mail);
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
             await _unitOfWork.SaveAsync();
