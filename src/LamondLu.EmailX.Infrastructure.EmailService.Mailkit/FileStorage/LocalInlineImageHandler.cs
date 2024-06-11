@@ -33,6 +33,12 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
                                 att.Content.DecodeTo(mem);
                                 mem.Position = 0;
 
+                                var attachmentFolder = new DirectoryInfo($"{Directory.GetCurrentDirectory()}/images");
+                                if (!attachmentFolder.Exists)
+                                {
+                                    attachmentFolder.Create();
+                                }
+
                                 using (var fs = new FileStream($"{Directory.GetCurrentDirectory()}/images/{DateTime.Now.Ticks}.{fileType}", FileMode.Create))
                                 {
                                     mem.WriteTo(fs);

@@ -119,7 +119,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                             var email = folder.GetMessage(emailId);
                             Console.WriteLine($"[{email.Date}] {email.Subject}");
 
-                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.FolderId, emailId, items.FirstOrDefault(p => p.UniqueId == emailId).Flags.Value.HasFlag(MessageFlags.Seen));
+                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.EmailFolderId, emailId, items.FirstOrDefault(p => p.UniqueId == emailId).Flags.Value.HasFlag(MessageFlags.Seen));
                         }
                     }
                 }
@@ -182,16 +182,18 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId, bool isRead)
         {
-            var newEmail = new AddEmailModel();
-            newEmail.EmailConnectorId = emailConnectorId;
-            newEmail.EmailFolderId = folderId;
-            newEmail.Subject = mail.Subject;
-            newEmail.Sender = mail.From?.Mailboxes?.FirstOrDefault()?.Address;
-            newEmail.ReceivedDate = mail.Date.Date;
-            newEmail.MessageId = mail.MessageId;
-            newEmail.Id = emailId.Id;
-            newEmail.Validity = emailId.Validity;
-            newEmail.IsRead = isRead;
+            var newEmail = new AddEmailModel
+            {
+                EmailConnectorId = emailConnectorId,
+                EmailFolderId = folderId,
+                Subject = mail.Subject,
+                Sender = mail.From?.Mailboxes?.FirstOrDefault()?.Address,
+                ReceivedDate = mail.Date.Date,
+                MessageId = mail.MessageId,
+                Id = emailId.Id,
+                Validity = emailId.Validity,
+                IsRead = isRead
+            };
 
             await _unitOfWork.EmailRepository.SaveNewEmail(newEmail);
 
