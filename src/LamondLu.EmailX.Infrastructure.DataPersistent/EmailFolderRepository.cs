@@ -31,7 +31,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
         public async Task<EmailFolderConfigurationModel> CreateEmailFolder(Guid emailConnectorId, string folderPath, string folderName)
         {
-            var sql = "INSERT INTO EmailFolder(FolderId, EmailConnectorId, FolderFullPath,FolderName,IsDeleted,LastEmailId,LastValidityId) VALUES(UUID(),@emailConnectorId,@folderPath,@folderName,0,0,0)";
+            var sql = "INSERT INTO EmailFolder(EmailFolderId, EmailConnectorId, FolderFullPath,FolderName,IsDeleted,LastEmailId,LastValidityId) VALUES(UUID(),@emailConnectorId,@folderPath,@folderName,0,1,0)";
 
             await _context.Execute(sql, new
             {
@@ -58,7 +58,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
         public async Task RecordFolderProcess(Guid folderId, uint lastEmailId, uint lastValidityId)
         {
-            var sql = "UPDATE EmailFolder SET LastEmailId=@lastEmailId, LastValidityId=@lastValidityId WHERE FolderId=@folderId";
+            var sql = "UPDATE EmailFolder SET LastEmailId=@lastEmailId, LastValidityId=@lastValidityId WHERE EmailFolderId=@folderId";
 
             await _context.Execute(sql, new
             {

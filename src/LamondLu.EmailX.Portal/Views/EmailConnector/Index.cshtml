@@ -1,38 +1,38 @@
-@model List<LamondLu.EmailX.Domain.ViewModels.EmailConnectorConfigViewModel>
-@using LamondLu.EmailX.Domain.Interface
-@using LamondLu.EmailX.Domain.Models
-@using LamondLu.EmailX.Domain.ViewModels
-@inject IUnitOfWorkFactory unitOfWorkFactory;
-
-
+@using LamondLu.EmailX.Domain.Enum
 @{
-    ViewData["Title"] = "Index";
-
-    var firstItem = Model.FirstOrDefault();
-    PagedResult<EmailListViewModel> emails = null;
-
-    if(firstItem != null){
-        emails = await unitOfWorkFactory.Create().EmailRepository.GetEmails(firstItem.EmailConnectorId, 10, 1);
-    }
-    
+    ViewData["Title"] = "Setting - Email Connectors";
 }
 
-<div class="row">
-    <div class="col-2">
-        <span>Email Connectors</span>
-        <ul class="list-group">
-            @foreach (var item in Model)
-            {
-                <li class="list-group-item active">@item.Name</li>
-            }
-        </ul>
 
-    </div>
-    <div class="col-10">
-        @if (emails != null)
-        {
-            @Html.Partial("_EmailList", emails)
-        }
-        
-    </div>
-  </div>
+@model List<LamondLu.EmailX.Domain.ViewModels.EmailConnectorConfigViewModel>
+ 
+<table class="table">
+  <thead>
+    <tr>
+      <th class="col-2">Name</th>
+      <th class="col-4">Email Address</th>
+      <th class="col-3">Method</th>
+      <th class="col-2">Status</th>
+      <th class="col-1">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  @foreach (var item in Model)
+  {
+    <tr>
+      <th scope="row">@item.Name</th>
+       <td>@item.EmailAddress</td>
+      <td>
+        @(item.Type == EmailConnectorType.IMAP ? "IMAP" : "POP3")
+      </td>
+      <td>@(item.IsRunning?"Running":"Stopped")</td>
+      <td>
+      <i class="bi bi-arrow-right-square"></i>
+        <i class="bi bi-reply"></i>
+        <i class="bi bi-reply-all"></i>
+      </td>
+    </tr>
+  }
+  
+  </tbody>
+</table>

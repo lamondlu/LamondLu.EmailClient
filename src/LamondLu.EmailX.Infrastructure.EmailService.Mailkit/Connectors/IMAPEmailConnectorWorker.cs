@@ -33,7 +33,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
             _unitOfWork = unitOfWork;
-            _inlineImageHandler = inlineImageHandler; 
+            _inlineImageHandler = inlineImageHandler;
             _emailAttachmentHandler = emailAttachmentHandler;
         }
 
@@ -101,13 +101,13 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
 
                     List<UniqueId> ids = null;
-                    if (_emailClient.Inbox != null)
+                    if (folder != null)
                     {
-                        var start = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId);
-                        var end = new UniqueId(folderEntity.LastValidityId, folderEntity.LastEmailId + (uint)_emailClient.Inbox.Count);
+                        var start = new UniqueId(folder.UidValidity, folderEntity.LastEmailId + 1);
+                        var end = new UniqueId(folder.UidValidity, UniqueId.MaxValue.Id);
 
                         var range = new UniqueIdRange(start, end);
-                        ids = _emailClient.Inbox.Search(SearchQuery.Uids(range)).ToList();
+                        ids = _emailClient.Inbox.Search(SearchQuery.Uids(range)).Take(100).ToList();
                     }
 
                     if (ids.Count != 0)
@@ -119,7 +119,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                             var email = folder.GetMessage(emailId);
                             Console.WriteLine($"[{email.Date}] {email.Subject}");
 
-                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.FolderId, emailId, items.FirstOrDefault(p=>p.UniqueId == emailId).Flags.Value.HasFlag (MessageFlags.Seen));
+                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.EmailFolderId, emailId, items.FirstOrDefault(p => p.UniqueId == emailId).Flags.Value.HasFlag(MessageFlags.Seen));
                         }
                     }
                 }
@@ -168,8 +168,8 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             }
 
             var email = await SaveEmail(mail, emailConnectorId, folderId, emailId, isRead);
-            
-            await _unitOfWork.EmailRepository.SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail));
+
+            await _unitOfWork.EmailRepository.SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail, email.EmailId));
             await SaveAttachment(email.EmailId, mail);
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
             await _unitOfWork.SaveAsync();
@@ -182,16 +182,18 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId, bool isRead)
         {
-            var newEmail = new AddEmailModel();
-            newEmail.EmailConnectorId = emailConnectorId;
-            newEmail.EmailFolderId = folderId;
-            newEmail.Subject = mail.Subject;
-            newEmail.Sender = mail.From?.Mailboxes?.FirstOrDefault()?.Address;
-            newEmail.ReceivedDate = mail.Date.Date;
-            newEmail.MessageId = mail.MessageId;
-            newEmail.Id = emailId.Id;
-            newEmail.Validity = emailId.Validity;
-            newEmail.IsRead = isRead;
+            var newEmail = new AddEmailModel
+            {
+                EmailConnectorId = emailConnectorId,
+                EmailFolderId = folderId,
+                Subject = mail.Subject,
+                Sender = mail.From?.Mailboxes?.FirstOrDefault()?.Address,
+                ReceivedDate = mail.Date.Date,
+                MessageId = mail.MessageId,
+                Id = emailId.Id,
+                Validity = emailId.Validity,
+                IsRead = isRead
+            };
 
             await _unitOfWork.EmailRepository.SaveNewEmail(newEmail);
 

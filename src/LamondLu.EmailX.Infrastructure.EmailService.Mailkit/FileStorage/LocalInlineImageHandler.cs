@@ -7,7 +7,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
 {
     public class LocalInlineImageHandler : IInlineImageHandler
     {
-        public string PopulateInlineImages(MimeMessage newMessage)
+        public string PopulateInlineImages(MimeMessage newMessage, Guid emailId)
         {
             var body = string.Empty;
 
@@ -33,11 +33,22 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
                                 att.Content.DecodeTo(mem);
                                 mem.Position = 0;
 
-                                using (var fs = new FileStream($"{Directory.GetCurrentDirectory()}/images/{DateTime.Now.Ticks}.{fileType}", FileMode.Create))
+                                var attachmentFolder = new DirectoryInfo($"{Directory.GetCurrentDirectory()}/images");
+                                if (!attachmentFolder.Exists)
+                                {
+                                    attachmentFolder.Create();
+                                }
+
+                                var fileName = $"{DateTime.Now.Ticks}.{fileType}";
+
+                                using (var fs = new FileStream($"{Directory.GetCurrentDirectory()}/images/{fileName}", FileMode.Create))
                                 {
                                     mem.WriteTo(fs);
                                     fs.Flush();
                                 }
+
+                                var fileFullUrl = $"https://filestorage/emails/{emailId}/attachments/{fileName}";
+                                body = body.Replace("cid:" + att.ContentId, fileFullUrl);
                             }
                         }
                     }

@@ -12,7 +12,7 @@ namespace LamondLu.EmailX.Portal.Controllers
     public class EmailConnectorController : Controller
     {
         private readonly ILogger<EmailConnectorController> _logger;
-        private IUnitOfWork _unitOfWork = null;
+        private IUnitOfWork _unitOfWork;
 
         public EmailConnectorController(ILogger<EmailConnectorController> logger, IUnitOfWorkFactory unitOfWorkFactory)
         {

@@ -1,7 +1,7 @@
 @model LamondLu.EmailX.Domain.Models.PagedResult<LamondLu.EmailX.Domain.ViewModels.EmailListViewModel>
 
-<p class="alert-info">
-Current Connector: QQ (309728709@qq.com)
+<p class="alert alert-success">
+Current Connector: @ViewData["EmailConnectorName"] (@ViewData["EmailConnectorAddress"])
 </p>
  
 <table class="table">

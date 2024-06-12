@@ -8,7 +8,7 @@ namespace LamondLu.EmailX.Portal.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private IUnitOfWork _unitOfWork = null;
+    private IUnitOfWork _unitOfWork;
 
     public HomeController(ILogger<HomeController> logger, IUnitOfWorkFactory unitOfWorkFactory)
     {

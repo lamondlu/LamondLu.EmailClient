@@ -1,0 +1,68 @@
+@model List<LamondLu.EmailX.Domain.ViewModels.EmailConnectorConfigViewModel>?
+@using LamondLu.EmailX.Domain.Interface
+@using LamondLu.EmailX.Domain.Models
+@using LamondLu.EmailX.Domain.ViewModels
+@using System.Linq
+@inject IUnitOfWorkFactory unitOfWorkFactory;
+
+
+@{
+    ViewData["Title"] = "Emails";
+    PagedResult<EmailListViewModel>? emails = null;
+    if (ViewBag.EmailConnectorId != null)
+    {
+        var emailConnectorId = ViewBag.EmailConnectorId;
+        var emailConnector = Model?.FirstOrDefault(x => x.EmailConnectorId ==
+        emailConnectorId);
+        if (emailConnector != null)
+        {
+            emails = await
+            unitOfWorkFactory.Create().EmailRepository.GetEmails(emailConnector.EmailConnectorId,
+            15, 1);
+            ViewData["EmailConnectorName"] = emailConnector.Name;
+            ViewData["EmailConnectorAddress"] = emailConnector.EmailAddress;
+        }
+    }
+    else
+    {
+        var firstItem = Model?.FirstOrDefault();
+
+        if (firstItem != null)
+        {
+            ViewBag.EmailConnectorId = firstItem.EmailConnectorId;
+            emails = await
+            unitOfWorkFactory.Create().EmailRepository.GetEmails(firstItem.EmailConnectorId,
+            15, 1);
+            ViewData["EmailConnectorName"] = firstItem.Name;
+            ViewData["EmailConnectorAddress"] = firstItem.EmailAddress;
+
+        }
+    }
+}
+
+<div class="row">
+    <div class="col-2">
+        <span>Email Connectors</span>
+        <ul class="list-group">
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item @(ViewBag.EmailConnectorId == item.EmailConnectorId? "active": "")"
+                    onclick="showDetails('@item.EmailConnectorId')">@item.Name</li>
+            }
+        </ul>
+
+    </div>
+    <div class="col-10">
+        @if (emails != null)
+        {
+            @Html.Partial("_EmailList", emails, this.ViewData)
+        }
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function showDetails(id) {
+        window.location.href = "/Email/Index?emailConnectorId=" + id;
+    }
+</script>

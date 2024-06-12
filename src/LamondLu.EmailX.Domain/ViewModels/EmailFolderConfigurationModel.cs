@@ -6,7 +6,7 @@ namespace LamondLu.EmailX.Domain.ViewModels
 {
     public class EmailFolderConfigurationModel
     {
-        public Guid FolderId { get; set; }
+        public Guid EmailFolderId { get; set; }
 
         public Guid EmailConnectorId { get; set; }
 

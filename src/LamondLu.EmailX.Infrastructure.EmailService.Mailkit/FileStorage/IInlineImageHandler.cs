@@ -8,6 +8,6 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
 {
     public interface IInlineImageHandler
     {
-        string PopulateInlineImages(MimeMessage newMessage);
+        string PopulateInlineImages(MimeMessage newMessage, Guid emailId);
     } 
 }
