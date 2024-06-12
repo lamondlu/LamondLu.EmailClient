@@ -8,11 +8,10 @@
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/LamondLu.EmailClient.ConsoleApp/bin/Debug/netcoreapp3.1/LamondLu.EmailClient.ConsoleApp.dll",
+            "program": "${workspaceFolder}/src/LamondLu.EmailX.Client/bin/Debug/net8.0/LamondLu.EmailX.Client.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/LamondLu.EmailClient.Test",
+            "cwd": "${workspaceFolder}/src/LamondLu.EmailX.Client/bin/Debug/net8.0",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

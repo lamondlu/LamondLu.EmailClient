@@ -1,27 +1,53 @@
-version: "3"
+version: "3.8"
 services:
+  emailclient:
+    image: "lamondlu/emailx.client"
+    container_name: emailx.client
+    volumes:
+      - ../config/config.local.json:/app/appsettings.json
+    links:
+      - db
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: ./LamondLu.EmailX.Client/dockerfile
+    networks:
+      - bridgenew
   emailservice:
-    image: "lamondlu/emailclientserver"
-    container_name: emailclientserver
+    image: "lamondlu/emailx.server"
+    container_name: emailx.server
     ports:
-      - "5000:5000"
+      - "5080:5000"
     hostname: emailclientserver
     links:
       - db
-    depends_on: 
+    depends_on:
       - db
     build:
-      context: ./LamondLu.EmailClient.Server
-      dockerfile: dockerfile
+      context: .
+      dockerfile: ./LamondLu.EmailX.Server/dockerfile
+    networks:
+      - bridgenew
   db:
-    image: mysql:latest
-    command: --default-authentication-plugin=mysql_native_password
-    hostname: emailclientdb
-    container_name: emailclientdb
-    environment: 
+    image: mysql:8.0.33
+    command: --default-authentication-plugin=mysql_native_password --lower_case_table_names=1
+    hostname: db
+    container_name: emailx.db
+    ports:
+      - "3308:3306"
+    environment:
       MYSQL_ROOT_PASSWORD: a@12345
       MYSQL_ROOT_HOST: "%"
-    volumes: 
+    volumes:
       - ./init:/docker-entrypoint-initdb.d
-      - ./data:/var/lib/mysql
-      - ./conf/my.cnf:/etc/my.cnf
+      - email-db:/var/lib/mysql
+    networks:
+      bridgenew:
+        aliases:
+          - db
+volumes:
+  email-db:
+networks:
+  bridgenew:
+    driver: bridge

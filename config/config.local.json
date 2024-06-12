@@ -1,0 +1,14 @@
+{
+    "Logging": {
+      "LogLevel": {
+        "Default": "Information",
+        "Microsoft.AspNetCore": "Warning"
+      }
+    },
+    "AllowedHosts": "*",
+    "Db": {
+      "connectionString": "server=db;userid=root;pwd=a@12345;port=3306;database=emaildb;sslmode=none;",
+      "timeOut": 10
+    }
+  }
+  

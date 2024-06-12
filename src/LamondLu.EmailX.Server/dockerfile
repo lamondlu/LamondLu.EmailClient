@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+ARG BUILD=Release
+# copy csproj and restore as distinct layers
+COPY ["../LamondLu.EmailX.Domain/LamondLu.EmailX.Domain.csproj", "LamondLu.EmailX.Domain/"]
+COPY ["../LamondLu.EmailX.Infrastructure.DataPersistent/LamondLu.EmailX.Infrastructure.DataPersistent.csproj", "LamondLu.EmailX.Infrastructure.DataPersistent/"]
+COPY ["../LamondLu.EmailX.Infrastructure.EmailService.Mailkit/LamondLu.EmailX.Infrastructure.EmailService.Mailkit.csproj", "LamondLu.EmailX.Infrastructure.EmailService.Mailkit/"]
+COPY ["../LamondLu.EmailX.Server/LamondLu.EmailX.Server.csproj", "LamondLu.EmailX.Server/"]
+
+COPY . .
+WORKDIR "/app/LamondLu.EmailX.Server"
+RUN dotnet build "LamondLu.EmailX.Server.csproj" -c ${BUILD} -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "LamondLu.EmailX.Server.csproj" -c ${BUILD} -o /app/publish
+
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "LamondLu.EmailX.Server.dll"]
