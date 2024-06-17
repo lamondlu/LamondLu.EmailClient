@@ -16,9 +16,17 @@ namespace LamondLu.EmailX.Domain.DTOs
 
         public string Password { get; set; }
 
-        public string Server { get; set; }
+        public string SMTPServer { get; set; }
 
-        public int Port { get; set; }
+        public int? SMTPPort { get; set; }
+
+        public string POP3Server { get; set; }
+
+        public int? POP3Port { get; set; }
+
+        public string IMAPServer { get; set; }
+
+        public int? IMAPPort { get; set; }
 
         [DisplayName("SSL/TLS")]
         public bool EnableSSL { get; set; }

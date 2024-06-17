@@ -20,7 +20,7 @@ namespace LamondLu.EmailX.Domain.Managers
         {
             try
             {
-                var emailConnector = new EmailConnector(model.Name, model.EmailAddress, model.UserName, model.Password, new EmailServerConfig(model.Server, model.Port, model.EnableSSL), model.Type, model.Description);
+                var emailConnector = new EmailConnector(model.Name, model.EmailAddress, model.UserName, model.Password, new EmailServerConfig(model.SMTPServer, model.SMTPPort, model.IMAPServer, model.IMAPPort, model.POP3Server, model.POP3Port, model.EnableSSL), model.Type, model.Description);
 
                 var duplicateChecking = await _unitOfWork.EmailConnectorRepository.CheckDuplicated(emailConnector.EmailAddress, emailConnector.Name, emailConnector.EmailConnectorId);
 
