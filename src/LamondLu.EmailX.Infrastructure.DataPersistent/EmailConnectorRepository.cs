@@ -33,11 +33,15 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                     UserName, 
                     Password, 
                     Status, 
-                    IP, 
-                    Port, 
+                    SMTPServer,
+                    SMTPPort,
+                    IMAPServer,
+                    IMAPPort,
+                    POP3Server,
+                    POP3Port,
                     EnableSSL, 
                     Description, Type) 
-                    VALUES(@EmailConnectorId, @Name, @EmailAddress, @UserName, @Password, @Status, @IP, @Port, @EnableSSL, @Description, @Type)";
+                    VALUES(@EmailConnectorId, @Name, @EmailAddress, @UserName, @Password, @Status, @SMTPServer, @SMTPPort, @IMAPServer, @IMAPPort, @POP3Server, @POP3Port, @EnableSSL, @Description, @Type)";
 
             await _context.Execute(sql, new
             {
@@ -46,8 +50,12 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                 emailConnector,
                 emailConnector.Password,
                 emailConnector.Status,
-                IP = emailConnector.Server.Server,
-                emailConnector.Server.Port,
+                emailConnector.Server.SMTPServer,
+                emailConnector.Server.SMTPPort,
+                emailConnector.Server.IMAPServer,
+                emailConnector.Server.IMAPPort,
+                emailConnector.Server.POP3Server,
+                emailConnector.Server.POP3Port,
                 emailConnector.Server.EnableSSL,
                 emailConnector.Description,
                 emailConnector.UserName,
@@ -62,9 +70,26 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             return count > 0;
         }
 
-        public Task<EmailConnector> GetEmailConnector(Guid emailConnectorId)
+        public async Task<EmailConnector> GetEmailConnector(Guid emailConnectorId)
         {
-            throw new NotImplementedException();
+            var sql = "SELECT * FROM EmailConnector WHERE IsDeleted = 0 AND EmailConnectorId=@emailConnectorId";
+            var result = await _context.QueryFirstOrDefaultAsync<EmailConnectorConfigViewModel>(sql);
+
+            if (result != null)
+            {
+                return new EmailConnector(result.EmailConnectorId, result.Name, result.EmailAddress, result.UserName, result.Password, new EmailServerConfig
+                (
+                    result.IMAPServer,
+                    result.IMAPPort,
+                    result.POP3Server,
+                    result.POP3Port,
+                    result.SMTPServer,
+                    result.SMTPPort,
+                    result.EnableSSL
+                ), result.Type, result.Description);
+            }
+
+            return null;
         }
     }
 }

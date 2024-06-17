@@ -50,6 +50,18 @@ namespace LamondLu.EmailX.Domain
 
         public EmailConnectorType Type { get; set; }
 
+        public string SMTPServer { get; set; }
+
+        public int? SMTPPort { get; set; }
+
+        public string POP3Server { get; set; }
+
+        public int? POP3Port { get; set; }
+
+        public string IMAPServer { get; set; }
+
+        public int? IMAPPort { get; set; }
+
         public string Description { get; set; }
 
         public void Start()

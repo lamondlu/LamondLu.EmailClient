@@ -31,7 +31,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             {
                 _emailClient = new Pop3Client();
 
-                await _emailClient.ConnectAsync(_emailConnector.Server.Server, _emailConnector.Server.Port, true);
+                await _emailClient.ConnectAsync(_emailConnector.Server.POP3Server, _emailConnector.Server.POP3Port.Value, true);
                 _emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
                 await _emailClient.AuthenticateAsync(_emailConnector.UserName, _emailConnector.Password);
 

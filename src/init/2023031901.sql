@@ -32,9 +32,12 @@ CREATE TABLE `EmailConnector` (
   `UserName` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `Password` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `Status` tinyint(1) DEFAULT NULL,
-  `IPv4` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `Port` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `IPv6` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `SMTPServer` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `SMTPPort` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `POP3Server` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `POP3Port` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `IMAPServer` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `IMAPPort` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `EnableSSL` bit(1) DEFAULT NULL,
   `Description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `Type` tinyint(1) DEFAULT NULL,
@@ -61,8 +64,6 @@ CREATE TABLE `EmailFolder` (
 SET FOREIGN_KEY_CHECKS = 1;
 
 ALTER TABLE EmailConnector ADD COLUMN IsDeleted BIT(1) NOT NULL;
-ALTER TABLE EmailConnector DROP COLUMN IPv6;
-ALTER TABLE EmailConnector CHANGE COLUMN IPv4 IP VARCHAR(100) NOT NULL;
 
 
 SET FOREIGN_KEY_CHECKS = 1;

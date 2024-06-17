@@ -59,8 +59,6 @@ namespace LamondLu.EmailX.Client
         private void Version(EmailConnectorConfigViewModel emailConnector)
         {
             _logger.Write($"[{emailConnector.Name}] Email Connect Type: {emailConnector.Type}");
-            _logger.Write($"[{emailConnector.Name}] Address: {emailConnector.IP}");
-            _logger.Write($"[{emailConnector.Name}] Port: {emailConnector.Port}");
             _logger.Write($"[{emailConnector.Name}] SSL: {(emailConnector.EnableSSL ? "Yes" : "No")}");
             _logger.Write($"[{emailConnector.Name}] UserName: {emailConnector.UserName}");
             _logger.Write($"[{emailConnector.Name}] Password: {emailConnector.Password}");

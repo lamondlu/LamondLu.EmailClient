@@ -47,15 +47,15 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             {
                 _emailClient = new ImapClient();
 
-                await _emailClient.ConnectAsync(_emailConnector.Server.Server, _emailConnector.Server.Port, true);
+                await _emailClient.ConnectAsync(_emailConnector.Server.IMAPServer, _emailConnector.Server.IMAPPort.Value, true);
                 _emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
                 await _emailClient.AuthenticateAsync(_emailConnector.UserName, _emailConnector.Password);
 
-                if (_emailConnector.Server.IsNetEase)
-                {
-                    //for netease box, there need some extra work
-                    await SpeicalBox();
-                }
+                // if (_emailConnector.Server.IsNetEase)
+                // {
+                //     //for netease box, there need some extra work
+                //     await SpeicalBox();
+                // }
 
                 return true;
             }
