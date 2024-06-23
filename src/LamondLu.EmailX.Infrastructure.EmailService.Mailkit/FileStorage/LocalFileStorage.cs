@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
 {
+    /// <summary>
+    /// Use local file storage to store email attachments
+    /// </summary>
     public class LocalFileStorage : IFileStorage
     {
         public async Task Upload(Guid emailId, string fileName, MemoryStream stream)

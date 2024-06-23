@@ -5,6 +5,9 @@ using MimeKit;
 
 namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
 {
+    /// <summary>
+    /// Use local file storage to store inline images
+    /// </summary>
     public class LocalInlineImageHandler : IInlineImageHandler
     {
         public string PopulateInlineImages(MimeMessage newMessage, Guid emailId)
