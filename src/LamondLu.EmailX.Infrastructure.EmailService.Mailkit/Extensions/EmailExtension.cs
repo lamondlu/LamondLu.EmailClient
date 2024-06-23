@@ -23,8 +23,6 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.Extensions
             email.EmailRealId = uniqueId.Id;
             email.MessageId = message.MessageId;
 
-          
-
             return email;
         }
 

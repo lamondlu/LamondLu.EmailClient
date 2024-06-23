@@ -6,6 +6,9 @@ using MimeKit;
 
 namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
 {
+    /// <summary>
+    /// A interface to handle email attachments
+    /// </summary>
     public interface IEmailAttachmentHandler
     {
         Task<List<AddEmailAttachmentModel>> SaveAttachment(Guid emailId, MimeMessage mail);

@@ -51,8 +51,6 @@ namespace LamondLu.EmailX.Client
                 _tasks.Add(task);
 
                 task.Start();
-
-                _logger.Write($"[{connector.Name}] Started");
             }
         }
 
