@@ -1,10 +1,10 @@
 using LamondLu.EmailX.Domain.Interface;
+using LamondLu.EmailX.Domain.Managers;
 using LamondLu.EmailX.Infrastructure.DataPersistent;
 using LamondLu.EmailX.Infrastructure.DataPersistent.Models;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
-using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,16 +12,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 var item = builder.Configuration.GetSection("Db");
 builder.Services.Configure<DbSetting>(builder.Configuration.GetSection("Db"));
+builder.Logging.AddConsole();
 builder.Services.AddOptions();
 builder.Services.AddScoped<IInlineImageHandler, LocalInlineImageHandler>()
                     .AddScoped<IEmailAttachmentHandler, EmailAttachmentHandler>()
                     .AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>()
                     .AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
                     .AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>()
-                    .AddSingleton<IFileStorage, LocalFileStorage>();
+                    .AddSingleton<IFileStorage, LocalFileStorage>()
+                    .AddScoped<EmailConnectorManager>();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="LamondLu.Core" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../LamondLu.EmailX.Domain/LamondLu.EmailX.Domain.csproj" />

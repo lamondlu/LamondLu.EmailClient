@@ -42,13 +42,5 @@ namespace LamondLu.EmailX.Domain.ViewModels
                 return Status == EmailConnectorStatus.Running;
             }
         }
-
-        public bool IsStopped
-        {
-            get
-            {
-                return Status == EmailConnectorStatus.Stopped;
-            }
-        }
     }
 }

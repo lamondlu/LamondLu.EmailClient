@@ -1,23 +1,92 @@
+using LamondLu.EmailX.Domain;
+using LamondLu.EmailX.Domain.DTOs;
+using LamondLu.EmailX.Domain.Enum;
 using LamondLu.EmailX.Domain.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using LamondLu.Core;
+using LamondLu.Core.Api;
+using MimeKit.Cryptography;
+using LamondLu.EmailX.Domain.Models.EmailConnectors;
+using LamondLu.EmailX.Domain.Managers;
 
 namespace LamondLu.EmailX.Server.Controllers
 {
     [Route("api/emailconnectors")]
     public class EmailConnectorController : ControllerBase
     {
-        private IUnitOfWork _unitOfWork = null;
+        private IUnitOfWork _unitOfWork;
 
-        public EmailConnectorController(IUnitOfWorkFactory unitOfWorkFactory)
+        private EmailConnectorManager _emailConnectorManager;
+
+        public EmailConnectorController(IUnitOfWorkFactory unitOfWorkFactory, EmailConnectorManager emailConnectorManager)
         {
             _unitOfWork = unitOfWorkFactory.Create();
+            _emailConnectorManager = emailConnectorManager;
         }
 
         // GET: api/EmailConnector
         [HttpGet("")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _unitOfWork.EmailConnectorRepository.GetEmailConnectors());
+            var result = await _unitOfWork.EmailConnectorRepository.GetEmailConnectorStatuses();
+
+            return Ok(
+                new SuccessResponse(result));
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> Add([FromBody] AddEmailConnectorModel model)
+        {
+            Console.WriteLine("Add Email Connector");
+            Console.WriteLine(JsonConvert.SerializeObject(model));
+
+            if (await _unitOfWork.EmailConnectorRepository.CheckDuplicated(model.EmailAddress, model.Name, Guid.Empty))
+            {
+                return BadRequest("Duplicated Email Connector");
+            }
+
+            await _unitOfWork.EmailConnectorRepository.AddEmailConnector(new EmailConnector(
+                model.Name,
+                model.EmailAddress,
+                model.UserName,
+                model.Password,
+                new EmailServerConfig(
+                    model.SMTPServer,
+                    model.SMTPPort,
+                    model.IMAPServer,
+                    model.IMAPPort,
+                    model.POP3Server,
+                    model.POP3Port,
+                    model.EnableSSL
+                ),
+                model.Type,
+                model.Description
+            ));
+
+            await _unitOfWork.SaveAsync();
+
+            return Ok(new SuccessResponse());
+        }
+
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> ChangeStatus(Guid id, [FromBody] EmailConnectorStatusChangedModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity();
+            }
+
+            if (model.Status == EmailConnectorStatus.Stopped)
+            {
+                _emailConnectorManager.Stop(id);
+                return Ok(new SuccessResponse());
+            }
+            else
+            {
+                _emailConnectorManager.Start(id);
+                return Ok(new SuccessResponse());
+            }
         }
     }
 }
