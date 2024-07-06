@@ -99,45 +99,55 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             var folders = GetFolders(_emailClient.Inbox);
             folders.Add(_emailClient.Inbox);
 
-            while (true)
+            try
             {
-                foreach (var folder in folders)
+                while (true)
                 {
-                    if (!folder.IsOpen)
+                    foreach (var folder in folders)
                     {
-                        folder.Open(FolderAccess.ReadOnly);
-                    }
-
-                    var folderEntity = await GetOrCreateFolder(_emailConnector.EmailConnectorId, folder.FullName, folder.Name);
-
-                    Console.WriteLine($"Current Folder: {folderEntity.FolderPath}");
-
-
-                    List<UniqueId> ids = null;
-                    if (folder != null)
-                    {
-                        var start = new UniqueId(folder.UidValidity, folderEntity.LastEmailId + 1);
-                        var end = new UniqueId(folder.UidValidity, UniqueId.MaxValue.Id);
-
-                        var range = new UniqueIdRange(start, end);
-                        ids = _emailClient.Inbox.Search(SearchQuery.Uids(range)).Take(100).ToList();
-                    }
-
-                    if (ids.Count != 0)
-                    {
-                        var items = folder.Fetch(ids, MessageSummaryItems.Flags);
-
-                        foreach (var emailId in ids)
+                        if (!folder.IsOpen)
                         {
-                            var email = folder.GetMessage(emailId);
-                            Console.WriteLine($"[{email.Date}] {email.Subject}");
+                            folder.Open(FolderAccess.ReadOnly);
+                        }
 
-                            await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.EmailFolderId, emailId, items.FirstOrDefault(p => p.UniqueId == emailId).Flags.Value.HasFlag(MessageFlags.Seen));
+                        var folderEntity = await GetOrCreateFolder(_emailConnector.EmailConnectorId, folder.FullName, folder.Name);
+
+                        Console.WriteLine($"Current Folder: {folderEntity.FolderPath}");
+
+
+                        List<UniqueId> ids = null;
+                        if (folder != null)
+                        {
+                            var start = new UniqueId(folder.UidValidity, folderEntity.LastEmailId + 1);
+                            var end = new UniqueId(folder.UidValidity, UniqueId.MaxValue.Id);
+
+                            var range = new UniqueIdRange(start, end);
+                            ids = _emailClient.Inbox.Search(SearchQuery.Uids(range)).Take(100).ToList();
+                        }
+
+                        if (ids.Count != 0)
+                        {
+                            var items = folder.Fetch(ids, MessageSummaryItems.Flags);
+
+                            foreach (var emailId in ids)
+                            {
+                                var email = folder.GetMessage(emailId);
+                                Console.WriteLine($"[{email.Date}] {email.Subject}");
+
+                                await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.EmailFolderId, emailId, items.FirstOrDefault(p => p.UniqueId == emailId).Flags.Value.HasFlag(MessageFlags.Seen));
+                            }
                         }
                     }
-                }
 
-                Thread.Sleep(30000);
+                    Thread.Sleep(30000);
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!_emailClient.IsConnected)
+                {
+                    Console.WriteLine("The email client is disconnected.");
+                }
             }
         }
 
@@ -172,7 +182,8 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         private async Task SaveMessage(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId, bool isRead)
         {
-            if(mail.MessageId == null){
+            if (mail.MessageId == null)
+            {
                 Console.WriteLine("The email id is null. System skip it.");
                 return;
             }

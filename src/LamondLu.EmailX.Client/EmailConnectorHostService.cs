@@ -18,7 +18,7 @@ namespace LamondLu.EmailX.Client
         private readonly IUnitOfWorkFactory _unitOfWorkFactory = null;
         private readonly IEmailConnectorWorkerFactory _emailConnectorWorkerFactory = null;
         private readonly IRuleProcessorFactory _ruleProcessorFactory = null;
-        private List<EmailConnectorTask> _tasks = new List<EmailConnectorTask>();
+        private static List<EmailConnectorTask> _tasks = new List<EmailConnectorTask>();
 
         private IInlineImageHandler _inlineImageHandler = null;
 
@@ -47,7 +47,7 @@ namespace LamondLu.EmailX.Client
 
             foreach (var connector in connectors.Where(p => p.IsRunning))
             {
-                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler);
+                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler, _logger);
 
                 Version(connector);
                 _tasks.Add(task);
@@ -92,7 +92,7 @@ namespace LamondLu.EmailX.Client
             }
             else
             {
-                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler);
+                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler, _logger);
 
                 Version(connector);
                 _tasks.Add(task);

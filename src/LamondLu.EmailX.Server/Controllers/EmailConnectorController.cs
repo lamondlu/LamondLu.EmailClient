@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using LamondLu.Core.Api;
 using LamondLu.EmailX.Domain.Models.EmailConnectors;
 using LamondLu.EmailX.Domain.Managers;
-using LamondLu.EmailX.Client;
 
 namespace LamondLu.EmailX.Server.Controllers
 {
@@ -17,13 +16,11 @@ namespace LamondLu.EmailX.Server.Controllers
         private IUnitOfWork _unitOfWork;
 
         private EmailConnectorManager _emailConnectorManager;
-        private EmailConnectorHostService _emailConnectorService;
 
-        public EmailConnectorController(IUnitOfWorkFactory unitOfWorkFactory, EmailConnectorManager emailConnectorManager, EmailConnectorHostService emailConnectorHostService)
+        public EmailConnectorController(IUnitOfWorkFactory unitOfWorkFactory, EmailConnectorManager emailConnectorManager)
         {
             _unitOfWork = unitOfWorkFactory.Create();
             _emailConnectorManager = emailConnectorManager;
-            _emailConnectorService = emailConnectorHostService;
         }
 
         // GET: api/EmailConnector

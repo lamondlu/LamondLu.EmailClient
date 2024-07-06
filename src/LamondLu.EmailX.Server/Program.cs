@@ -56,5 +56,4 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 app.MapControllers();
-app.Urls.Add("http://*:5083");
 app.Run();
