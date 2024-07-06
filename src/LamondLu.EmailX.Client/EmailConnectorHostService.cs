@@ -3,6 +3,7 @@ using LamondLu.EmailX.Domain.ViewModels;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -12,7 +13,7 @@ namespace LamondLu.EmailX.Client
 {
     public class EmailConnectorHostService : IHostedService
     {
-        private readonly ILogger _logger = null;
+        private readonly ILogger<EmailConnectorHostService> _logger = null;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory = null;
         private readonly IEmailConnectorWorkerFactory _emailConnectorWorkerFactory = null;
         private readonly IRuleProcessorFactory _ruleProcessorFactory = null;
@@ -21,7 +22,7 @@ namespace LamondLu.EmailX.Client
         private IInlineImageHandler _inlineImageHandler = null;
 
         private IEmailAttachmentHandler _emailAttachmentHandler = null;
-        public EmailConnectorHostService(ILogger logger,
+        public EmailConnectorHostService(ILogger<EmailConnectorHostService> logger,
         IUnitOfWorkFactory unitOfWorkFactory,
           IEmailConnectorWorkerFactory emailConnectorWorkerFactory,
           IRuleProcessorFactory ruleProcessorFactory,
@@ -38,7 +39,7 @@ namespace LamondLu.EmailX.Client
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Write("Email Service started.");
+            _logger.LogInformation("Email Service started.");
 
             var unitOfWork = _unitOfWorkFactory.Create();
             var connectors = await unitOfWork.EmailConnectorRepository.GetEmailConnectors();
@@ -56,17 +57,19 @@ namespace LamondLu.EmailX.Client
 
         private void Version(EmailConnectorConfigViewModel emailConnector)
         {
-            _logger.Write($"[{emailConnector.Name}] Email Connect Type: {emailConnector.Type}");
-            _logger.Write($"[{emailConnector.Name}] SSL: {(emailConnector.EnableSSL ? "Yes" : "No")}");
-            _logger.Write($"[{emailConnector.Name}] UserName: {emailConnector.UserName}");
-            _logger.Write($"[{emailConnector.Name}] Password: {emailConnector.Password}");
+            _logger.LogInformation($"[{emailConnector.Name}] Email Connect Type: {emailConnector.Type}");
+            _logger.LogInformation($"[{emailConnector.Name}] SSL: {(emailConnector.EnableSSL ? "Yes" : "No")}");
+            _logger.LogInformation($"[{emailConnector.Name}] UserName: {emailConnector.UserName}");
+            _logger.LogInformation($"[{emailConnector.Name}] Password: {emailConnector.Password}");
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
-                _logger.Write("Email Service stopped.");
+                _logger.LogInformation("Email Service stopped.");
+                _tasks.ForEach(async p => await p.Stop());
+                _tasks.Clear();
             });
         }
     }

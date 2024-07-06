@@ -64,12 +64,12 @@ namespace LamondLu.EmailX.Domain.Managers
 
         }
 
-        public void Stop(Guid emailConnectorId)
+        public async Task StopAsync(Guid emailConnectorId)
         {
             _logger.LogInformation($"System is stopping email connector {emailConnectorId}");
         }
 
-        public void Start(Guid emailConnectorId)
+        public async Task StartAsync(Guid emailConnectorId)
         {
             _logger.LogInformation($"System is starting email connector {emailConnectorId}");
         }

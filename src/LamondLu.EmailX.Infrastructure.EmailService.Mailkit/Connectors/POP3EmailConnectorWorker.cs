@@ -43,6 +43,18 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             }
         }
 
+        public async Task<bool> Disconnect()
+        {
+            try{
+                await _emailClient.DisconnectAsync(true);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public async Task Listen()
         {
             Console.WriteLine("Start to pull email.");

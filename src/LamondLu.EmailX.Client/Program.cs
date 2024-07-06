@@ -32,7 +32,6 @@ namespace LamondLu.EmailX.Client
                 
                 services.AddHostedService<EmailConnectorHostService>()
                     .AddScoped<IInlineImageHandler, LocalInlineImageHandler>()
-                    .AddSingleton<ILogger, ConsoleLogger>()
                     .AddScoped<IEmailAttachmentHandler, EmailAttachmentHandler>()
                     .AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>()
                     .AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()

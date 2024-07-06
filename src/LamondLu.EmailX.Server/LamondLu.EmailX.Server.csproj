@@ -12,6 +12,7 @@
     <PackageReference Include="LamondLu.Core" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="../LamondLu.EmailX.Client/LamondLu.EmailX.Client.csproj" />
     <ProjectReference Include="../LamondLu.EmailX.Domain/LamondLu.EmailX.Domain.csproj" />
     <ProjectReference Include="../LamondLu.EmailX.Infrastructure.DataPersistent/LamondLu.EmailX.Infrastructure.DataPersistent.csproj" />
     <ProjectReference Include="../LamondLu.EmailX.Infrastructure.EmailService.Mailkit/LamondLu.EmailX.Infrastructure.EmailService.Mailkit.csproj" />
