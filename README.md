@@ -10,7 +10,7 @@ Each email connector have a rule pipeline with multiple rules. The rule pipeline
 
 ![](./img/20200407081451.png)
 
-### Support Rules
+### Support Rules t
 - Forward
 - Reply
 - Classify
