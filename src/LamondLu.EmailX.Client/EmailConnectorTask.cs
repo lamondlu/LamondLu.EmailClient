@@ -3,6 +3,7 @@ using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.ViewModels;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -11,8 +12,11 @@ namespace LamondLu.EmailX.Client
     public class EmailConnectorTask
     {
         private EmailConnectorConfigViewModel _emailConnector = null;
+
         private IEmailConnectorWorkerFactory _factory = null;
+
         private IRuleProcessorFactory _ruleProcessorFactory = null;
+
         private IUnitOfWorkFactory _unitOfWorkFactory = null;
 
         private IInlineImageHandler _inlineImageHandler = null;
@@ -21,7 +25,9 @@ namespace LamondLu.EmailX.Client
 
         private IEmailConnectorWorker _emailConnectorWorker = null;
 
-        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler)
+        private ILogger _logger = null;
+
+        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler, ILogger<EmailConnectorHostService> logger)
         {
             _emailConnector = emailConnector;
             _factory = factory;
@@ -29,7 +35,10 @@ namespace LamondLu.EmailX.Client
             _unitOfWorkFactory = unitOfWorkFactory;
             _inlineImageHandler = inlineImageHandler;
             _emailAttachmentHandler = emailAttachmentHandler;
+            _logger = logger;
         }
+
+        public Guid EmailConnectorId => _emailConnector.EmailConnectorId;
 
         public async Task Start()
         {
@@ -57,13 +66,13 @@ namespace LamondLu.EmailX.Client
 
                 if (isConnected)
                 {
-                    Console.WriteLine("Email Connector connected.");
+                    _logger.LogInformation($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Connected");
                     await _emailConnectorWorker.Listen();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex, $"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Connect Error");
             }
         }
     }

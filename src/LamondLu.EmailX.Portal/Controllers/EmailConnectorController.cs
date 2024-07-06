@@ -22,7 +22,7 @@ namespace LamondLu.EmailX.Portal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var emailConnectors = await _unitOfWork.EmailConnectorRepository.GetEmailConnectors();
+            var emailConnectors = await _unitOfWork.EmailConnectorRepository.GetEmailConnectorConfigs();
 
             return View(emailConnectors);
         }

@@ -55,7 +55,7 @@
     <div class="col-10">
         @if (emails != null)
         {
-            @Html.Partial("_EmailList", emails, this.ViewData)
+            <partial name="_EmailList" model="emails" view-data="ViewData" />
         }
 
     </div>

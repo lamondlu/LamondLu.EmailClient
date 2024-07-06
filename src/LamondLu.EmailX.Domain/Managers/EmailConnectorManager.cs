@@ -13,10 +13,13 @@ namespace LamondLu.EmailX.Domain.Managers
         private IUnitOfWork _unitOfWork = null;
         private readonly ILogger<EmailConnectorManager> _logger;
 
-        public EmailConnectorManager(IUnitOfWorkFactory unitOfWorkFactory, ILogger<EmailConnectorManager> logger)
+        private IEmailConnectorAction _emailConnectorAction;
+
+        public EmailConnectorManager(IUnitOfWorkFactory unitOfWorkFactory, ILogger<EmailConnectorManager> logger, IEmailConnectorAction emailConnectorAction)
         {
             _unitOfWork = unitOfWorkFactory.Create();
             _logger = logger;
+            _emailConnectorAction = emailConnectorAction;
         }
 
         public async Task<OperationResult> Add(AddEmailConnectorModel model)
@@ -67,11 +70,15 @@ namespace LamondLu.EmailX.Domain.Managers
         public async Task StopAsync(Guid emailConnectorId)
         {
             _logger.LogInformation($"System is stopping email connector {emailConnectorId}");
+            await _unitOfWork.EmailConnectorRepository.UpdateEmailConnectorStatus(emailConnectorId, Enum.EmailConnectorStatus.Stopped);
+            await _emailConnectorAction.StopConnector(emailConnectorId);
         }
 
         public async Task StartAsync(Guid emailConnectorId)
         {
             _logger.LogInformation($"System is starting email connector {emailConnectorId}");
+             await _unitOfWork.EmailConnectorRepository.UpdateEmailConnectorStatus(emailConnectorId, Enum.EmailConnectorStatus.Running);
+            await _emailConnectorAction.StartConnector(emailConnectorId);
         }
     }
 }

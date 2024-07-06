@@ -1,4 +1,5 @@
-﻿using LamondLu.EmailX.Domain.ViewModels;
+﻿using LamondLu.EmailX.Domain.Enum;
+using LamondLu.EmailX.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +8,9 @@ namespace LamondLu.EmailX.Domain.Interface
 {
     public interface IEmailConnectorRepository
     {
-        Task<List<EmailConnectorConfigViewModel>> GetEmailConnectors();
+        Task<List<EmailConnectorConfigViewModel>> GetEmailConnectorConfigs();
+
+        Task<EmailConnectorConfigViewModel> GetEmailConnectorConfig(Guid emailConnectorId);
 
         Task AddEmailConnector(EmailConnector emailConnector);
 
@@ -16,5 +19,7 @@ namespace LamondLu.EmailX.Domain.Interface
         Task<EmailConnector> GetEmailConnector(Guid emailConnectorId);
 
         Task<List<EmailConnectorStatusViewModel>> GetEmailConnectorStatuses();
+
+        Task UpdateEmailConnectorStatus(Guid emailConnectorId, EmailConnectorStatus status);
     }
 }
