@@ -142,7 +142,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                     Thread.Sleep(30000);
                 }
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 if (!_emailClient.IsConnected)
                 {

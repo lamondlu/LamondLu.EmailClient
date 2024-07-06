@@ -45,7 +45,8 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         public async Task<bool> Disconnect()
         {
-            try{
+            try
+            {
                 await _emailClient.DisconnectAsync(true);
                 return true;
             }
@@ -59,19 +60,29 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
         {
             Console.WriteLine("Start to pull email.");
 
-            if (!_emailClient.IsConnected)
+            try
             {
-                for (var index = 0; index < _emailClient.Count; index++)
+                if (!_emailClient.IsConnected)
                 {
-                    var message = await _emailClient.GetMessageAsync(index);
-
-                    if (EmailReceived!=null)
+                    for (var index = 0; index < _emailClient.Count; index++)
                     {
-                        EmailReceived(new Domain.DTOs.AddEmailModel());
+                        var message = await _emailClient.GetMessageAsync(index);
+
+                        if (EmailReceived != null)
+                        {
+                            EmailReceived(new Domain.DTOs.AddEmailModel());
+                        }
                     }
                 }
-            }
 
+            }
+            catch(InvalidOperationException)
+            {
+                if (!_emailClient.IsConnected)
+                {
+                    Console.WriteLine("The email client is disconnected.");
+                }
+            }
         }
     }
 }
