@@ -15,12 +15,20 @@ namespace LamondLu.EmailX.Portal.Controllers
             _unitOfWork = unitOfWorkFactory.Create();
         }
 
+        [Route("Emails")]
         public async Task<IActionResult> Index(Guid? emailConnectorId = null)
         {
             ViewBag.EmailConnectorId = emailConnectorId;
             var emailConnectors = await _unitOfWork.EmailConnectorRepository.GetEmailConnectorConfigs();
 
             return View(emailConnectors);
+        }
+
+        [Route("Emails/{id}")]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var email = await _unitOfWork.EmailRepository.GetEmail(id);
+            return View(email);
         }
     }
 }

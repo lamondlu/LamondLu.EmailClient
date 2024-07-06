@@ -1,4 +1,4 @@
-@model LamondLu.EmailX.Domain.Models.PagedResult<LamondLu.EmailX.Domain.ViewModels.EmailListViewModel>
+@model LamondLu.EmailX.Domain.Models.PagedResult<LamondLu.EmailX.Domain.ViewModels.Emails.EmailListViewModel>
 
 <p class="alert alert-success">
 Current Connector: @ViewData["EmailConnectorName"] (@ViewData["EmailConnectorAddress"])
@@ -9,7 +9,7 @@ Current Connector: @ViewData["EmailConnectorName"] (@ViewData["EmailConnectorAdd
     <tr>
       <th class="col-1">#</th>
       <th class="col-3">From</th>
-        <th class="col-5">Subject</th>
+      <th class="col-5">Subject</th>
       <th class="col-2">Date</th>
       <th class="col-1">Action</th>
     </tr>
@@ -34,7 +34,7 @@ Current Connector: @ViewData["EmailConnectorName"] (@ViewData["EmailConnectorAdd
      
       <td>@item.ReceivedDate.ToString("yyyy-MM-dd")</td>
       <td>
-      <i class="bi bi-arrow-right-square"></i>
+        <i class="bi bi-arrow-right-square" onclick="openDetails('@item.EmailId')"></i>
         <i class="bi bi-reply"></i>
         <i class="bi bi-reply-all"></i>
       </td>
@@ -43,3 +43,9 @@ Current Connector: @ViewData["EmailConnectorName"] (@ViewData["EmailConnectorAdd
   
   </tbody>
 </table>
+
+<script type="text/javascript">
+  function openDetails(id){
+    window.location = '/Emails/'+ id;
+  }
+</script>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LamondLu.EmailX.Domain.ViewModels
+namespace LamondLu.EmailX.Domain.ViewModels.Emails
 {
     public class EmailListViewModel
     {

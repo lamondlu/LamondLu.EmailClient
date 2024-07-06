@@ -1,0 +1,17 @@
+@model LamondLu.EmailX.Domain.ViewModels.Emails.EmailDetailedViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="emailContent">
+
+    <div class="emailSubject">
+        <div class="fieldName">Email Subject</div>
+        <div>@Model.Subject</div>
+    </div>
+
+    <div class="emailBody">
+        @Html.Raw(Model.EmailHTMLBody)
+    </div>
+</div>    

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using LamondLu.EmailX.Domain.DTOs;
 using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.Models;
-using LamondLu.EmailX.Domain.ViewModels;
+using LamondLu.EmailX.Domain.ViewModels.Emails;
 
 namespace LamondLu.EmailX.Infrastructure.DataPersistent
 {
@@ -73,6 +73,14 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             var total = await _context.QueryFirstOrDefaultAsync<int>(countSQL, new { emailConnectorId });
 
             return new PagedResult<EmailListViewModel>(result.ToList(), total, pageSize, pageNum);
+        }
+
+        public async Task<EmailDetailedViewModel> GetEmail(Guid emailId)
+        {
+            var sql =
+                "SELECT e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, eb.EmailHTMLBody FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId INNER JOIN EmailBody eb ON e.EmailId=eb.EmailId WHERE e.EmailId=@emailId";
+
+            return await _context.QueryFirstOrDefaultAsync<EmailDetailedViewModel>(sql, new { emailId });
         }
     }
 }
