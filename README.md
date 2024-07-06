@@ -14,7 +14,7 @@ Each email connector have a rule pipeline with multiple rules. The rule pipeline
 - Forward
 - Reply
 - Classify
-
+ 
 ### Forward rule
 If the rule matched, the system will forward the email to assigned emailboxes.
 
