@@ -172,6 +172,11 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         private async Task SaveMessage(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId, bool isRead)
         {
+            if(mail.MessageId == null){
+                Console.WriteLine("The email id is null. System skip it.");
+                return;
+            }
+
             var dup = await _unitOfWork.EmailRepository.MessageIdExisted(mail.MessageId);
 
             if (dup)

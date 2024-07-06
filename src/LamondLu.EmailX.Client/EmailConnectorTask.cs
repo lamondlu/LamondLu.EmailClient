@@ -31,6 +31,8 @@ namespace LamondLu.EmailX.Client
             _emailAttachmentHandler = emailAttachmentHandler;
         }
 
+        public Guid EmailConnectorId => _emailConnector.EmailConnectorId;
+
         public async Task Start()
         {
             await ConnectAsync();

@@ -14,9 +14,9 @@ namespace LamondLu.EmailX.Domain.Services
 
         }
 
-        public async Task<List<EmailConnectorConfigViewModel>> GetEmailConnectors()
+        public async Task<List<EmailConnectorConfigViewModel>> GetEmailConnectorConfigs()
         {
-            return await _unitOfWork.EmailConnectorRepository.GetEmailConnectors();
+            return await _unitOfWork.EmailConnectorRepository.GetEmailConnectorConfigs();
         }
 
         public async Task<EmailConnector> GetEmailConnector(Guid emailConnectorId)

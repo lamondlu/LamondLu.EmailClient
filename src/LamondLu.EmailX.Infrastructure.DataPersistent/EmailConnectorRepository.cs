@@ -1,4 +1,5 @@
 ﻿using LamondLu.EmailX.Domain;
+using LamondLu.EmailX.Domain.Enum;
 using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.ViewModels;
 using System;
@@ -17,12 +18,20 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             _context = context;
         }
 
-        public async Task<List<EmailConnectorConfigViewModel>> GetEmailConnectors()
+        public async Task<List<EmailConnectorConfigViewModel>> GetEmailConnectorConfigs()
         {
             var sql = "SELECT * FROM EmailConnector WHERE IsDeleted = 0";
             var result = await _context.QueryAsync<EmailConnectorConfigViewModel>(sql);
 
             return result.ToList();
+        }
+
+        public async Task<EmailConnectorConfigViewModel> GetEmailConnectorConfig(Guid emailConnectorId)
+        {
+            var sql = "SELECT * FROM EmailConnector WHERE IsDeleted = 0 AND EmailConnectorId=@emailConnectorId";
+            var result = await _context.QueryFirstOrDefaultAsync<EmailConnectorConfigViewModel>(sql, new { emailConnectorId });
+
+            return result;
         }
 
         public async Task AddEmailConnector(EmailConnector emailConnector)
@@ -98,6 +107,12 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             var result = await _context.QueryAsync<EmailConnectorStatusViewModel>(sql);
 
             return result.ToList();
+        }
+
+        public async Task UpdateEmailConnectorStatus(Guid emailConnectorId, EmailConnectorStatus status)
+        {
+            var sql = "UPDATE EmailConnector SET Status=@status WHERE EmailConnectorId=@emailConnectorId";
+            await _context.Execute(sql, new { status, emailConnectorId });
         }
     }
 }

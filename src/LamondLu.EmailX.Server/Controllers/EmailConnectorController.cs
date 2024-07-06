@@ -4,9 +4,7 @@ using LamondLu.EmailX.Domain.Enum;
 using LamondLu.EmailX.Domain.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using LamondLu.Core;
 using LamondLu.Core.Api;
-using MimeKit.Cryptography;
 using LamondLu.EmailX.Domain.Models.EmailConnectors;
 using LamondLu.EmailX.Domain.Managers;
 using LamondLu.EmailX.Client;
@@ -83,13 +81,11 @@ namespace LamondLu.EmailX.Server.Controllers
             if (model.Status == EmailConnectorStatus.Stopped)
             {
                 await _emailConnectorManager.StopAsync(id);
-                await _emailConnectorService.StopAsync(new CancellationToken());
                 return Ok(new SuccessResponse());
             }
             else
             {
                 await _emailConnectorManager.StartAsync(id);
-                await _emailConnectorService.StartAsync(new CancellationToken());
                 return Ok(new SuccessResponse());
             }
         }

@@ -35,6 +35,12 @@ builder.Services.AddSingleton<EmailConnectorHostService>(serviceProvider =>
 {
     return serviceProvider.GetServices<IHostedService>().Where(e => e.GetType() == typeof(EmailConnectorHostService)).Cast<EmailConnectorHostService>().Single();
 });
+
+builder.Services.AddSingleton<IEmailConnectorAction, EmailConnectorHostService>(serviceProvider =>
+{
+    return serviceProvider.GetServices<IHostedService>().Where(e => e.GetType() == typeof(EmailConnectorHostService)).Cast<EmailConnectorHostService>().Single();
+});
+
 builder.Services.AddScoped<EmailConnectorManager>();
 
 var app = builder.Build();
@@ -50,5 +56,5 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 app.MapControllers();
-
+app.Urls.Add("http://*:5083");
 app.Run();
