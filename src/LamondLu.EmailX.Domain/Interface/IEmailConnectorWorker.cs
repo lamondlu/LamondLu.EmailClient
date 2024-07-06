@@ -13,6 +13,8 @@ namespace LamondLu.EmailX.Domain.Interface
 
         Task<bool> Connect();
 
+        Task<bool> Disconnect();
+
         Task Listen();
     }
 }

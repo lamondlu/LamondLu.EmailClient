@@ -91,5 +91,13 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
             return null;
         }
+
+        public async Task<List<EmailConnectorStatusViewModel>> GetEmailConnectorStatuses()
+        {
+            var sql = "SELECT Name, EmailAddress, Status FROM EmailConnector WHERE IsDeleted = 0";
+            var result = await _context.QueryAsync<EmailConnectorStatusViewModel>(sql);
+
+            return result.ToList();
+        }
     }
 }

@@ -2,18 +2,21 @@
 using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.Models;
 using LamondLu.EmailX.Domain.Results;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailX.Domain.Managers
 {
-    public class EmailConnectorManager : ManagerBase
+    public class EmailConnectorManager
     {
         private IUnitOfWork _unitOfWork = null;
+        private readonly ILogger<EmailConnectorManager> _logger;
 
-        public EmailConnectorManager(IUnitOfWork unitOfWork)
+        public EmailConnectorManager(IUnitOfWorkFactory unitOfWorkFactory, ILogger<EmailConnectorManager> logger)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWorkFactory.Create();
+            _logger = logger;
         }
 
         public async Task<OperationResult> Add(AddEmailConnectorModel model)
@@ -61,14 +64,14 @@ namespace LamondLu.EmailX.Domain.Managers
 
         }
 
-        public void Stop(Guid emailConnectorId)
+        public async Task StopAsync(Guid emailConnectorId)
         {
-
+            _logger.LogInformation($"System is stopping email connector {emailConnectorId}");
         }
 
-        public void Start(Guid emailConnectorId)
+        public async Task StartAsync(Guid emailConnectorId)
         {
-
+            _logger.LogInformation($"System is starting email connector {emailConnectorId}");
         }
     }
 }

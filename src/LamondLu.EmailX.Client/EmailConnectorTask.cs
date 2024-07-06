@@ -19,6 +19,8 @@ namespace LamondLu.EmailX.Client
 
         private IEmailAttachmentHandler _emailAttachmentHandler = null;
 
+        private IEmailConnectorWorker _emailConnectorWorker = null;
+
         public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler)
         {
             _emailConnector = emailConnector;
@@ -29,9 +31,15 @@ namespace LamondLu.EmailX.Client
             _emailAttachmentHandler = emailAttachmentHandler;
         }
 
-        public async void Start()
+        public async Task Start()
         {
             await ConnectAsync();
+        }
+
+        public async Task Stop()
+        {
+            Console.WriteLine($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Stop");
+            await _emailConnectorWorker.Disconnect();
         }
 
         public async Task ConnectAsync()
@@ -43,14 +51,14 @@ namespace LamondLu.EmailX.Client
 
             try
             {
-                var worker = _factory.Build(emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler, _emailAttachmentHandler);
+                _emailConnectorWorker = _factory.Build(emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler, _emailAttachmentHandler);
 
-                var isConnected = await worker.Connect();
+                var isConnected = await _emailConnectorWorker.Connect();
 
                 if (isConnected)
                 {
                     Console.WriteLine("Email Connector connected.");
-                    await worker.Listen();
+                    await _emailConnectorWorker.Listen();
                 }
             }
             catch (Exception ex)

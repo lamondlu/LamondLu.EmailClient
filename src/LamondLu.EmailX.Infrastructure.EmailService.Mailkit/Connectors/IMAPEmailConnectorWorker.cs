@@ -65,6 +65,19 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             }
         }
 
+        public async Task<bool> Disconnect()
+        {
+            try
+            {
+                await _emailClient.DisconnectAsync(true);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private async Task SpeicalBox()
         {
             await _emailClient.IdentifyAsync(new ImapImplementation
