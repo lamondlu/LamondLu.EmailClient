@@ -12,6 +12,8 @@ namespace LamondLu.EmailX.Domain.ViewModels.Emails
 
         public string To { get; set; }
 
+        public string From {get;set;}
+
         public DateTime ReceivedDate { get; set; }
 
         public string EmailHTMLBody { get; set; }
