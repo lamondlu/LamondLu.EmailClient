@@ -28,5 +28,13 @@ namespace LamondLu.EmailX.Domain.DTOs
         public string MessageId { get; set; }
 
         public bool IsRead { get; set; }
+
+        public string To { get; set; }
+
+        public string Cc { get; set; }
+
+        public string Bcc { get; set; }
+
+        public string ReplyTo { get; set; }
     }
 }
