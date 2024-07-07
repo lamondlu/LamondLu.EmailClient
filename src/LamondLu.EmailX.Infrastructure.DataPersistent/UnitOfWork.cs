@@ -80,6 +80,14 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             }
         }
 
+        public IEmailRecipientRepository EmailRecipientRepository
+        {
+            get
+            {
+                return new EmailRecipientRepository(_dbContext);
+            }
+        }
+
         public async Task<DbOperationResult> SaveAsync()
         {
             return await _dbContext.SubmitAsync();

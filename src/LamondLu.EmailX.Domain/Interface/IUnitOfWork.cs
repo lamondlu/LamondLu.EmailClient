@@ -13,6 +13,8 @@ namespace LamondLu.EmailX.Domain.Interface
 
         IEmailAttachmentRepository EmailAttachmentRepository { get; }
 
+        IEmailRecipientRepository EmailRecipientRepository { get; }
+
         Task<DbOperationResult> SaveAsync();
     }
 }
