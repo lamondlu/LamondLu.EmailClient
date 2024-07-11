@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LamondLu.EmailX.Domain.DTOs;
 using LamondLu.EmailX.Domain.Interface;
+using LamondLu.EmailX.Domain.ViewModels.Emails;
 
 namespace LamondLu.EmailX.Infrastructure.DataPersistent
 {
@@ -25,6 +29,18 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                 emailRecipient.DisplayName,
                 emailRecipient.Type
             });
+        }
+
+        public async Task<List<EmailRecipientViewModel>> GetEmailRecipients(Guid emailId)
+        {
+            var sql = "SELECT Email, DisplayName, `Type` FROM EmailRecipient WHERE EmailId=@emailId";
+
+            var result =  await _context.QueryAsync<EmailRecipientViewModel>(sql, new
+            {
+                emailId
+            });
+            
+            return result.ToList();
         }
     }
 }

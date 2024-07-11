@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LamondLu.EmailX.Domain.DTOs;
 using LamondLu.EmailX.Domain.Interface;
+using LamondLu.EmailX.Domain.ViewModels.Emails;
 
 namespace LamondLu.EmailX.Infrastructure.DataPersistent
 {
@@ -27,6 +28,17 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                 dto.FileSize,
                 dto.SourceFileName
             });
+        }
+
+        public async Task<List<EmailAttachmentViewModel>> GetEmailAttachments(Guid emailId)
+        {
+            var sql = "SELECT EmailAttachmentId, FileName, SourceFileName FROM EmailAttachment WHERE EmailId=@emailId";
+
+            var result = await _context.QueryAsync<EmailAttachmentViewModel>(sql, new {
+                emailId
+            });
+
+            return result.ToList();
         }
     }
 }

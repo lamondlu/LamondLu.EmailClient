@@ -26,5 +26,17 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
                 await fs.FlushAsync();
             }
         }
+
+        public async Task<Stream> Download(Guid emailId, string fileName)
+        {
+            var filePath = $"{Directory.GetCurrentDirectory()}/attachments/{emailId}/{fileName}";
+
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            return new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        }
     }
 }

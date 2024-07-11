@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using LamondLu.EmailX.Domain.DTOs;
 using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.Models;
-using LamondLu.EmailX.Domain.ViewModels;
+using LamondLu.EmailX.Domain.ViewModels.Emails;
 
 namespace LamondLu.EmailX.Infrastructure.DataPersistent
 {
@@ -65,8 +65,8 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
         public async Task<PagedResult<EmailListViewModel>> GetEmails(Guid emailConnectorId, int pageSize, int pageNum)
         {
             var sql =
-                $"SELECT e.IsRead, e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, e.Id, e.Validity, e.MessageId FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId WHERE e.EmailConnectorId=@emailConnectorId ORDER BY ReceivedDate DESC LIMIT @skipNum, @pageSize"; 
-            
+                $"SELECT e.IsRead, e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, e.Id, e.Validity, e.MessageId FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId WHERE e.EmailConnectorId=@emailConnectorId ORDER BY ReceivedDate DESC LIMIT @skipNum, @pageSize";
+
 
             var result = await _context.QueryAsync<EmailListViewModel>(sql,
                 new { emailConnectorId, skipNum = (pageNum - 1) * pageSize, pageSize });
@@ -77,6 +77,23 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             var total = await _context.QueryFirstOrDefaultAsync<int>(countSQL, new { emailConnectorId });
 
             return new PagedResult<EmailListViewModel>(result.ToList(), total, pageSize, pageNum);
+        }
+
+        public async Task<EmailDetailedViewModel> GetEmail(Guid emailId)
+        {
+            var sql =
+                "SELECT e.EmailId, e.Subject, e.Sender, ec.EmailAddress as 'To', e.ReceivedDate, eb.EmailHTMLBody FROM Email e INNER JOIN EmailConnector ec ON e.EmailConnectorId=e.EmailConnectorId INNER JOIN EmailBody eb ON e.EmailId=eb.EmailId WHERE e.EmailId=@emailId";
+
+            var email = await _context.QueryFirstOrDefaultAsync<EmailDetailedViewModel>(sql, new { emailId });
+
+            return email;
+        }
+
+        public async Task<string> GetEmailBody(Guid emailId)
+        {
+            var sql = "SELECT EmailHTMLBody FROM EmailBody WHERE EmailId=@emailId";
+
+            return await _context.QueryFirstOrDefaultAsync<string>(sql, new { emailId });
         }
     }
 }
