@@ -17,5 +17,7 @@ namespace LamondLu.EmailX.Domain.Interface
         Task<PagedResult<EmailListViewModel>> GetEmails(Guid emailConnectorId, int pageSize, int pageNum);
 
         Task<EmailDetailedViewModel> GetEmail(Guid emailId);
+
+        Task<string> GetEmailBody(Guid emailId);
     }
 }

@@ -10,12 +10,36 @@
         <div class="fieldName">Email Subject: </div>
         <div>@Model.Subject</div>
     </div>
-     <div class="emailField">
+
+    <div class="emailField">
         <div class="fieldName">From: </div>
         <div>@Model.From</div>
     </div>
 
-    <div class="emailBody">
-        @Html.Raw(Model.EmailHTMLBody)
+    <div class="emailField">
+        <div class="fieldName">To: </div>
+        <div>
+            @foreach (var recipient in Model.To)
+            {
+                if (recipient.Name != null)
+                {
+                    <label class="recipientLabel">@recipient.Name
+                        (@recipient.Email)</label>
+                }
+                else
+                {
+                    <label class="recipientLabel">@recipient.Email</label>
+                }
+            }
+
+        </div>
     </div>
-</div>    
+
+    <div class="emailBody">
+        <iframe src="/Emails/@Model.EmailId/Content"
+            style="width:100%; height: 500px">
+
+        </iframe>
+
+    </div>
+</div>

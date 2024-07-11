@@ -30,5 +30,18 @@ namespace LamondLu.EmailX.Portal.Controllers
             var email = await _unitOfWork.EmailRepository.GetEmail(id);
             return View(email);
         }
+
+        [Route("Emails/{id}/Content")]
+        public async Task<IActionResult> Content(Guid id)
+        {
+            var email = await _unitOfWork.EmailRepository.GetEmailBody(id);
+
+            return new ContentResult
+            {
+                Content = email,
+                ContentType = "text/html"
+            };
+
+        }
     }
 }
