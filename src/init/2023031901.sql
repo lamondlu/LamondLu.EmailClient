@@ -124,15 +124,15 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 ALTER TABLE Email ADD COLUMN `IsRead` BIT NOT NULL DEFAULT 0;
 
-DROP TABLE IF EXISTS `EmailReceipt`;
+DROP TABLE IF EXISTS `EmailRecipient`;
 CREATE TABLE `EmailReceipt` (
-  `EmailReceiptId` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `EmailRecipientId` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `EmailId` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `Email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `Type` tinyint(1) DEFAULT NULL,
   `DisplayName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`EmailReceiptId`),
-  KEY `FK_EmailReceipt_Email_EmailId` (`EmailId`),
-  CONSTRAINT `FK_EmailReceipt_Email_EmailId` FOREIGN KEY (`EmailId`) REFERENCES `Email` (`EmailId`) ON DELETE CASCADE ON UPDATE NO ACTION
+  KEY `FK_EmailRecipient_Email_EmailId` (`EmailId`),
+  CONSTRAINT `FK_EmailRecipient_Email_EmailId` FOREIGN KEY (`EmailId`) REFERENCES `Email` (`EmailId`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

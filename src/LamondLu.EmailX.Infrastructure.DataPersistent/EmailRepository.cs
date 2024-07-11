@@ -20,7 +20,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
         public async Task SaveNewEmail(AddEmailModel email)
         {
             var sql =
-                "INSERT INTO Email(EmailId, EmailConnectorId, Subject, ReceivedDate, EmailFolderId, Id, Validity, CreatedTime, Sender, MessageId, IsRead) VALUE(@emailId, @emailConnectorId, @subject,@receivedDate, @emailFolderId, @id, @validity, @createdTime, @sender, @messageId, @isRead)";
+                "INSERT INTO Email(EmailId, EmailConnectorId, Subject, ReceivedDate, EmailFolderId, Id, Validity, CreatedTime, Sender, MessageId, IsRead, `To`, Cc, Bcc, ReplyTo) VALUE(@emailId, @emailConnectorId, @subject,@receivedDate, @emailFolderId, @id, @validity, @createdTime, @sender, @messageId, @isRead, @to, @cc, @bcc, @replyTo)";
 
             await _context.Execute(sql, new
             {
@@ -34,7 +34,11 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                 email.EmailFolderId,
                 email.Sender,
                 email.MessageId,
-                email.IsRead
+                email.IsRead,
+                email.To,
+                email.Cc,
+                email.Bcc,
+                email.ReplyTo
             });
         }
 

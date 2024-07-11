@@ -13,6 +13,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.Extensions;
+using LamondLu.EmailX.Domain.Enum;
 
 namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 {
@@ -201,11 +203,31 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             await _unitOfWork.EmailRepository.SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail, email.EmailId));
             await SaveAttachment(email.EmailId, mail);
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
+
+            await SaveRecipients(EmailRecipientType.To, email.EmailId, mail.To.Mailboxes);
+            await SaveRecipients(EmailRecipientType.Cc, email.EmailId, mail.Cc.Mailboxes);
+            await SaveRecipients(EmailRecipientType.Bcc, email.EmailId, mail.Bcc.Mailboxes);
+            await SaveRecipients(EmailRecipientType.ReplyTo, email.EmailId, mail.ReplyTo.Mailboxes);
+
             await _unitOfWork.SaveAsync();
 
             if (EmailReceived != null)
             {
                 EmailReceived(email);
+            }
+        }
+
+        private async Task SaveRecipients(EmailRecipientType type, Guid emailId, IEnumerable<MailboxAddress> recipients)
+        {
+            foreach (var recipient in recipients)
+            {
+                await _unitOfWork.EmailRecipientRepository.SaveEmailReceipt(new AddEmailRecipientModel
+                {
+                    EmailId = emailId,
+                    MailboxAddress = recipient.Address,
+                    DisplayName = recipient.Name,
+                    Type = type
+                });
             }
         }
 
@@ -221,7 +243,11 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                 MessageId = mail.MessageId,
                 Id = emailId.Id,
                 Validity = emailId.Validity,
-                IsRead = isRead
+                IsRead = isRead,
+                Cc = mail.Cc?.Mailboxes?.UnionAddress(),
+                Bcc = mail.Bcc?.Mailboxes?.UnionAddress(),
+                To = mail.To?.Mailboxes?.UnionAddress(),
+                ReplyTo = mail.ReplyTo?.Mailboxes?.UnionAddress()
             };
 
             await _unitOfWork.EmailRepository.SaveNewEmail(newEmail);
