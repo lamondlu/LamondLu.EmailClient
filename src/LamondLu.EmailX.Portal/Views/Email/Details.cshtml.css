@@ -4,3 +4,20 @@
     border: 1px solid #ccc;
     padding: 20px;
 }
+
+label.recipientLabel {
+    background-color: #eee;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+div.emailField {
+    margin-bottom: 10px;
+}
+
+div.fieldName{
+    font-weight: bold;
+    text-decoration: underline;
+}
+

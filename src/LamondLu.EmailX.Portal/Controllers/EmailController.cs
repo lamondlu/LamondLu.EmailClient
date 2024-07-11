@@ -1,5 +1,6 @@
 
 using LamondLu.EmailX.Domain.Interface;
+using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LamondLu.EmailX.Portal.Controllers
@@ -9,10 +10,13 @@ namespace LamondLu.EmailX.Portal.Controllers
         private readonly ILogger<EmailController> _logger;
         private IUnitOfWork _unitOfWork;
 
-        public EmailController(ILogger<EmailController> logger, IUnitOfWorkFactory unitOfWorkFactory)
+        private IEmailAttachmentHandler _emailAttachmentHandler;
+
+        public EmailController(ILogger<EmailController> logger, IUnitOfWorkFactory unitOfWorkFactory, IEmailAttachmentHandler emailAttachmentHandler)
         {
             _logger = logger;
             _unitOfWork = unitOfWorkFactory.Create();
+            _emailAttachmentHandler = emailAttachmentHandler;
         }
 
         [Route("Emails")]
@@ -41,7 +45,18 @@ namespace LamondLu.EmailX.Portal.Controllers
                 Content = email,
                 ContentType = "text/html"
             };
+        }
 
+        [Route("Emails/{id}/Attachments/{fileName}")]
+        public async Task<IActionResult> DownloadAttachment(Guid id, string fileName)
+        {   
+            var stream = await _emailAttachmentHandler.DownloadAttachment(id, fileName);
+            if (stream == null)
+            {
+                return NotFound();
+            }
+
+            return File(stream, "application/octet-stream", fileName);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LamondLu.EmailX.Domain.Enum;
 
 namespace LamondLu.EmailX.Domain.ViewModels.Emails
 {
@@ -16,14 +17,6 @@ namespace LamondLu.EmailX.Domain.ViewModels.Emails
         public DateTime ReceivedDate { get; set; }
 
         public string EmailHTMLBody { get; set; }
-
-        public List<EmailRecipientViewModel> To { get; set; }
-
-        public List<EmailRecipientViewModel> Cc { get; set; }
-
-        public List<EmailRecipientViewModel> Bcc { get; set; }
-
-        public List<EmailRecipientViewModel> ReplyTo { get; set; }
     }
 
     public class EmailRecipientViewModel
@@ -32,6 +25,15 @@ namespace LamondLu.EmailX.Domain.ViewModels.Emails
 
         public string Name { get; set; }
 
-        //public EmailRecipientType Type { get; set; }
+        public EmailRecipientType Type { get; set; }
+    }
+
+    public class EmailAttachmentViewModel
+    {
+        public string FileName { get; set; }
+
+        public string FilePath { get; set; }
+
+        public string SourceFileName{get;set;}
     }
 }

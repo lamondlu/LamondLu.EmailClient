@@ -12,5 +12,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
     public interface IFileStorage
     {
         Task Upload(Guid emailId, string fileName, MemoryStream stream);
+
+        Task<Stream> Download(Guid emailId, string fileName);
     }
 }

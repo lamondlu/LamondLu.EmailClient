@@ -86,17 +86,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
             var email = await _context.QueryFirstOrDefaultAsync<EmailDetailedViewModel>(sql, new { emailId });
 
-            if (email == null)
-            {
-                return null;
-            }
-
-            var recipientsSQL =
-                "SELECT Email, Name, Type FROM EmailRecipient WHERE EmailId=@emailId";
-
-            var recipients = await _context.QueryAsync<EmailRecipientViewModel>(recipientsSQL, new { emailId });
-
-            email.To = recipients.Where(x => x.).ToList();
+            return email;
         }
 
         public async Task<string> GetEmailBody(Guid emailId)

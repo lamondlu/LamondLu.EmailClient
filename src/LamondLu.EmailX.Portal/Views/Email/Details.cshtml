@@ -1,25 +1,40 @@
 @model LamondLu.EmailX.Domain.ViewModels.Emails.EmailDetailedViewModel
+@using System.Linq;
+@inject LamondLu.EmailX.Domain.Interface.IUnitOfWorkFactory unitOfWorkFactory;
 
 @{
     ViewData["Title"] = "Details";
+
+    var unitOfWork = unitOfWorkFactory.Create();
+    var recipients = await
+    unitOfWork.EmailRecipientRepository.GetEmailRecipients(Model.EmailId);
+    var to = recipients.Where(x => x.Type ==
+    LamondLu.EmailX.Domain.Enum.EmailRecipientType.To).ToList();
+    var cc = recipients.Where(x => x.Type ==
+    LamondLu.EmailX.Domain.Enum.EmailRecipientType.Cc).ToList();
+    var bcc = recipients.Where(x => x.Type ==
+    LamondLu.EmailX.Domain.Enum.EmailRecipientType.Bcc).ToList();
+    var attachments = await
+    unitOfWork.EmailAttachmentRepository.GetEmailAttachments(Model.EmailId);
+
 }
 
 <div class="emailContent">
 
     <div class="emailField">
-        <div class="fieldName">Email Subject: </div>
+        <div class="fieldName">Email Subject </div>
         <div>@Model.Subject</div>
     </div>
 
     <div class="emailField">
-        <div class="fieldName">From: </div>
+        <div class="fieldName">From </div>
         <div>@Model.From</div>
     </div>
 
     <div class="emailField">
-        <div class="fieldName">To: </div>
+        <div class="fieldName">To</div>
         <div>
-            @foreach (var recipient in Model.To)
+            @foreach (var recipient in to)
             {
                 if (recipient.Name != null)
                 {
@@ -35,11 +50,61 @@
         </div>
     </div>
 
+    <div class="emailField">
+        <div class="fieldName">CC </div>
+        <div>
+            @foreach (var recipient in cc)
+            {
+                if (recipient.Name != null)
+                {
+                    <label class="recipientLabel">@recipient.Name
+                        (@recipient.Email)</label>
+                }
+                else
+                {
+                    <label class="recipientLabel">@recipient.Email</label>
+                }
+            }
+
+        </div>
+    </div>
+
+    <div class="emailField">
+        <div class="fieldName">BCC </div>
+        <div>
+            @foreach (var recipient in bcc)
+            {
+                if (recipient.Name != null)
+                {
+                    <label class="recipientLabel">@recipient.Name
+                        (@recipient.Email)</label>
+                }
+                else
+                {
+                    <label class="recipientLabel">@recipient.Email</label>
+                }
+            }
+
+        </div>
+    </div>
+    <div class="emailField">
+        <div class="fieldName">Received Date </div>
+        <div>@Model.ReceivedDate.ToString("yyyy-MM-dd")</div>
+    </div>
+    <div class="emailField">
+        <div class="fieldName">Attachments </div>
+        <div>
+            @foreach (var attachment in attachments)
+            {
+                <a class="attachment" href="/Emails/@Model.EmailId/Attachments/@attachment.FileName" target="_blank">@attachment.SourceFileName</a>
+            }
+        </div>
+    </div>
+
     <div class="emailBody">
         <iframe src="/Emails/@Model.EmailId/Content"
             style="width:100%; height: 500px">
-
         </iframe>
-
     </div>
+
 </div>
