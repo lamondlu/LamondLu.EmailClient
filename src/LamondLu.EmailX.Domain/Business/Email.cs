@@ -1,4 +1,5 @@
 ﻿using LamondLu.EmailX.Domain.Business;
+using LamondLu.EmailX.Domain.Extension;
 using System;
 using System.Collections.Generic;
 
@@ -35,18 +36,54 @@ namespace LamondLu.EmailX.Domain
 
         public string Notes { get; set; }
 
-        public List<EmailAddress> Receipts { get; set; }
+        public List<EmailAddress> Recipients { get; set; }
+
+        public string RecipientsUnionAddress
+        {
+            get
+            {
+
+                return Recipients?.UnionAddress();
+            }
+        }
 
         public List<EmailAddress> CCs { get; set; }
 
+        public string CCsUnionAddress
+        {
+            get
+            {
+
+                return CCs?.UnionAddress();
+            }
+        }
+
         public List<EmailAddress> BCCs { get; set; }
 
+        public string BCCsUnionAddress
+        {
+            get
+            {
+
+                return BCCs?.UnionAddress();
+            }
+        }
+
         public List<EmailAddress> ReplyTos { get; set; }
+
+        public string ReplyTosUnionAddress
+        {
+            get
+            {
+
+                return ReplyTos?.UnionAddress();
+            }
+        }
 
         public List<EmailAttachment> Attachments { get; set; }
 
         public List<Tag> Tags { get; set; }
 
-        public bool IsRead {get;set;}
+        public bool IsRead { get; set; }
     }
 }

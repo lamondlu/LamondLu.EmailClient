@@ -6,17 +6,31 @@ namespace LamondLu.EmailX.Domain
 {
     public class EmailFolder
     {
-        public EmailFolder(Guid folderId)
+        public Guid EmailFolderId { get; set; }
+
+        public Guid EmailConnectorId { get; set; }
+
+        public FolderType FolderType
         {
-            FolderId = folderId;
+            get
+            {
+                if (!string.IsNullOrEmpty(FolderPath) && FolderPath.Contains("Sent"))
+                {
+                    return FolderType.Send;
+                }
+                else
+                {
+                    return FolderType.Receive;
+                }
+            }
         }
 
-        public Guid FolderId { get; set; }
-
-        public string FolderName { get; set; }
-
-        public FolderType FolderType { get; set; }
-
         public List<EmailFolder> SubFolders { get; set; }
+
+        public string FolderPath { get; set; }
+
+        public uint LastEmailId { get; set; }
+
+        public uint LastValidityId { get; set; }
     }
 }

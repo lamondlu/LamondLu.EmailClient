@@ -68,10 +68,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                     {
                         var message = await _emailClient.GetMessageAsync(index);
 
-                        if (EmailReceived != null)
-                        {
-                            EmailReceived(new Domain.DTOs.AddEmailModel());
-                        }
+                       
                     }
                 }
 
