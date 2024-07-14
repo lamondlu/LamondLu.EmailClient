@@ -19,9 +19,9 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
 
         private IFileStorage _fileStorage = null;
 
-        public async Task<Stream> DownloadAttachment(Guid emailId, string fileName)
+        public Stream DownloadAttachment(Guid emailId, string fileName)
         {
-            return await _fileStorage.Download(emailId, fileName);
+            return _fileStorage.Download(emailId, fileName);
         }
 
         public async Task<List<AddEmailAttachmentModel>> SaveAttachment(Guid emailId, MimeMessage mail)

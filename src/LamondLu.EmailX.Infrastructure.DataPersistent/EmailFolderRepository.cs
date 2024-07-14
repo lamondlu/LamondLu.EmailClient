@@ -18,18 +18,6 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             _context = context;
         }
 
-        public async Task<List<EmailFolderConfigurationModel>> GetFolders(Guid emailConnectorId)
-        {
-            var sql = "SELECT * FROM EmailFolder WHERE IsDeleted=0 and EmailConnectId=@emailConnectorId";
-
-            var result = await _context.QueryAsync<EmailFolderConfigurationModel>(sql, new
-            {
-                emailConnectorId
-            });
-
-            return result.ToList();
-        }
-
         public async Task<EmailFolder> CreateEmailFolder(Guid emailConnectorId, string folderPath, string folderName)
         {
             var sql = "INSERT INTO EmailFolder(EmailFolderId, EmailConnectorId, FolderFullPath,FolderName,IsDeleted,LastEmailId,LastValidityId) VALUES(UUID(),@emailConnectorId,@folderPath,@folderName,0,1,0)";

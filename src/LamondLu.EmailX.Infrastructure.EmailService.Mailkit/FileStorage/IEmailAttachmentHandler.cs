@@ -15,6 +15,6 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
     {
         Task<List<EmailAttachment>> SaveAttachments(Guid emailId, MimeMessage mail);
 
-        Task<Stream> DownloadAttachment(Guid emailId, string fileName);
+        Stream DownloadAttachment(Guid emailId, string fileName);
     }
 }

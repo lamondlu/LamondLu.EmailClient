@@ -68,12 +68,16 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                     {
                         var message = await _emailClient.GetMessageAsync(index);
 
-                       
+                        if (EmailReceived != null)
+                        {
+
+
+                        }
                     }
                 }
 
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 if (!_emailClient.IsConnected)
                 {

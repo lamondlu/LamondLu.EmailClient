@@ -215,6 +215,8 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             {
                 EmailReceived(emailEntity);
             }
+
+            Pipeline.Run(emailEntity);
         }
 
     }

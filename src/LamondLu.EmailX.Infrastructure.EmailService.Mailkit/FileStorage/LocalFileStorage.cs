@@ -27,7 +27,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
             }
         }
 
-        public async Task<Stream> Download(Guid emailId, string fileName)
+        public Stream Download(Guid emailId, string fileName)
         {
             var filePath = $"{Directory.GetCurrentDirectory()}/attachments/{emailId}/{fileName}";
 
