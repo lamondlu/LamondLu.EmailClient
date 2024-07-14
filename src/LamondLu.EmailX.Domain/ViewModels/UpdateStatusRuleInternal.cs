@@ -1,0 +1,21 @@
+﻿using LamondLu.EmailX.Domain.Enum;
+using System;
+
+namespace LamondLu.EmailX.Domain.ViewModels
+{
+    public class UpdateStatusRuleInternal
+    {
+        public string RuleName { get; set; }
+        public MatchField ConditionType { get; set; }
+
+        public MatchCondition ConditionOperator { get; set; }
+
+        public string ConditionValue { get; set; }
+
+        public EmailStatus EmailStatus { get; set; }
+
+        public bool TerminateIfMatch { get; set; }
+        public bool IsAIOCRCriteria { get; set; }
+        public int Order { get; set; }
+    }
+}

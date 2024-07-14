@@ -7,8 +7,6 @@ namespace LamondLu.EmailX.Domain.Interface
 
     public interface IEmailConnectorWorker
     {
-        RulePipeline Pipeline { get; }
-
         event EmailReceived EmailReceived;
 
         Task<bool> Connect();

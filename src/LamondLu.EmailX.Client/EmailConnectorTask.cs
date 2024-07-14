@@ -47,13 +47,13 @@ namespace LamondLu.EmailX.Client
 
         public async Task Stop()
         {
-            Console.WriteLine($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Stop");
+            _logger.LogInformation($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Stop");
             await _emailConnectorWorker.Disconnect();
         }
 
         public async Task ConnectAsync()
         {
-            Console.WriteLine($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Start");
+            _logger.LogInformation($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Start");
 
             EmailConnector emailConnector = new EmailConnector(_emailConnector.EmailConnectorId, _emailConnector.Name, _emailConnector.EmailAddress, _emailConnector.UserName, _emailConnector.Password, new EmailServerConfig(_emailConnector.SMTPServer, _emailConnector.SMTPPort, _emailConnector.IMAPServer, _emailConnector.IMAPPort, _emailConnector.POP3Server, _emailConnector.POP3Port, _emailConnector.EnableSSL)
             , _emailConnector.Type, string.Empty);

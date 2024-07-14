@@ -23,12 +23,12 @@ namespace LamondLu.EmailX.Domain
             {
                 if (rule.Match(email))
                 {
-                    //process the handler
+                   
 
                     IRuleProcessor ruleProcessor = _factory.GetRuleProcessor(rule, _unitOfWork);
                     ruleProcessor.Run(email);
 
-                    if (rule.TerminateIfMatch)
+                    if (rule.StopProcessingMoreRule)
                     {
                         return;
                     }

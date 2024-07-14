@@ -54,3 +54,33 @@ CREATE TABLE `emailconnectorrule` (
   `IsDeleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`EmailConnectorId`,`EmailRuleId`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+
+DROP TABLE IF EXISTS `emailruledetails`;
+CREATE TABLE `emailruledetails` (
+  `EmailRuleDetailsId` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `EmailRuleId` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ConditionType` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ConditionValue` text COLLATE utf8mb4_unicode_ci,
+  `ConditionOperator` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Condition` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Order` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`EmailRuleDetailsId`) USING BTREE,
+  KEY `FK_EmailRuleDetails_EmailRuleId_EmailRule_Id` (`EmailRuleId`) USING BTREE,
+  CONSTRAINT `FK_EmailRuleDetails_EmailRuleId_EmailRule_Id` FOREIGN KEY (`EmailRuleId`) REFERENCES `emailrule` (`EmailRuleId`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+
+DROP TABLE IF EXISTS `emailtemplate`;
+CREATE TABLE `emailtemplate` (
+  `EmailTemplateId` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Body` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CreatedTime` datetime DEFAULT NULL,
+  `CreatedBy` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `UpdatedTime` datetime DEFAULT NULL,
+  `UpdatedBy` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `IsDeleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`EmailTemplateId`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;

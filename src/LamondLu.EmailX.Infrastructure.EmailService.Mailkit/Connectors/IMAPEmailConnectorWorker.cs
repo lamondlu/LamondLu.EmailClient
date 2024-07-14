@@ -26,20 +26,17 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         private IUnitOfWork _unitOfWork = null;
 
-        private IInlineImageHandler _inlineImageHandler = null;
-
         private IEmailAttachmentHandler _emailAttachmentHandler = null;
+
+        private RulePipeline _pipeline = null;
 
         public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler)
         {
-            Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
+            _pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
             _unitOfWork = unitOfWork;
-            _inlineImageHandler = inlineImageHandler;
             _emailAttachmentHandler = emailAttachmentHandler;
         }
-
-        public RulePipeline Pipeline { get; }
 
         public event EmailReceived EmailReceived;
 
@@ -216,7 +213,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                 EmailReceived(emailEntity);
             }
 
-            Pipeline.Run(emailEntity);
+            _pipeline.Run(emailEntity);
         }
 
     }
