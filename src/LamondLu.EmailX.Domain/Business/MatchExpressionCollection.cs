@@ -22,7 +22,7 @@ namespace LamondLu.EmailX.Domain.Business
             foreach (var item in matchExpressions)
             {
                 current++;
-                if (!item.Condition.HasValue || item.Operator == MatchOperator.AND)
+                if (!item.Condition.HasValue || item.Condition == MatchCondition.AND)
                 {
                     if (currentGroup == null)
                     {

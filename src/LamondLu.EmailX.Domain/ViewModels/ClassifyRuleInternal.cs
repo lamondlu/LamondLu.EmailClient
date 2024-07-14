@@ -17,7 +17,7 @@ namespace LamondLu.EmailX.Domain.ViewModels
         public Guid TagId { get; set; }
 
         public bool TerminateIfMatch { get; set; }
-        public bool IsAIOCRCriteria { get; set; }
+
         public int Order { get; set; }
     }
 }

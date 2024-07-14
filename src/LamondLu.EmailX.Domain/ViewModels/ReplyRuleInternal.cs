@@ -6,10 +6,12 @@ namespace LamondLu.EmailX.Domain.ViewModels
     public class ReplyRuleInternal
     {
         public Guid EmailRule { get; set; }
+
         public string RuleName { get; set; }
+
         public MatchField ConditionType { get; set; }
 
-        public MatchCondition ConditionOperator { get; set; }
+        public MatchOperator ConditionOperator { get; set; }
 
         public string ConditionValue { get; set; }
 
@@ -23,7 +25,6 @@ namespace LamondLu.EmailX.Domain.ViewModels
 
         public bool TerminateIfMatch { get; set; }
 
-        public bool IsAIOCRCriteria { get; set; }
         public int Order { get; set; }
     }
 }

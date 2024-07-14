@@ -17,19 +17,6 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             _context = context;
         }
 
-        public async Task AddEmailAttachment(AddEmailAttachmentModel dto)
-        {
-            var sql = "INSERT INTO EmailAttachment(EmailAttachmentId, EmailId, FileName, FileSize, SourceFileName) VALUE(@emailAttachmentId, @emailId, @fileName, @fileSize, @sourceFileName)";
-
-            await _context.Execute(sql, new {
-                dto.EmailAttachmentId,
-                dto.EmailId,
-                dto.FileName,
-                dto.FileSize,
-                dto.SourceFileName
-            });
-        }
-
         public async Task<List<EmailAttachmentViewModel>> GetEmailAttachments(Guid emailId)
         {
             var sql = "SELECT EmailAttachmentId, FileName, SourceFileName FROM EmailAttachment WHERE EmailId=@emailId";

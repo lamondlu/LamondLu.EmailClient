@@ -1,3 +1,4 @@
+using System;
 using LamondLu.EmailX.Domain;
 using LamondLu.EmailX.Domain.Interface;
 
@@ -14,7 +15,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         public void Run(Email email)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine($"System send out reply email 'RE: {email.Subject}'");
         }
     }
 }

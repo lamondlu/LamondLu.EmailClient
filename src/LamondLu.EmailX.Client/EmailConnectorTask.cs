@@ -11,7 +11,7 @@ namespace LamondLu.EmailX.Client
 {
     public class EmailConnectorTask
     {
-        private EmailConnectorConfigViewModel _emailConnector = null;
+        private EmailConnector _emailConnector = null;
 
         private IEmailConnectorWorkerFactory _factory = null;
 
@@ -27,7 +27,7 @@ namespace LamondLu.EmailX.Client
 
         private ILogger _logger = null;
 
-        public EmailConnectorTask(EmailConnectorConfigViewModel emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler, ILogger<EmailConnectorHostService> logger)
+        public EmailConnectorTask(EmailConnector emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler, ILogger<EmailConnectorHostService> logger)
         {
             _emailConnector = emailConnector;
             _factory = factory;
@@ -55,12 +55,9 @@ namespace LamondLu.EmailX.Client
         {
             _logger.LogInformation($"Email Connector (id:{_emailConnector.EmailConnectorId},name: {_emailConnector.Name}) Start");
 
-            EmailConnector emailConnector = new EmailConnector(_emailConnector.EmailConnectorId, _emailConnector.Name, _emailConnector.EmailAddress, _emailConnector.UserName, _emailConnector.Password, new EmailServerConfig(_emailConnector.SMTPServer, _emailConnector.SMTPPort, _emailConnector.IMAPServer, _emailConnector.IMAPPort, _emailConnector.POP3Server, _emailConnector.POP3Port, _emailConnector.EnableSSL)
-            , _emailConnector.Type, string.Empty);
-
             try
             {
-                _emailConnectorWorker = _factory.Build(emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler, _emailAttachmentHandler);
+                _emailConnectorWorker = _factory.Build(_emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler, _emailAttachmentHandler);
 
                 var isConnected = await _emailConnectorWorker.Connect();
 

@@ -15,7 +15,7 @@ namespace LamondLu.EmailX.Domain.ViewModels
         public EmailStatus EmailStatus { get; set; }
 
         public bool TerminateIfMatch { get; set; }
-        public bool IsAIOCRCriteria { get; set; }
+
         public int Order { get; set; }
     }
 }

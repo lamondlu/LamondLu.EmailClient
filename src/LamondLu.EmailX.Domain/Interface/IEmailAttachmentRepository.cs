@@ -9,7 +9,6 @@ namespace LamondLu.EmailX.Domain.Interface
 {
     public interface IEmailAttachmentRepository
     {
-        Task AddEmailAttachment(AddEmailAttachmentModel dto);
 
         Task<List<EmailAttachmentViewModel>> GetEmailAttachments(Guid emailId);
     }

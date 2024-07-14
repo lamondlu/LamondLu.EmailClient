@@ -8,7 +8,8 @@ namespace LamondLu.EmailX.Domain
 
         public string FileName { get; set; }
 
-        public string SystemFileName { get; set; }
+        public string SystemFileName {get;set;}
+
 
         public long FileSize { get; set; }
     }

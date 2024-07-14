@@ -6,17 +6,10 @@ namespace LamondLu.EmailX.Domain
 {
     public class EmailConnector
     {
-        public EmailConnector(string name, string emailAddress, string userName, string password, EmailServerConfig config, EmailConnectorType type, string description)
+        public EmailConnector(string name, string emailAddress, string userName, string password, EmailServerConfig config, EmailConnectorType type, string description): this(Guid.NewGuid(), name, emailAddress, userName, password, config, type, description)
         {
-            EmailConnectorId = Guid.NewGuid();
-            Name = name;
-            UserName = userName;
-            Password = password;
-            Server = config;
-            Type = type;
-            Description = description;
-            Status = EmailConnectorStatus.Stopped;
-            EmailAddress = emailAddress;
+            
+
         }
 
         public EmailConnector(Guid emailConnectorId, string name, string emailAddress, string userName, string password, EmailServerConfig config, EmailConnectorType type, string description)
@@ -30,6 +23,13 @@ namespace LamondLu.EmailX.Domain
             Description = description;
             Status = EmailConnectorStatus.Stopped;
             EmailAddress = emailAddress;
+            IMAPPort = config.IMAPPort;
+            IMAPServer = config.IMAPServer;
+            POP3Port = config.POP3Port;
+            POP3Server = config.POP3Server;
+            SMTPPort = config.SMTPPort;
+            SMTPServer = config.SMTPServer;
+            EnableSSL = config.EnableSSL;
         }
 
         public Guid EmailConnectorId { get; private set; }
@@ -63,6 +63,8 @@ namespace LamondLu.EmailX.Domain
         public int? IMAPPort { get; set; }
 
         public string Description { get; set; }
+
+        public bool EnableSSL { get; set; }
 
         public void Start()
         {

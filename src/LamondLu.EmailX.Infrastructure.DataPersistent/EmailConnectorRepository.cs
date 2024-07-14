@@ -83,7 +83,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
         public async Task<EmailConnector> GetEmailConnector(Guid emailConnectorId)
         {
             var sql = "SELECT * FROM EmailConnector WHERE IsDeleted = 0 AND EmailConnectorId=@emailConnectorId";
-            var connectorRaw = await _context.QueryFirstOrDefaultAsync<EmailConnectorConfigViewModel>(sql);
+            var connectorRaw = await _context.QueryFirstOrDefaultAsync<EmailConnectorConfigViewModel>(sql, new { emailConnectorId });
 
             EmailConnector connector = null;
             if (connectorRaw == null)
@@ -93,12 +93,12 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
             connector = new EmailConnector(connectorRaw.EmailConnectorId, connectorRaw.Name, connectorRaw.EmailAddress, connectorRaw.UserName, connectorRaw.Password, new EmailServerConfig
                 (
+                    connectorRaw.SMTPServer,
+                    connectorRaw.SMTPPort,
                     connectorRaw.IMAPServer,
                     connectorRaw.IMAPPort,
                     connectorRaw.POP3Server,
                     connectorRaw.POP3Port,
-                    connectorRaw.SMTPServer,
-                    connectorRaw.SMTPPort,
                     connectorRaw.EnableSSL
                 ), connectorRaw.Type, connectorRaw.Description);
 
@@ -137,7 +137,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
             connector.Rules = mappingRules;
 
-            return null;
+            return connector;
         }
 
          
@@ -182,7 +182,6 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                         et.Subject, 
                         et.Body, er.rulename,
                         er.TerminateIfMatch,
-                        er.IsAIOCRCriteria,
                         e.`Order`
                         FROM replyemailrule rr
                         INNER JOIN emailrule er on er.EmailRuleId = rr.EmailRuleId
@@ -219,6 +218,14 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
         {
             var sql = "UPDATE EmailConnector SET Status=@status WHERE EmailConnectorId=@emailConnectorId";
             await _context.Execute(sql, new { status, emailConnectorId });
+        }
+
+        public async Task<List<Guid>> GetAllRunningEmailConnectorIds()
+        {
+            var sql = "SELECT EmailConnectorId FROM EmailConnector WHERE IsDeleted = 0 AND Status = @status";
+            var result = await _context.QueryAsync<Guid>(sql, new { status = EmailConnectorStatus.Running });
+
+            return result.ToList();
         }
     }
 }

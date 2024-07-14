@@ -9,7 +9,6 @@ namespace LamondLu.EmailX.Domain.Business
 {
     public class MatchExpression
     {
-
         private List<string> _valueList;
 
         public MatchField Field { get; set; }
@@ -72,27 +71,27 @@ namespace LamondLu.EmailX.Domain.Business
 
         private bool Compare(List<string> source)
         {
-            if (Condition == MatchCondition.Equal)
+            if (Operator == MatchOperator.Equal)
             {
                 return source.Any(p => ValueList.Any(v => string.Compare(v, p, true) == 0));
             }
-            else if (Condition == MatchCondition.NotEqual)
+            else if (Operator == MatchOperator.NotEqual)
             {
                 return source.All(p => ValueList.All(v => string.Compare(v, p, true) != 0));
             }
-            else if (Condition == MatchCondition.Contain)
+            else if (Operator == MatchOperator.Contain)
             {
                 return source.Any(p => ValueList.Any(v => p.Contains(v, StringComparison.OrdinalIgnoreCase)));
             }
-            else if (Condition == MatchCondition.NotContain)
+            else if (Operator == MatchOperator.NotContain)
             {
                 return source.All(p => ValueList.All(v => !p.Contains(v, StringComparison.OrdinalIgnoreCase)));
             }
-            else if (Condition == MatchCondition.HasAttachment)
+            else if (Operator == MatchOperator.HasAttachment)
             {
                 return source.Count > 0;
             }
-            else if (Condition == MatchCondition.NoAttachment)
+            else if (Operator == MatchOperator.NoAttachment)
             {
                 return source.Count == 0;
             }
@@ -107,19 +106,19 @@ namespace LamondLu.EmailX.Domain.Business
                 return false;
             }
 
-            if (Condition == MatchCondition.Equal)
+            if (Operator == MatchOperator.Equal)
             {
                 return ValueList.Any(x => string.Compare(x, source, true) == 0);
             }
-            else if (Condition == MatchCondition.NotEqual)
+            else if (Operator == MatchOperator.NotEqual)
             {
                 return ValueList.All(x => string.Compare(x, source, true) != 0); 
             }
-            else if (Condition == MatchCondition.Contain)
+            else if (Operator == MatchOperator.Contain)
             {
                 return ValueList.Any(x => source.Contains(x, StringComparison.OrdinalIgnoreCase)); 
             }
-            else if (Condition == MatchCondition.NotContain)
+            else if (Operator == MatchOperator.NotContain)
             {
                 return ValueList.All(x => !source.Contains(x, StringComparison.OrdinalIgnoreCase)); 
             }

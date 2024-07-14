@@ -1,4 +1,5 @@
-﻿using LamondLu.EmailX.Domain.Interface;
+﻿using LamondLu.EmailX.Domain;
+using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.ViewModels;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
@@ -43,10 +44,12 @@ namespace LamondLu.EmailX.Client
             _logger.LogInformation("Email Service started.");
 
             var unitOfWork = _unitOfWorkFactory.Create();
-            var connectors = await unitOfWork.EmailConnectorRepository.GetEmailConnectorConfigs();
+            var runningConnectorIds = await unitOfWork.EmailConnectorRepository.GetAllRunningEmailConnectorIds();
 
-            foreach (var connector in connectors.Where(p => p.IsRunning))
+            foreach (var connectorId in runningConnectorIds)
             {
+                var connector = await unitOfWork.EmailConnectorRepository.GetEmailConnector(connectorId);
+
                 var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler, _logger);
 
                 Version(connector);
@@ -55,7 +58,7 @@ namespace LamondLu.EmailX.Client
             }
         }
 
-        private void Version(EmailConnectorConfigViewModel emailConnector)
+        private void Version(EmailConnector emailConnector)
         {
             _logger.LogInformation($"[{emailConnector.Name}] Email Connect Type: {emailConnector.Type}");
             _logger.LogInformation($"[{emailConnector.Name}] SSL: {(emailConnector.EnableSSL ? "Yes" : "No")}");
@@ -83,7 +86,7 @@ namespace LamondLu.EmailX.Client
         public async Task StartConnector(Guid emailConnectorId)
         {
             var unitOfWork = _unitOfWorkFactory.Create();
-            var connector = await unitOfWork.EmailConnectorRepository.GetEmailConnectorConfig(emailConnectorId);
+            var connector = await unitOfWork.EmailConnectorRepository.GetEmailConnector(emailConnectorId);
 
             if (connector == null)
             {
