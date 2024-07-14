@@ -9,15 +9,18 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.Extensions
 {
     public static class EmailExtension
     {
-        public static Email ConvertEmail(this MimeMessage message, UniqueId uniqueId, Guid folderId)
+        public static Email ConvertEmail(this MimeMessage message, UniqueId uniqueId, EmailFolder folder)
         {
             var email = new Email(message.MessageId, uniqueId.Id, uniqueId.Validity);
             email.Subject = message.Subject;
-            email.EmailFolder = new EmailFolder(folderId);
-            email.Receipts = message.To?.Mailboxes?.Select(p => new EmailAddress(p.Address, p.Name)).ToList();
+            email.EmailFolder = folder;
+            email.Sender = new EmailAddress(message.From.Mailboxes.First().Address, message.From.Mailboxes.First().Name);
+            email.Recipients = message.To?.Mailboxes?.Select(p => new EmailAddress(p.Address, p.Name)).ToList();
             email.CCs = message.Cc?.Mailboxes?.Select(p => new EmailAddress(p.Address, p.Name)).ToList();
             email.BCCs = message.Bcc?.Mailboxes?.Select(p => new EmailAddress(p.Address, p.Name)).ToList();
+            email.ReplyTos = message.ReplyTo?.Mailboxes?.Select(p => new EmailAddress(p.Address, p.Name)).ToList();
             email.Body = PopulateInlineImages(message);
+            email.TextBody = message.TextBody;
             email.ReceivedDate = message.Date.LocalDateTime;
             email.EmailValidityId = uniqueId.Validity;
             email.EmailRealId = uniqueId.Id;

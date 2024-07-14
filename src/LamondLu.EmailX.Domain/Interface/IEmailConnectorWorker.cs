@@ -3,7 +3,7 @@ using LamondLu.EmailX.Domain.DTOs;
 
 namespace LamondLu.EmailX.Domain.Interface
 {
-    public delegate void EmailReceived(AddEmailModel email);
+    public delegate void EmailReceived(Email email);
 
     public interface IEmailConnectorWorker
     {

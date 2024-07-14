@@ -10,6 +10,8 @@ namespace LamondLu.EmailX.Domain.Interface
     {
         Task SaveNewEmail(AddEmailModel email);
 
+        Task SaveEmail(Email email);
+
         Task<bool> MessageIdExisted(string messageId);
 
         Task SaveEmailBody(Guid emailId, string emailBody, string emailHTMLBody);

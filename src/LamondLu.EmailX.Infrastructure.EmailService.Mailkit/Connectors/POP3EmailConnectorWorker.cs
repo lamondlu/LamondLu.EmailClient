@@ -70,13 +70,14 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
                         if (EmailReceived != null)
                         {
-                            EmailReceived(new Domain.DTOs.AddEmailModel());
+
+
                         }
                     }
                 }
 
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 if (!_emailClient.IsConnected)
                 {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LamondLu.EmailX.Domain;
 using MimeKit;
 
 namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.Extensions

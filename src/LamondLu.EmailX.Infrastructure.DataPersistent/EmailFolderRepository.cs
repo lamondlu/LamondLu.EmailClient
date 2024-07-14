@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using LamondLu.EmailX.Domain;
 
 namespace LamondLu.EmailX.Infrastructure.DataPersistent
 {
@@ -17,19 +18,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             _context = context;
         }
 
-        public async Task<List<EmailFolderConfigurationModel>> GetFolders(Guid emailConnectorId)
-        {
-            var sql = "SELECT * FROM EmailFolder WHERE IsDeleted=0 and EmailConnectId=@emailConnectorId";
-
-            var result = await _context.QueryAsync<EmailFolderConfigurationModel>(sql, new
-            {
-                emailConnectorId
-            });
-
-            return result.ToList();
-        }
-
-        public async Task<EmailFolderConfigurationModel> CreateEmailFolder(Guid emailConnectorId, string folderPath, string folderName)
+        public async Task<EmailFolder> CreateEmailFolder(Guid emailConnectorId, string folderPath, string folderName)
         {
             var sql = "INSERT INTO EmailFolder(EmailFolderId, EmailConnectorId, FolderFullPath,FolderName,IsDeleted,LastEmailId,LastValidityId) VALUES(UUID(),@emailConnectorId,@folderPath,@folderName,0,1,0)";
 
@@ -45,11 +34,11 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             return await GetEmailFolder(emailConnectorId, folderPath);
         }
 
-        public async Task<EmailFolderConfigurationModel> GetEmailFolder(Guid emailConnectorId, string folderPath)
+        public async Task<EmailFolder> GetEmailFolder(Guid emailConnectorId, string folderPath)
         {
             var sql = "SELECT * FROM EmailFolder WHERE EmailConnectorId=@emailConnectorId AND FolderFullPath=@folderPath";
 
-            return await _context.QueryFirstOrDefaultAsync<EmailFolderConfigurationModel>(sql, new
+            return await _context.QueryFirstOrDefaultAsync<EmailFolder>(sql, new
             {
                 emailConnectorId,
                 folderPath

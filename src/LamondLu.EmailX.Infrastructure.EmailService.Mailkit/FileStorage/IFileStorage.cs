@@ -13,6 +13,6 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage
     {
         Task Upload(Guid emailId, string fileName, MemoryStream stream);
 
-        Task<Stream> Download(Guid emailId, string fileName);
+        Stream Download(Guid emailId, string fileName);
     }
 }

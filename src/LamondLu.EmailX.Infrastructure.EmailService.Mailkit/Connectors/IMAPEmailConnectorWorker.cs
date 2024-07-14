@@ -136,7 +136,10 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                                 var email = folder.GetMessage(emailId);
                                 Console.WriteLine($"[{email.Date}] {email.Subject}");
 
-                                await SaveMessage(email, _emailConnector.EmailConnectorId, folderEntity.EmailFolderId, emailId, items.FirstOrDefault(p => p.UniqueId == emailId).Flags.Value.HasFlag(MessageFlags.Seen));
+                                await SaveMessage(email,
+                                folderEntity,
+                                emailId,
+                                items.FirstOrDefault(p => p.UniqueId == emailId).Flags.Value.HasFlag(MessageFlags.Seen));
                             }
                         }
                     }
@@ -170,7 +173,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             return folders;
         }
 
-        private async Task<EmailFolderConfigurationModel> GetOrCreateFolder(Guid emailconnectorId, string folderName, string folderPath)
+        private async Task<EmailFolder> GetOrCreateFolder(Guid emailconnectorId, string folderName, string folderPath)
         {
             var folder = await _unitOfWork.EmailFolderRepository.GetEmailFolder(emailconnectorId, folderPath);
 
@@ -182,7 +185,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             return folder;
         }
 
-        private async Task SaveMessage(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId, bool isRead)
+        private async Task SaveMessage(MimeMessage mail, EmailFolder emailFolder, UniqueId emailId, bool isRead)
         {
             if (mail.MessageId == null)
             {
@@ -198,71 +201,23 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                 return;
             }
 
-            var email = await SaveEmail(mail, emailConnectorId, folderId, emailId, isRead);
+            var emailEntity = mail.ConvertEmail(emailId, emailFolder);
 
-            await _unitOfWork.EmailRepository.SaveEmailBody(email.EmailId, mail.TextBody, _inlineImageHandler.PopulateInlineImages(mail, email.EmailId));
-            await SaveAttachment(email.EmailId, mail);
-            await _unitOfWork.EmailFolderRepository.RecordFolderProcess(folderId, emailId.Id, emailId.Validity);
-
-            await SaveRecipients(EmailRecipientType.To, email.EmailId, mail.To.Mailboxes);
-            await SaveRecipients(EmailRecipientType.Cc, email.EmailId, mail.Cc.Mailboxes);
-            await SaveRecipients(EmailRecipientType.Bcc, email.EmailId, mail.Bcc.Mailboxes);
-            await SaveRecipients(EmailRecipientType.ReplyTo, email.EmailId, mail.ReplyTo.Mailboxes);
-
+            await _unitOfWork.EmailRepository.SaveEmail(emailEntity);
+            var attachments = await _emailAttachmentHandler.SaveAttachments(emailEntity.EmailId.SystemId, mail);
+            emailEntity.Attachments = attachments;
+            await _unitOfWork.EmailFolderRepository.RecordFolderProcess(emailFolder.EmailFolderId, emailEntity.EmailId.MailkitId, emailEntity.EmailId.MailkitValidityId);
             await _unitOfWork.SaveAsync();
+
+            Console.WriteLine("Email saved.");
 
             if (EmailReceived != null)
             {
-                EmailReceived(email);
+                EmailReceived(emailEntity);
             }
+
+            Pipeline.Run(emailEntity);
         }
 
-        private async Task SaveRecipients(EmailRecipientType type, Guid emailId, IEnumerable<MailboxAddress> recipients)
-        {
-            foreach (var recipient in recipients)
-            {
-                await _unitOfWork.EmailRecipientRepository.SaveEmailReceipt(new AddEmailRecipientModel
-                {
-                    EmailId = emailId,
-                    MailboxAddress = recipient.Address,
-                    DisplayName = recipient.Name,
-                    Type = type
-                });
-            }
-        }
-
-        private async Task<AddEmailModel> SaveEmail(MimeMessage mail, Guid emailConnectorId, Guid folderId, UniqueId emailId, bool isRead)
-        {
-            var newEmail = new AddEmailModel
-            {
-                EmailConnectorId = emailConnectorId,
-                EmailFolderId = folderId,
-                Subject = mail.Subject,
-                Sender = mail.From?.Mailboxes?.FirstOrDefault()?.Address,
-                ReceivedDate = mail.Date.Date,
-                MessageId = mail.MessageId,
-                Id = emailId.Id,
-                Validity = emailId.Validity,
-                IsRead = isRead,
-                Cc = mail.Cc?.Mailboxes?.UnionAddress(),
-                Bcc = mail.Bcc?.Mailboxes?.UnionAddress(),
-                To = mail.To?.Mailboxes?.UnionAddress(),
-                ReplyTo = mail.ReplyTo?.Mailboxes?.UnionAddress()
-            };
-
-            await _unitOfWork.EmailRepository.SaveNewEmail(newEmail);
-
-            return newEmail;
-        }
-
-        private async Task SaveAttachment(Guid emailId, MimeMessage mail)
-        {
-            var result = await _emailAttachmentHandler.SaveAttachment(emailId, mail);
-
-            foreach (var item in result)
-            {
-                await _unitOfWork.EmailAttachmentRepository.AddEmailAttachment(item);
-            }
-        }
     }
 }
