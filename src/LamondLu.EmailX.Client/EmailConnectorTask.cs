@@ -1,6 +1,5 @@
 ﻿using LamondLu.EmailX.Domain;
 using LamondLu.EmailX.Domain.Interface;
-using LamondLu.EmailX.Domain.ViewModels;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
 using Microsoft.Extensions.Logging;

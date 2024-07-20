@@ -1,4 +1,6 @@
+
 using LamondLu.EmailX.Client;
+using LamondLu.EmailX.Client.Extensions;
 using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.Managers;
 using LamondLu.EmailX.Infrastructure.DataPersistent;
@@ -6,35 +8,17 @@ using LamondLu.EmailX.Infrastructure.DataPersistent.Models;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var item = builder.Configuration.GetSection("Db");
-builder.Services.Configure<DbSetting>(item);
+
 builder.Logging.AddConsole();
 builder.Services.AddOptions();
-builder.Services.AddSingleton<IInlineImageHandler, LocalInlineImageHandler>()
-                    .AddSingleton<IEmailAttachmentHandler, EmailAttachmentHandler>()
-                    .AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>()
-                    .AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
-                    .AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>()
-                    .AddSingleton<IFileStorage, LocalFileStorage>();
-
-builder.Services.AddHostedService<EmailConnectorHostService>();
-builder.Services.AddSingleton<EmailConnectorHostService>(serviceProvider =>
-{
-    return serviceProvider.GetServices<IHostedService>().Where(e => e.GetType() == typeof(EmailConnectorHostService)).Cast<EmailConnectorHostService>().Single();
-});
-
-builder.Services.AddSingleton<IEmailConnectorAction, EmailConnectorHostService>(serviceProvider =>
-{
-    return serviceProvider.GetServices<IHostedService>().Where(e => e.GetType() == typeof(EmailConnectorHostService)).Cast<EmailConnectorHostService>().Single();
-});
-
-builder.Services.AddScoped<EmailConnectorManager>();
+builder.ConfigureEmailX();
 
 var app = builder.Build();
 

@@ -50,7 +50,7 @@ namespace LamondLu.EmailX.Portal.Controllers
         [Route("Emails/{id}/Attachments/{fileName}")]
         public async Task<IActionResult> DownloadAttachment(Guid id, string fileName)
         {   
-            var stream = await _emailAttachmentHandler.DownloadAttachment(id, fileName);
+            var stream = _emailAttachmentHandler.DownloadAttachment(id, fileName);
             if (stream == null)
             {
                 return NotFound();
