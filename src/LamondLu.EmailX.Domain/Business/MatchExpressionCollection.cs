@@ -1,34 +1,32 @@
-﻿using LamondLu.EmailX.Domain.Enum;
 using System.Collections.Generic;
 using System.Linq;
+using LamondLu.EmailX.Domain.Enum;
 
-namespace LamondLu.EmailX.Domain
+namespace LamondLu.EmailX.Domain.Business
 {
-    public class MatchCriteraCollection
+    public class MatchExpressionCollection
     {
-        public MatchCriteraCollection(List<MatchCritera> criteras)
+        public MatchExpressionCollection(List<MatchExpression> matchExpressions)
         {
-            BuildMatchGroup(criteras);
+            BuildMatchGroup(matchExpressions);
         }
 
-        public List<MatchCritera> Criteras { get; set; }
+        private List<List<MatchExpression>> _matchGroups = new List<List<MatchExpression>>();
 
-        private List<List<MatchCritera>> _matchGroups = new List<List<MatchCritera>>();
-
-        private void BuildMatchGroup(List<MatchCritera> matchExpressions)
+        private void BuildMatchGroup(List<MatchExpression> matchExpressions)
         {
-            List<MatchCritera> currentGroup = null;
+            List<MatchExpression> currentGroup = null;
 
             var count = matchExpressions.Count;
             var current = 0;
             foreach (var item in matchExpressions)
             {
                 current++;
-                if (!item.Operator.HasValue || item.Operator.Value == MatchOperator.AND)
+                if (!item.Condition.HasValue || item.Condition == MatchCondition.AND)
                 {
                     if (currentGroup == null)
                     {
-                        currentGroup = new List<MatchCritera>();
+                        currentGroup = new List<MatchExpression>();
                     }
 
                     currentGroup.Add(item);
@@ -36,7 +34,7 @@ namespace LamondLu.EmailX.Domain
                 else
                 {
                     _matchGroups.Add(currentGroup);
-                    currentGroup = new List<MatchCritera>();
+                    currentGroup = new List<MatchExpression>();
                     currentGroup.Add(item);
                 }
 

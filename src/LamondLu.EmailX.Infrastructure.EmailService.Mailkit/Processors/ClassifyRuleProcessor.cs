@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using LamondLu.EmailX.Domain;
 using LamondLu.EmailX.Domain.Interface;
 
@@ -12,7 +13,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             _unitOfWork = unitOfWork;
         }
 
-        public void Run(Email email)
+        public async Task Run(Email email, Rule rule)
         {
             throw new System.NotImplementedException();
         }

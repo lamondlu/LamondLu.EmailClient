@@ -1,4 +1,5 @@
-﻿using LamondLu.EmailX.Domain.Interface;
+﻿using LamondLu.EmailX.Client.Extensions;
+using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Infrastructure.DataPersistent;
 using LamondLu.EmailX.Infrastructure.DataPersistent.Models;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit;
@@ -25,20 +26,8 @@ namespace LamondLu.EmailX.Client
                 configApp.AddCommandLine(args);
             }).ConfigureServices((hostContext, services) =>
             {
-                var item = hostContext.Configuration.GetSection("Db");
-                services.Configure<DbSetting>(hostContext.Configuration.GetSection("Db"));
-
                 services.AddOptions();
-                
-                services.AddHostedService<EmailConnectorHostService>()
-                    .AddScoped<IInlineImageHandler, LocalInlineImageHandler>()
-                    .AddScoped<IEmailAttachmentHandler, EmailAttachmentHandler>()
-                    .AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>()
-                    .AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
-                    .AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>()
-                    .AddSingleton<IFileStorage, LocalFileStorage>();
-
-            }).UseConsoleLifetime().Build();
+            }).ConfigureEmailX().UseConsoleLifetime().Build();
 
             await host.RunAsync();
         }

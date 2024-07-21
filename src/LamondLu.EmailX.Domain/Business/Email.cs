@@ -9,12 +9,15 @@ namespace LamondLu.EmailX.Domain
     {
         public Email(string messageId, uint mailkitId, uint mailkitValidityId)
         {
-            EmailId = new EmailId(messageId, mailkitId, mailkitValidityId);
+            EmailId = Guid.NewGuid();
+            MessageId = messageId;
+            EmailRealId = mailkitId;
+            EmailValidityId = mailkitValidityId;
             Tags = new List<Tag>();
             Attachments = new List<EmailAttachment>();
         }
 
-        public EmailId EmailId { get; private set; }
+        public Guid EmailId { get; set; }
 
         public EmailFolder EmailFolder { get; set; }
 

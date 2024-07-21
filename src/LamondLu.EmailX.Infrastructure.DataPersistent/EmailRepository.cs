@@ -27,13 +27,13 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
             await _context.Execute(sql, new
             {
-                EmailId = email.EmailId.SystemId,
+                EmailId = email.EmailId,
                 email.EmailFolder.EmailConnectorId,
                 email.Subject,
                 email.ReceivedDate,
                 email.EmailFolder.EmailFolderId,
-                Id = email.EmailId.MailkitId,
-                Validity = email.EmailId.MailkitValidityId,
+                Id = email.EmailRealId,
+                Validity = email.EmailValidityId,
                 CreatedTime = DateTime.Now,
                 Sender = email.Sender.Address,
                 email.MessageId,
@@ -53,10 +53,10 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                     await _context.Execute(attachmentSQL, new
                     {
                         attachment.EmailAttachmentId,
-                        email.EmailId.SystemId,
+                        email.EmailId,
                         attachment.FileName,
                         attachment.FileSize,
-                        attachment.SystemFileName
+                        sourceFileName = attachment.SystemFileName
                     });
                 }
             }
@@ -66,7 +66,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
             await _context.Execute(bodySQL, new
             {
-                EmailId = email.EmailId.SystemId,
+                EmailId = email.EmailId,
                 EmailBody = email.TextBody,
                 EmailHTMLBody = email.Body
             });
@@ -81,7 +81,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                     await _context.Execute(recipientSQL, new
                     {
                         EmailRecipientId = Guid.NewGuid(),
-                        EmailId = email.EmailId.SystemId,
+                        EmailId = email.EmailId,
                         Email = recipient.Address,
                         recipient.DisplayName,
                         Type = EmailRecipientType.To
@@ -99,7 +99,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                     await _context.Execute(ccSQL, new
                     {
                         EmailRecipientId = Guid.NewGuid(),
-                        EmailId = email.EmailId.SystemId,
+                        EmailId = email.EmailId,
                         Email = cc.Address,
                         cc.DisplayName,
                         Type = EmailRecipientType.Cc
@@ -117,7 +117,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                     await _context.Execute(bccSQL, new
                     {
                         EmailRecipientId = Guid.NewGuid(),
-                        EmailId = email.EmailId.SystemId,
+                        EmailId = email.EmailId,
                         Email = bcc.Address,
                         bcc.DisplayName,
                         Type = EmailRecipientType.Bcc
@@ -135,7 +135,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                     await _context.Execute(replyToSQL, new
                     {
                         EmailRecipientId = Guid.NewGuid(),
-                        EmailId = email.EmailId.SystemId,
+                        EmailId = email.EmailId,
                         Email = replyTo.Address,
                         replyTo.DisplayName,
                         Type = EmailRecipientType.ReplyTo

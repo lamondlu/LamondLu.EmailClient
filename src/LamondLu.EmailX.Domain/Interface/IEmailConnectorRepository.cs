@@ -21,5 +21,7 @@ namespace LamondLu.EmailX.Domain.Interface
         Task<List<EmailConnectorStatusViewModel>> GetEmailConnectorStatuses();
 
         Task UpdateEmailConnectorStatus(Guid emailConnectorId, EmailConnectorStatus status);
+
+        Task<List<Guid>> GetAllRunningEmailConnectorIds();
     }
 }

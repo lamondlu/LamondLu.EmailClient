@@ -77,7 +77,7 @@ namespace LamondLu.EmailX.Domain.Managers
         public async Task StartAsync(Guid emailConnectorId)
         {
             _logger.LogInformation($"System is starting email connector {emailConnectorId}");
-             await _unitOfWork.EmailConnectorRepository.UpdateEmailConnectorStatus(emailConnectorId, Enum.EmailConnectorStatus.Running);
+            await _unitOfWork.EmailConnectorRepository.UpdateEmailConnectorStatus(emailConnectorId, Enum.EmailConnectorStatus.Running);
             await _emailConnectorAction.StartConnector(emailConnectorId);
         }
     }

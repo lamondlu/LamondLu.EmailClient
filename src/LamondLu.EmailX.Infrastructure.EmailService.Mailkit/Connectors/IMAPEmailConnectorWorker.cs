@@ -1,7 +1,5 @@
 using LamondLu.EmailX.Domain;
-using LamondLu.EmailX.Domain.DTOs;
 using LamondLu.EmailX.Domain.Interface;
-using LamondLu.EmailX.Domain.ViewModels;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
 using MailKit;
 using MailKit.Net.Imap;
@@ -9,12 +7,10 @@ using MailKit.Search;
 using MimeKit;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.Extensions;
-using LamondLu.EmailX.Domain.Enum;
 
 namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 {
@@ -26,20 +22,17 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         private IUnitOfWork _unitOfWork = null;
 
-        private IInlineImageHandler _inlineImageHandler = null;
-
         private IEmailAttachmentHandler _emailAttachmentHandler = null;
+
+        private RulePipeline _pipeline = null;
 
         public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler)
         {
-            Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
+            _pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
             _unitOfWork = unitOfWork;
-            _inlineImageHandler = inlineImageHandler;
             _emailAttachmentHandler = emailAttachmentHandler;
         }
-
-        public RulePipeline Pipeline { get; }
 
         public event EmailReceived EmailReceived;
 
@@ -202,11 +195,12 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
             }
 
             var emailEntity = mail.ConvertEmail(emailId, emailFolder);
+            var attachments = await _emailAttachmentHandler.SaveAttachments(emailEntity.EmailId, mail);
+            emailEntity.Attachments = attachments;
 
             await _unitOfWork.EmailRepository.SaveEmail(emailEntity);
-            var attachments = await _emailAttachmentHandler.SaveAttachments(emailEntity.EmailId.SystemId, mail);
-            emailEntity.Attachments = attachments;
-            await _unitOfWork.EmailFolderRepository.RecordFolderProcess(emailFolder.EmailFolderId, emailEntity.EmailId.MailkitId, emailEntity.EmailId.MailkitValidityId);
+            await _unitOfWork.EmailFolderRepository.RecordFolderProcess(emailFolder.EmailFolderId, emailEntity.EmailRealId, emailEntity.EmailValidityId);
+
             await _unitOfWork.SaveAsync();
 
             Console.WriteLine("Email saved.");
@@ -216,7 +210,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                 EmailReceived(emailEntity);
             }
 
-            Pipeline.Run(emailEntity);
+            await _pipeline.Run(emailEntity);
         }
 
     }

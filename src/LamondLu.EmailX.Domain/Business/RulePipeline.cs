@@ -1,5 +1,7 @@
 ﻿using LamondLu.EmailX.Domain.Interface;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace LamondLu.EmailX.Domain
 {
@@ -17,18 +19,16 @@ namespace LamondLu.EmailX.Domain
             _unitOfWork = unitOfWork;
         }
 
-        public void Run(Email email)
+        public async Task Run(Email email)
         {
             foreach (Rule rule in _rules)
             {
                 if (rule.Match(email))
                 {
-                    //process the handler
-
                     IRuleProcessor ruleProcessor = _factory.GetRuleProcessor(rule, _unitOfWork);
-                    ruleProcessor.Run(email);
+                    await ruleProcessor.Run(email, rule);
 
-                    if (rule.TerminateIfMatch)
+                    if (rule.StopProcessingMoreRule)
                     {
                         return;
                     }
