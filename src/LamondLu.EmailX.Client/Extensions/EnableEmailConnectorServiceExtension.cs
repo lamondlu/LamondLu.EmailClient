@@ -64,12 +64,15 @@ namespace LamondLu.EmailX.Client.Extensions
                 return;
             }
 
+
+            builder.Services.Configure<DbSetting>(builder.Configuration.GetSection("Db"));
             var settings = new DbSetting();
 
             settings.ConnectionString = builder.Configuration.GetSection("Db:ConnectionString").Value;
             settings.TimeOut = Convert.ToInt32(builder.Configuration.GetSection("Db:Timeout").Value);
 
             builder.Configuration.Bind(settings);
+
 
             if (settings.IsValid)
             {
@@ -83,7 +86,7 @@ namespace LamondLu.EmailX.Client.Extensions
 
                 builder.Services.AddScoped<EmailConnectorManager>();
 
-                builder.Services.AddSingleton<EmailConnectorHostService>(serviceProvider =>
+                builder.Services.AddSingleton(serviceProvider =>
                 {
                     return serviceProvider.GetServices<IHostedService>().Where(e => e.GetType() == typeof(EmailConnectorHostService)).Cast<EmailConnectorHostService>().Single();
                 });

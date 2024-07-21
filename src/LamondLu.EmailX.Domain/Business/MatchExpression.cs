@@ -9,8 +9,6 @@ namespace LamondLu.EmailX.Domain.Business
 {
     public class MatchExpression
     {
-        private List<string> _valueList;
-
         public MatchField Field { get; set; }
 
         public MatchCondition? Condition { get; set; }
@@ -24,18 +22,13 @@ namespace LamondLu.EmailX.Domain.Business
         {
             get
             {
-                if (_valueList != null)
-                {
-                    return _valueList;
-                }
-
                 if (string.IsNullOrWhiteSpace(Value))
                 {
-                    return new List<string>();
+                    return [];
                 }
                 else
                 {
-                    return Value.Split(EmailConstantHelper.SeparatorForConditionValue).ToList();
+                    return [.. Value.Split(EmailConstantHelper.SeparatorForConditionValue)];
                 }
             }
 
