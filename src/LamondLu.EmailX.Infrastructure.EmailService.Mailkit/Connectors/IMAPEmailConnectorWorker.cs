@@ -194,13 +194,13 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                 return;
             }
 
-
             var emailEntity = mail.ConvertEmail(emailId, emailFolder);
             var attachments = await _emailAttachmentHandler.SaveAttachments(emailEntity.EmailId, mail);
             emailEntity.Attachments = attachments;
 
             await _unitOfWork.EmailRepository.SaveEmail(emailEntity);
             await _unitOfWork.EmailFolderRepository.RecordFolderProcess(emailFolder.EmailFolderId, emailEntity.EmailRealId, emailEntity.EmailValidityId);
+
             await _unitOfWork.SaveAsync();
 
             Console.WriteLine("Email saved.");

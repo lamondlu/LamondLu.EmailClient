@@ -10,7 +10,6 @@ namespace LamondLu.EmailX.Domain
 
         public string SystemFileName {get;set;}
 
-
         public long FileSize { get; set; }
     }
 }
