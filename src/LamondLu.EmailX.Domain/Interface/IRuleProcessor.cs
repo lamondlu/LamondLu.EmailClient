@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace LamondLu.EmailX.Domain.Interface
 {
     public interface IRuleProcessor
     {
-        void Run(Email email);
+        Task Run(Email email, Rule rule);
     }
 }

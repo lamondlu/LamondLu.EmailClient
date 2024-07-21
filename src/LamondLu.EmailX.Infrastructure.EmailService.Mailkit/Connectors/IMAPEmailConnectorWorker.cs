@@ -210,7 +210,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                 EmailReceived(emailEntity);
             }
 
-            _pipeline.Run(emailEntity);
+            await _pipeline.Run(emailEntity);
         }
 
     }
