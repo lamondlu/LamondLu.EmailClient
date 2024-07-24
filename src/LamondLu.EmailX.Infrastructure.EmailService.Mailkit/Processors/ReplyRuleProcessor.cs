@@ -47,7 +47,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
                         {
                             foreach (var replyTo in email.ReplyTos)
                             {
-                                mimeMessage.ReplyTo.Add(new MailboxAddress(replyTo.DisplayName ?? string.Empty, replyTo.Address));
+                                mimeMessage.To.Add(new MailboxAddress(replyTo.DisplayName ?? string.Empty, replyTo.Address));
                             }
                         }
 

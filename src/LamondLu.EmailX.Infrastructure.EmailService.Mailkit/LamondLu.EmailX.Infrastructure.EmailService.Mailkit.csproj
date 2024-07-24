@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mailkit" Version="4.6.0" />
+    <PackageReference Include="Mailkit" Version="4.7.1.1" />
   </ItemGroup>
 
 </Project>
