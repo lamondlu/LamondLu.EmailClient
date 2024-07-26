@@ -25,5 +25,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="../init/2023031901.sql" />
+    <EmbeddedResource Include="../init/2024070701.sql" />
+    <EmbeddedResource Include="../init/2024071301.sql" />
+  </ItemGroup>
 </Project>

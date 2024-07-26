@@ -1,8 +1,13 @@
-﻿using LamondLu.EmailX.Domain.Interface;
+﻿using Dapper;
+using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.Models;
 using LamondLu.EmailX.Infrastructure.DataPersistent.Models;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailX.Infrastructure.DataPersistent
@@ -26,6 +31,46 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             _dbSetting = optionsAccessor.Value;
             _connection = new MySqlConnection(_dbSetting.ConnectionString);
             _dbContext = new DapperDbContext(_connection, _dbSetting.TimeOut);
+        }
+
+        public void CreateDatabaseIfNotExisted()
+        {
+            var databaseName = _connection.Database;
+            try
+            {
+                var sql = $"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{databaseName}'";
+                var result = _connection.ExecuteScalar(sql);
+            }
+            catch (MySqlException ex)
+            {
+                if ((ex.Message ?? "").Contains($"Unknown database '{databaseName}'"))
+                {
+                    Console.WriteLine("Database is not existed. Try to initialize the database.");
+                    CreateDatabase(databaseName);
+                }
+                else
+                {
+                    
+                }
+            }
+        }
+
+        private void CreateDatabase(string dbName)
+        {
+            var assembly = Assembly.Load("LamondLu.EmailX.Client");
+            var sqlFiles = assembly.GetManifestResourceNames();
+
+            using (var connection = new MySqlConnection(_dbSetting.ConnectionString.Replace(dbName, "mysql")))
+            {
+                foreach (var sqlFile in sqlFiles)
+                {
+                    using (var sr = new StreamReader(assembly.GetManifestResourceStream(sqlFile)))
+                    {
+                        var sql = sr.ReadToEnd().Replace("$DB_NAME", dbName);
+                        connection.Execute(sql);
+                    }
+                }
+            }
         }
 
         public IEmailRepository EmailRepository

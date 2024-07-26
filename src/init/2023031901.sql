@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS `emaildb` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `$DB_NAME` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-use emaildb;
+use $DB_NAME;
 
 /*
  Navicat Premium Data Transfer
@@ -131,7 +131,7 @@ CREATE TABLE `EmailReceipt` (
   `Email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `Type` tinyint(1) DEFAULT NULL,
   `DisplayName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`EmailReceiptId`),
+  PRIMARY KEY (`EmailRecipientId`),
   KEY `FK_EmailRecipient_Email_EmailId` (`EmailId`),
   CONSTRAINT `FK_EmailRecipient_Email_EmailId` FOREIGN KEY (`EmailId`) REFERENCES `Email` (`EmailId`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

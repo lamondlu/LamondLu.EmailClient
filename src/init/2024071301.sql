@@ -1,4 +1,4 @@
-use emaildb;
+use $DB_NAME;
 
 
 DROP TABLE IF EXISTS `emailrule`;

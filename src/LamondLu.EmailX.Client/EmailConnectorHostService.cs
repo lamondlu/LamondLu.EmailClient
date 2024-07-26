@@ -41,6 +41,8 @@ namespace LamondLu.EmailX.Client
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+
+
             _logger.LogInformation("Email Service started.");
 
             var unitOfWork = _unitOfWorkFactory.Create();
@@ -52,18 +54,14 @@ namespace LamondLu.EmailX.Client
 
                 var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler, _logger);
 
-                Version(connector);
                 _tasks.Add(task);
                 task.Start();
             }
         }
 
-        private void Version(EmailConnector emailConnector)
+        private async Task Initialize()
         {
-            _logger.LogInformation($"[{emailConnector.Name}] Email Connect Type: {emailConnector.Type}");
-            _logger.LogInformation($"[{emailConnector.Name}] SSL: {(emailConnector.EnableSSL ? "Yes" : "No")}");
-            _logger.LogInformation($"[{emailConnector.Name}] UserName: {emailConnector.UserName}");
-            _logger.LogInformation($"[{emailConnector.Name}] Password: {emailConnector.Password}");
+
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
@@ -97,7 +95,6 @@ namespace LamondLu.EmailX.Client
             {
                 var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler, _logger);
 
-                Version(connector);
                 _tasks.Add(task);
 
                 task.Start();

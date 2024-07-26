@@ -1,4 +1,4 @@
-use emaildb;
+use $DB_NAME;
 
 ALTER TABLE Email ADD COLUMN `To` varchar(500) COLLATE utf8mb4_unicode_ci;
 ALTER TABLE Email ADD COLUMN `Cc` varchar(500) COLLATE utf8mb4_unicode_ci;

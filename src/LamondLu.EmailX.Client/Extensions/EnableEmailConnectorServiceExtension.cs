@@ -96,6 +96,8 @@ namespace LamondLu.EmailX.Client.Extensions
                     return serviceProvider.GetServices<IHostedService>().Where(e => e.GetType() == typeof(EmailConnectorHostService)).Cast<EmailConnectorHostService>().Single();
                 });
 
+                var unitOfWork = builder.Services.BuildServiceProvider().GetService<IUnitOfWorkFactory>().Create();
+                unitOfWork.CreateDatabaseIfNotExisted();
             }
             else
             {
