@@ -26,7 +26,10 @@ namespace LamondLu.EmailX.Client
 
         private ILogger _logger = null;
 
-        public EmailConnectorTask(EmailConnector emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler, ILogger<EmailConnectorHostService> logger)
+        private IEncrypt _encryptor = null;
+
+        public EmailConnectorTask(EmailConnector emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler, 
+        IEncrypt encryptor,ILogger<EmailConnectorHostService> logger)
         {
             _emailConnector = emailConnector;
             _factory = factory;
@@ -35,6 +38,7 @@ namespace LamondLu.EmailX.Client
             _inlineImageHandler = inlineImageHandler;
             _emailAttachmentHandler = emailAttachmentHandler;
             _logger = logger;
+            _encryptor = encryptor;
         }
 
         public Guid EmailConnectorId => _emailConnector.EmailConnectorId;
@@ -56,7 +60,7 @@ namespace LamondLu.EmailX.Client
 
             try
             {
-                _emailConnectorWorker = _factory.Build(_emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler, _emailAttachmentHandler);
+                _emailConnectorWorker = _factory.Build(_emailConnector, _ruleProcessorFactory, _unitOfWorkFactory.Create(), _inlineImageHandler, _emailAttachmentHandler, _encryptor);
 
                 var isConnected = await _emailConnectorWorker.Connect();
 

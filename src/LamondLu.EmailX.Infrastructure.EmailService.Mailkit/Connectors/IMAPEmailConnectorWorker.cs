@@ -24,14 +24,17 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         private IEmailAttachmentHandler _emailAttachmentHandler = null;
 
+        private IEncrypt _encryptor = null;
+
         private RulePipeline _pipeline = null;
 
-        public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler)
+        public IMAPEmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler, IEncrypt encryptor)
         {
             _pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
             _unitOfWork = unitOfWork;
             _emailAttachmentHandler = emailAttachmentHandler;
+            _encryptor = encryptor;
         }
 
         public event EmailReceived EmailReceived;
@@ -44,7 +47,10 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
                 await _emailClient.ConnectAsync(_emailConnector.Server.IMAPServer, _emailConnector.Server.IMAPPort.Value, true);
                 _emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
-                await _emailClient.AuthenticateAsync(_emailConnector.UserName, _emailConnector.Password);
+
+                var password = _encryptor.Decrypt(_emailConnector.Password);
+
+                await _emailClient.AuthenticateAsync(_emailConnector.UserName, password);
 
                 // if (_emailConnector.Server.IsNetEase)
                 // {
