@@ -1,10 +1,10 @@
-# LamondLu.EmailX - A email management system
+# LamondLu.EmailX - A email client
 Use Mailkit to create a email client, but not only a client, it can also support to create rule to support different scene
 
 ## Concepts
 
 ### Email Connector
-The email connector is like a email client, it will connect with the emailbox with POP3, IMAP, etc. If any new email received, it will sync the email into the email management system.
+The email connector is like a email client, it will connect with the mailbox with POP3, IMAP, etc. If any new email received, it will sync the email into the email management system.
 
 Each email connector have a rule pipeline with multiple rules. The rule pipeline are configurable.
 
