@@ -14,11 +14,14 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
         private IUnitOfWork _unitOfWork = null;
 
-        public POP3EmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork)
+        private IEncrypt _encryptor = null;
+
+        public POP3EmailConnectorWorker(EmailConnector emailConnector, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWork unitOfWork, IEncrypt encryptor)
         {
             Pipeline = new RulePipeline(emailConnector.Rules, ruleProcessorFactory, unitOfWork);
             _emailConnector = emailConnector;
             _unitOfWork = unitOfWork;
+            _encryptor = encryptor;
         }
 
         public RulePipeline Pipeline { get; }
@@ -33,7 +36,7 @@ namespace LamondLu.EmailX.Infrastructure.EmailService.Mailkit
 
                 await _emailClient.ConnectAsync(_emailConnector.Server.POP3Server, _emailConnector.Server.POP3Port.Value, true);
                 _emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
-                await _emailClient.AuthenticateAsync(_emailConnector.UserName, _emailConnector.Password);
+                await _emailClient.AuthenticateAsync(_emailConnector.UserName, _encryptor.Decrypt(_emailConnector.Password));
 
                 return true;
             }

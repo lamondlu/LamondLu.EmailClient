@@ -19,17 +19,20 @@ namespace LamondLu.EmailX.Client
         private readonly IUnitOfWorkFactory _unitOfWorkFactory = null;
         private readonly IEmailConnectorWorkerFactory _emailConnectorWorkerFactory = null;
         private readonly IRuleProcessorFactory _ruleProcessorFactory = null;
-        private static List<EmailConnectorTask> _tasks = new List<EmailConnectorTask>();
+        private static List<EmailConnectorTask> _tasks = new();
 
         private IInlineImageHandler _inlineImageHandler = null;
 
         private IEmailAttachmentHandler _emailAttachmentHandler = null;
+
+        private IEncrypt _encryptor = null;
+
         public EmailConnectorHostService(ILogger<EmailConnectorHostService> logger,
         IUnitOfWorkFactory unitOfWorkFactory,
           IEmailConnectorWorkerFactory emailConnectorWorkerFactory,
           IRuleProcessorFactory ruleProcessorFactory,
           IInlineImageHandler inlineImageHandler,
-          IEmailAttachmentHandler emailAttachmentHandler)
+          IEmailAttachmentHandler emailAttachmentHandler, IEncrypt encryptor)
         {
             _logger = logger;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -37,6 +40,7 @@ namespace LamondLu.EmailX.Client
             _ruleProcessorFactory = ruleProcessorFactory;
             _inlineImageHandler = inlineImageHandler;
             _emailAttachmentHandler = emailAttachmentHandler;
+            _encryptor = encryptor;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -52,7 +56,7 @@ namespace LamondLu.EmailX.Client
             {
                 var connector = await unitOfWork.EmailConnectorRepository.GetEmailConnector(connectorId);
 
-                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler, _logger);
+                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler, _encryptor, _logger);
 
                 _tasks.Add(task);
                 task.Start();
@@ -88,7 +92,8 @@ namespace LamondLu.EmailX.Client
             }
             else
             {
-                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler, _logger);
+                var task = new EmailConnectorTask(connector, _emailConnectorWorkerFactory, _ruleProcessorFactory, _unitOfWorkFactory, _inlineImageHandler, _emailAttachmentHandler,
+                _encryptor, _logger);
 
                 _tasks.Add(task);
 

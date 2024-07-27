@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using LamondLu.Core.Api;
 using LamondLu.EmailX.Domain.Models.EmailConnectors;
 using LamondLu.EmailX.Domain.Managers;
+using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 
 namespace LamondLu.EmailX.Server.Controllers
 {
@@ -17,10 +18,13 @@ namespace LamondLu.EmailX.Server.Controllers
 
         private EmailConnectorManager _emailConnectorManager;
 
-        public EmailConnectorController(IUnitOfWorkFactory unitOfWorkFactory, EmailConnectorManager emailConnectorManager)
+        private IEncrypt _encryptor;
+
+        public EmailConnectorController(IUnitOfWorkFactory unitOfWorkFactory, EmailConnectorManager emailConnectorManager, IEncrypt encryptor)
         {
             _unitOfWork = unitOfWorkFactory.Create();
             _emailConnectorManager = emailConnectorManager;
+            _encryptor = encryptor;
         }
 
         // GET: api/EmailConnector
@@ -48,7 +52,7 @@ namespace LamondLu.EmailX.Server.Controllers
                 model.Name,
                 model.EmailAddress,
                 model.UserName,
-                model.Password,
+                _encryptor.Encrypt(model.Password),
                 new EmailServerConfig(
                     model.SMTPServer,
                     model.SMTPPort,

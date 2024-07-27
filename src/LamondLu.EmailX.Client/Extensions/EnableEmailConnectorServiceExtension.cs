@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using LamondLu.EmailX.Client.Utilities;
 using LamondLu.EmailX.Domain.Interface;
 using LamondLu.EmailX.Domain.Managers;
 using LamondLu.EmailX.Infrastructure.DataPersistent;
@@ -33,7 +34,8 @@ namespace LamondLu.EmailX.Client.Extensions
                                         .AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>()
                                         .AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
                                         .AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>()
-                                        .AddSingleton<IFileStorage, LocalFileStorage>();
+                                        .AddSingleton<IFileStorage, LocalFileStorage>()
+                                        .AddSingleton<IEncrypt, DefaultEncryptor>();
 
                     services.AddScoped<EmailConnectorManager>();
 
@@ -82,7 +84,8 @@ namespace LamondLu.EmailX.Client.Extensions
                                     .AddSingleton<IEmailConnectorWorkerFactory, EmailConnectorWorkFactory>()
                                     .AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
                                     .AddSingleton<IRuleProcessorFactory, RuleProcessorFactory>()
-                                    .AddSingleton<IFileStorage, LocalFileStorage>();
+                                    .AddSingleton<IFileStorage, LocalFileStorage>()
+                                    .AddSingleton<IEncrypt, DefaultEncryptor>();;
 
                 builder.Services.AddScoped<EmailConnectorManager>();
 
