@@ -21,6 +21,18 @@ use $DB_NAME;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+
+-- ----------------------------
+-- Table structure for migrations
+-- ----------------------------
+DROP TABLE IF EXISTS `migrations`;
+CREATE TABLE `migrations` (
+  `MigrationId` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Version` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`MigrationId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 -- ----------------------------
 -- Table structure for EmailConnector
 -- ----------------------------
@@ -136,3 +148,4 @@ CREATE TABLE `EmailReceipt` (
   CONSTRAINT `FK_EmailRecipient_Email_EmailId` FOREIGN KEY (`EmailId`) REFERENCES `Email` (`EmailId`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO migrations (MigrationId, Version) VALUES ('LamondLu.EmailX.Client.2023031901.sql', 'v1.0.0');

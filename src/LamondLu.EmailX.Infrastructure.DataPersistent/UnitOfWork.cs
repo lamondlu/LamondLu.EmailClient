@@ -4,7 +4,9 @@ using LamondLu.EmailX.Domain.Models;
 using LamondLu.EmailX.Infrastructure.DataPersistent.Models;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Tls;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -40,6 +42,8 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             {
                 var sql = $"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{databaseName}'";
                 var result = _connection.ExecuteScalar(sql);
+
+                TryToUpgradeIfNeed();
             }
             catch (MySqlException ex)
             {
@@ -50,7 +54,38 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
                 }
                 else
                 {
-                    
+                    Console.WriteLine("Error: Initialization failed. Please check the database connection.");
+                }
+            }
+        }
+
+        private void TryToUpgradeIfNeed()
+        {
+            var lastMigration = _connection.QueryFirstOrDefault<string>("SELECT MigrationId FROM Migrations ORDER BY MigrationId DESC LIMIT 1");
+
+            var assembly = Assembly.Load("LamondLu.EmailX.Client");
+            var sqlFiles = assembly.GetManifestResourceNames().ToList();
+
+            if (!sqlFiles.Contains(lastMigration))
+            {
+                sqlFiles.Add(lastMigration);
+            }
+
+            sqlFiles = sqlFiles.OrderBy(e => e).SkipWhile(e => e != lastMigration).Skip(1).ToList();
+            RunMigration(_connection, sqlFiles.ToList(), _connection.Database);
+        }
+
+        private void RunMigration(MySqlConnection connection, List<string> sqlFiles, string dbName)
+        {
+            var assembly = Assembly.Load("LamondLu.EmailX.Client");
+
+            foreach (var sqlFile in sqlFiles)
+            {
+                using (var sr = new StreamReader(assembly.GetManifestResourceStream(sqlFile)))
+                {
+                    var sql = sr.ReadToEnd().Replace("$DB_NAME", dbName);
+                    Console.WriteLine($"Executing sql: {sqlFile}");
+                    connection.Execute(sql);
                 }
             }
         }
@@ -62,14 +97,7 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
             using (var connection = new MySqlConnection(_dbSetting.ConnectionString.Replace(dbName, "mysql")))
             {
-                foreach (var sqlFile in sqlFiles)
-                {
-                    using (var sr = new StreamReader(assembly.GetManifestResourceStream(sqlFile)))
-                    {
-                        var sql = sr.ReadToEnd().Replace("$DB_NAME", dbName);
-                        connection.Execute(sql);
-                    }
-                }
+                RunMigration(connection, sqlFiles.ToList(), dbName);
             }
         }
 

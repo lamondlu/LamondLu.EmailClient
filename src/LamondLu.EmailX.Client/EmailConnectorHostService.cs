@@ -59,11 +59,6 @@ namespace LamondLu.EmailX.Client
             }
         }
 
-        private async Task Initialize()
-        {
-
-        }
-
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await Task.Run(() =>
