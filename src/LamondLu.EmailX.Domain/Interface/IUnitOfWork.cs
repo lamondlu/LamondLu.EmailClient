@@ -16,5 +16,7 @@ namespace LamondLu.EmailX.Domain.Interface
         IEmailRecipientRepository EmailRecipientRepository { get; }
 
         Task<DbOperationResult> SaveAsync();
+
+        void CreateDatabaseIfNotExisted();
     }
 }

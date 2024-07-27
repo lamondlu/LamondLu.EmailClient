@@ -1,4 +1,4 @@
-use emaildb;
+use $DB_NAME;
 
 
 DROP TABLE IF EXISTS `emailrule`;
@@ -84,3 +84,5 @@ CREATE TABLE `emailtemplate` (
   `IsDeleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`EmailTemplateId`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+INSERT INTO migrations (MigrationId, Version) VALUES ('LamondLu.EmailX.Client.2024071301.sql', 'v1.0.2');

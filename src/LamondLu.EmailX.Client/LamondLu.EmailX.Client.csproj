@@ -25,5 +25,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="../init/*.sql" />
+  </ItemGroup>
 </Project>
