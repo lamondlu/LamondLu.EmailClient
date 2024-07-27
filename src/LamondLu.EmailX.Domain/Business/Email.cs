@@ -1,5 +1,4 @@
-﻿using LamondLu.EmailX.Domain.Business;
-using LamondLu.EmailX.Domain.Extension;
+﻿using LamondLu.EmailX.Domain.Extension;
 using System;
 using System.Collections.Generic;
 

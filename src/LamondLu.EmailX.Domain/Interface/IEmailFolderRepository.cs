@@ -1,5 +1,4 @@
-﻿using LamondLu.EmailX.Domain.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

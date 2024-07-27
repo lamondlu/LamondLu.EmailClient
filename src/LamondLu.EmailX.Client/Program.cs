@@ -1,10 +1,4 @@
 ﻿using LamondLu.EmailX.Client.Extensions;
-using LamondLu.EmailX.Domain.Interface;
-using LamondLu.EmailX.Infrastructure.DataPersistent;
-using LamondLu.EmailX.Infrastructure.DataPersistent.Models;
-using LamondLu.EmailX.Infrastructure.EmailService.Mailkit;
-using LamondLu.EmailX.Infrastructure.EmailService.Mailkit.FileStorage;
-using LamondLu.EmailX.Infrastructure.EmailService.MailKit.Connectors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

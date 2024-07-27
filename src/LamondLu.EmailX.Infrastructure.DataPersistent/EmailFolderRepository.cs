@@ -1,10 +1,6 @@
 ﻿using LamondLu.EmailX.Domain.Interface;
-using LamondLu.EmailX.Domain.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
 using LamondLu.EmailX.Domain;
 
 namespace LamondLu.EmailX.Infrastructure.DataPersistent

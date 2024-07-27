@@ -2,7 +2,6 @@
 using LamondLu.EmailX.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LamondLu.EmailX.Domain.Services

@@ -4,7 +4,6 @@ using LamondLu.EmailX.Domain.Models;
 using LamondLu.EmailX.Infrastructure.DataPersistent.Models;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
-using Org.BouncyCastle.Tls;
 using System;
 using System.Collections.Generic;
 using System.IO;

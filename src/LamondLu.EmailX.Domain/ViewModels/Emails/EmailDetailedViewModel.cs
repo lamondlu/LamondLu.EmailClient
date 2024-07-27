@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using LamondLu.EmailX.Domain.Enum;
 
 namespace LamondLu.EmailX.Domain.ViewModels.Emails
