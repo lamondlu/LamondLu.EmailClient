@@ -351,3 +351,4 @@ MigrationBackup/
 attachments
 images
 data
+src/LamondLu.EmailX.Client/deploy.sh
