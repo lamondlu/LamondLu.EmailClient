@@ -1,27 +1,11 @@
 # LamondLu.EmailX - A email client
-Use Mailkit to create a email client, but not only a client, it can also support to create rule to support different scene
+EmailX is a email client built with Mailkit under .NET 8. 
+- EmailX supports pulling email from Email Server with POP3 and IMAP. 
+- EmailX supports sending email with SMTP
+- EmailX supports a simple rule pipeline to create similar rule system as Outlook
 
-## Concepts
 
-### Email Connector
-The email connector is like a email client, it will connect with the mailbox with POP3, IMAP, etc. If any new email received, it will sync the email into the email management system.
 
-Each email connector have a rule pipeline with multiple rules. The rule pipeline are configurable.
 
-![](./img/20200407081451.png)
-
-### Support Rules
-- Forward
-- Reply
-- Classify
- 
-### Forward rule
-If the rule matched, the system will forward the email to assigned emailboxes.
-
-### Reply rule
-If the rule matched, the system will reply the sender with assigned email template.
-
-### Classify rule
-If the rule matched, the systesm will classify the email as assigned category. 
 
 
