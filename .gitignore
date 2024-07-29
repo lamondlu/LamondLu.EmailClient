@@ -352,3 +352,6 @@ attachments
 images
 data
 src/LamondLu.EmailX.Client/deploy.sh
+src/LamondLu.EmailX.Domain/deploy.sh
+src/LamondLu.EmailX.Infrastructure.DataPersistent/deploy.sh
+src/LamondLu.EmailX.Infrastructure.EmailService.Mailkit/deploy.sh
