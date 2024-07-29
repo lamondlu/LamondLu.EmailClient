@@ -1,7 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-     <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>LamondLu.EmailX.Infrastructure.DataPersistent</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Lamond Lu</Authors>
+    <Company>Lamond Lu</Company>
   </PropertyGroup>
 
   <ItemGroup>
