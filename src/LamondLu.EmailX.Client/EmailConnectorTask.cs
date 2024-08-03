@@ -10,23 +10,23 @@ namespace LamondLu.EmailX.Client
 {
     public class EmailConnectorTask
     {
-        private EmailConnector _emailConnector = null;
+        private EmailConnector _emailConnector;
 
-        private IEmailConnectorWorkerFactory _factory = null;
+        private IEmailConnectorWorkerFactory _factory;
 
-        private IRuleProcessorFactory _ruleProcessorFactory = null;
+        private IRuleProcessorFactory _ruleProcessorFactory;
 
-        private IUnitOfWorkFactory _unitOfWorkFactory = null;
+        private IUnitOfWorkFactory _unitOfWorkFactory;
 
-        private IInlineImageHandler _inlineImageHandler = null;
+        private IInlineImageHandler _inlineImageHandler;
 
-        private IEmailAttachmentHandler _emailAttachmentHandler = null;
+        private IEmailAttachmentHandler _emailAttachmentHandler;
 
-        private IEmailConnectorWorker _emailConnectorWorker = null;
+        private IEmailConnectorWorker _emailConnectorWorker ;
 
-        private ILogger _logger = null;
+        private ILogger _logger;
 
-        private IEncrypt _encryptor = null;
+        private IEncrypt _encryptor;
 
         public EmailConnectorTask(EmailConnector emailConnector, IEmailConnectorWorkerFactory factory, IRuleProcessorFactory ruleProcessorFactory, IUnitOfWorkFactory unitOfWorkFactory, IInlineImageHandler inlineImageHandler, IEmailAttachmentHandler emailAttachmentHandler, 
         IEncrypt encryptor,ILogger<EmailConnectorHostService> logger)

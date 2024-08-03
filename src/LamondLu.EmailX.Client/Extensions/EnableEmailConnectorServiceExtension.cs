@@ -39,7 +39,7 @@ namespace LamondLu.EmailX.Client.Extensions
 
                     services.AddScoped<EmailConnectorManager>();
 
-                    services.AddSingleton<EmailConnectorHostService>(serviceProvider =>
+                    services.AddSingleton(serviceProvider =>
                     {
                         return serviceProvider.GetServices<IHostedService>().Where(e => e.GetType() == typeof(EmailConnectorHostService)).Cast<EmailConnectorHostService>().Single();
                     });

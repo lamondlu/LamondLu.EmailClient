@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using LamondLu.EmailX.Domain.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace LamondLu.EmailX.Portal.Controllers
 {
