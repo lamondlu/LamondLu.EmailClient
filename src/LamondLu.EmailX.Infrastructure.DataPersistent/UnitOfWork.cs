@@ -23,6 +23,10 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
 
         private IEmailAttachmentRepository _emailAttachmentRepository = null;
 
+        private IEmailRecipientRepository _emailRecipientRepository = null;
+
+        private IEmailTagRepository _emailTagRepository = null;
+
         private MySqlConnection _connection = null;
         private DbSetting _dbSetting = null;
         private DapperDbContext _dbContext = null;
@@ -106,7 +110,8 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             {
                 if (_emailRepository == null)
                 {
-                    return new EmailRepository(_dbContext);
+                    _emailRepository = new EmailRepository(_dbContext);
+                    return _emailRepository;
                 }
 
                 return _emailRepository;
@@ -119,7 +124,8 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             {
                 if (_emailConnectorRepository == null)
                 {
-                    return new EmailConnectorRepository(_dbContext);
+                    _emailConnectorRepository = new EmailConnectorRepository(_dbContext);
+                    return _emailConnectorRepository;
                 }
 
                 return _emailConnectorRepository;
@@ -132,7 +138,8 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             {
                 if (_emailFolderRepository == null)
                 {
-                    return new EmailFolderRepository(_dbContext);
+                    _emailFolderRepository = new EmailFolderRepository(_dbContext);
+                    return _emailFolderRepository;
                 }
 
                 return _emailFolderRepository;
@@ -145,7 +152,8 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
             {
                 if (_emailAttachmentRepository == null)
                 {
-                    return new EmailAttachmentRepository(_dbContext);
+                    _emailAttachmentRepository = new EmailAttachmentRepository(_dbContext);
+                    return _emailAttachmentRepository;
                 }
 
                 return _emailAttachmentRepository;
@@ -156,7 +164,27 @@ namespace LamondLu.EmailX.Infrastructure.DataPersistent
         {
             get
             {
-                return new EmailRecipientRepository(_dbContext);
+                if (_emailRecipientRepository == null)
+                {
+                    _emailRecipientRepository = new EmailRecipientRepository(_dbContext);
+                    return _emailRecipientRepository;
+                }
+
+                return _emailRecipientRepository;
+            }
+        }
+
+        public IEmailTagRepository EmailTagRepository
+        {
+            get
+            {
+                if (_emailTagRepository == null)
+                {
+                    _emailTagRepository = new EmailTagRepository(_dbContext);
+                    return _emailTagRepository;
+                }
+
+                return _emailTagRepository;
             }
         }
 

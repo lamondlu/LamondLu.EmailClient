@@ -11,7 +11,5 @@ namespace LamondLu.EmailX.Domain
         public string Description { get; set; }
 
         public string Color { get; set; }
-
-        public bool IsSystem { get; set; }
     }
 }
